@@ -1,6 +1,11 @@
 :root {
-  --blue: #1e90ff;
-  --white: #ffffff;
+  --color1: #1C2E4F;
+  --color2: #0A192F;
+  --color3: #64FFDA;
+  --color4: #F2EFEF;
+  --color5: #CE73AC;
+  --color6: #4A49CB;
+  --disable-color: #858C97;
 }
 * {
   font-family: "Roboto";
