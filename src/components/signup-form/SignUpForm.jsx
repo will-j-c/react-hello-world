@@ -4,43 +4,60 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Grid from "@mui/material/Grid";
-import { useRef } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { useRef, useState } from "react";
 import "./SignUpForm.css";
 import axios from "axios";
 
 function LoginForm(props) {
+  const nameRef = useRef();
   const usernameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
   const handleRegistrationPost = (event) => {
-    console.log(props);
     event.preventDefault();
     axios
-      .post(`${props.baseUrl}/register`, {
+      .post(`${props.baseUrl}/api/v1/auth/register`, {
+        name: nameRef.current.value,
         username: usernameRef.current.value,
         email: emailRef.current.value,
         hash: passwordRef.current.value,
         confirm_password: confirmPasswordRef.current.value,
       })
       .then((response) => {
-        console.log(response);
+        setOpen(true);
+        setMessage('PLease check your emails for the activation link');
+        setSeverity('success');
+        return;
       })
       .catch((error) => {
-        console.log(error);
+        setOpen(true);
+        setMessage(error.response.data.error);
+        setSeverity('error');
+        return;
       });
   };
   return (
     <Box className="sign-up-form">
-      <Typography variant="subtitle1" textAlign={"center"} id="box-title" gutterBottom>
+      <Typography
+        variant="subtitle1"
+        textAlign={"center"}
+        id="box-title"
+        gutterBottom
+      >
         Sign up by
       </Typography>
       <Grid container direction="row" justifyContent={"center"}>
         <Grid item>
-          <GitHubIcon sx={{marginY: 1}} fontSize={"large"}/>
+          <GitHubIcon sx={{ marginY: 1 }} fontSize={"large"} />
         </Grid>
       </Grid>
-      
+
       <Typography variant="subtitle1" id="or" gutterBottom>
         <span>or</span>
       </Typography>
@@ -57,14 +74,28 @@ function LoginForm(props) {
       >
         <form id="registration-form" onSubmit={handleRegistrationPost}>
           <Typography variant="subtitle1" gutterBottom>
+            Name
+          </Typography>
+          <TextField
+            required
+            hiddenLabel
+            fullWidth
+            defaultValue="Ex. Melody"
+            variant="filled"
+            size="small"
+            form="registration-form"
+            sx={{ marginBottom: 2 }}
+            className="input-text"
+            inputRef={nameRef}
+          />
+          <Typography variant="subtitle1" gutterBottom>
             Username
           </Typography>
           <TextField
             required
             hiddenLabel
             fullWidth
-            name="username"
-            defaultValue="Ex. Melody"
+            defaultValue="Ex. McSpicy"
             variant="filled"
             size="small"
             form="registration-form"
@@ -151,6 +182,13 @@ function LoginForm(props) {
           </Box>
         </form>
       </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={((event, reason) => {
+        if (reason === 'timeout') {
+          setOpen(false);
+        }
+      })}>
+        <Alert variant="filled" severity={severity} sx={{ width: '100%' }}>{message}</Alert>
+      </Snackbar>
     </Box>
   );
 }
