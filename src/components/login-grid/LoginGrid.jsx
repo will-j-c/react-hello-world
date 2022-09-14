@@ -13,7 +13,7 @@ function LoginGrid(props) {
         {/* Some stuff will go here    */}
       </Grid>
       <Grid item md={4}>
-        <SignUpForm />
+        <SignUpForm baseUrl={props.baseUrl}/>
       </Grid>
     </Grid>
   );
