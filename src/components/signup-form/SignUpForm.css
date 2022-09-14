@@ -8,6 +8,16 @@
 .input-text{
   background-color: var(--color2);
 }
-#sign-up-form{
+#sign-up-button {
   color: var(--color3);
+  border-color: var(--color3);
+  border-width: 2px;
+}
+#login-button {
+  background-color: var(--color3);
+  color: var(--color1);
+}
+input[type="text"], input[type="email"],input[type="password"] {
+  color: var(--disable-color);
+  font-weight: bold;
 }

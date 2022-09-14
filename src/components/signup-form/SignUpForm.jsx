@@ -4,6 +4,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import "./SignUpForm.css";
 
+const styles = theme => ({
+  multilineColor:{
+      defaultValue:'red'
+  }
+});
+
 function LoginForm(props) {
   return (
     <Box
