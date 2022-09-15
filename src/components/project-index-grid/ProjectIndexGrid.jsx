@@ -10,7 +10,6 @@ function ProjectIndexGrid(props) {
   const baseProjectLogo = 'https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png';
   useEffect(() => {
     axios.get(`${props.baseUrl}/api/v1/projects`).then((response) => {
-      console.log(response.data);
       setProjects(response.data);
     });
   }, []);
@@ -31,7 +30,7 @@ function ProjectIndexGrid(props) {
   return (
     <Grid
       container
-      spacing={4}
+      spacing={5}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
     >
