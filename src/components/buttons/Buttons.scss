@@ -1,0 +1,19 @@
+#action {
+  background-color: var(--color3);
+  color: var(--color2);
+
+  &:hover {
+    background-color: var(--color3a);
+    color: var(--color4);
+  }
+}
+
+#skill {
+  background-color: var(--color7);
+  color: var(--color2);
+
+  &:hover {
+    background-color: var(--color7a);
+    color: var(--color4);
+  }
+}
