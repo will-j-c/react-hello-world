@@ -14,7 +14,7 @@ function TitleHomepage(props) {
     <Typography
       variant="h1"
       textAlign={"center"}
-      sx={{ color: "var(--color3)" }}
+      sx={{ color: "var(--color3)", fontSize: "6.5em" }}
       fontWeight={"bold"}
       marginTop={5}
       ref={titleRef}

@@ -16,6 +16,7 @@ function ProjectCard(props) {
         padding: 2,
         borderRadius: 0,
         backgroundColor: "var(--color1)",
+        position: "relative"
       }}
       raised={true}
     >
@@ -60,7 +61,7 @@ function ProjectCard(props) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <Box display="flex" padding={0} justifyContent={"flex-end"} sx={{position: "absolute", bottom: 0}}>
+      <Box display="flex" padding={0} justifyContent={"flex-end"} sx={{position: "absolute", bottom: 10, right: 5}}>
         <OutlinedButton name="Follow" />
         <OutlinedButton name="See more" />
       </Box>

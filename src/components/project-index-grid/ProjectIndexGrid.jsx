@@ -12,6 +12,7 @@ function ProjectIndexGrid(props) {
     axios.get(`${props.baseUrl}/api/v1/projects`).then((response) => {
       setProjects(response.data);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const projectCardsToShow = projects.map((project, idx) => {
     const projectCardDetails = {
@@ -30,7 +31,7 @@ function ProjectIndexGrid(props) {
   return (
     <Grid
       container
-      spacing={5}
+      spacing={8}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
     >

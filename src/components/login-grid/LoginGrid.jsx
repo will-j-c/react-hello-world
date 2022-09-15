@@ -1,6 +1,5 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import SignUpForm from "../signup-form/SignUpForm";
-import ProjectCard from "../project-card/ProjectCard";
 import ProjectIndexGrid from "../project-index-grid/ProjectIndexGrid";
 
 function LoginGrid(props) {
