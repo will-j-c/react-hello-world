@@ -10,6 +10,8 @@ import { useRef, useState } from "react";
 import "./SignUpForm.css";
 import axios from "axios";
 
+import ContainedButton from '../buttons/ContainedButton';
+
 function LoginForm(props) {
   const nameRef = useRef();
   const usernameRef = useRef();
@@ -171,14 +173,11 @@ function LoginForm(props) {
             </Typography>
           </Box>
           <Box textAlign={"center"}>
-            <Button
-              variant="contained"
-              size="small"
-              fullWidth
-              id="login-button"
-            >
-              Login
-            </Button>
+            <ContainedButton
+              title="Login" 
+              type="action"
+              isFullWidth={true} 
+            />
           </Box>
         </form>
       </Box>
