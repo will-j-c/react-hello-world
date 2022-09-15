@@ -6,8 +6,12 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AvatarComponent from "../avatar/Avatar";
 import OutlinedButton from "../outlined-button/OutlinedButton";
+import ContainedButton from "../buttons/ContainedButton";
 
 function ProjectCard(props) {
+  const categories = props.details.categories.map((category) => {
+    return <ContainedButton title={category} />;
+  });
   return (
     <Card
       sx={{
@@ -16,7 +20,7 @@ function ProjectCard(props) {
         padding: 2,
         borderRadius: 0,
         backgroundColor: "var(--color1)",
-        position: "relative"
+        position: "relative",
       }}
       raised={true}
     >
@@ -29,7 +33,7 @@ function ProjectCard(props) {
           // sx={{ maxHeight: 1}}
         />
         <CardContent sx={{ padding: 0, marginTop: 1 }}>
-          <Box display={"flex"}>
+          <Box display={"flex"} marginTop={2}>
             <AvatarComponent
               imgAlt={props.details.title}
               imgUrl={props.details.logo}
@@ -39,7 +43,7 @@ function ProjectCard(props) {
               gutterBottom
               variant="subtitle2"
               component="div"
-              sx={{ color: "var(--color3)", marginLeft: 1, fontWeight: 500 }}
+              sx={{ color: "var(--color3)", marginLeft: 1, fontWeight: 600 }}
             >
               {props.details.title}
             </Typography>
@@ -59,11 +63,17 @@ function ProjectCard(props) {
           >
             Looking for:
           </Typography>
+          <Box display="flex" >{categories}</Box>
         </CardContent>
       </CardActionArea>
-      <Box display="flex" padding={0} justifyContent={"flex-end"} sx={{position: "absolute", bottom: 10, right: 5}}>
-        <OutlinedButton name="Follow" />
-        <OutlinedButton name="See more" />
+      <Box
+        display="flex"
+        padding={0}
+        justifyContent={"flex-end"}
+        sx={{ position: "absolute", bottom: 10, right: 5 }}
+      >
+        <OutlinedButton title="Follow" />
+        <ContainedButton title="See more" />
       </Box>
     </Card>
   );
