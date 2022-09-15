@@ -7,11 +7,11 @@ function LoginGrid(props) {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={4}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
     >
-      <Grid item md={8}>
+      <Grid item md={8} sx={{display: {xs: "none", sm: "block"}}}>
         <ProjectIndexGrid baseUrl={props.baseUrl}/>
       </Grid>
       <Grid item md={4}>
