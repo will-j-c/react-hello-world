@@ -1,14 +1,14 @@
 :root {
-  --color1: #1C2E4F;
-  --color2: #0A192F;
-  --color3: #64FFDA;
-  --color4: #F2EFEF;
-  --color5: #CE73AC;
-  --color6: #4A49CB;
-  --disable-color: #858C97;
+  --color1: #1c2e4f;
+  --color2: #0a192f;
+  --color3: #64ffda;
+  --color4: #f2efef;
+  --color5: #ce73ac;
+  --color6: #4a49cb;
+  --disable-color: #858c97;
 }
 * {
-  font-family: 'Roboto Mono', monospace;
+  font-family: "Roboto Mono", monospace;
 }
 body {
   background-color: var(--color2);
