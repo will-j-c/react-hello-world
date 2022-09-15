@@ -9,7 +9,6 @@ const ModifiedButton = styled(Button)({
 });
 
 function ContainedButton(props) {
-  // expected props {title, id, href, onClick, isFullWidth}
   const { title, type, url, onClick, isFullWidth } = props;
   return (
     <ModifiedButton 
