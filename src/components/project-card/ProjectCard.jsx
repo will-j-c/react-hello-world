@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AvatarComponent from "../avatar/Avatar";
-import OutlinedButton from "../outlined-button/OutlinedButton";
+// import OutlinedButton from "../outlined-button/OutlinedButton";
 
 function ProjectCard(props) {
   return (
@@ -23,9 +23,9 @@ function ProjectCard(props) {
             <AvatarComponent
               imgAlt={props.details.title}
               imgUrl={props.details.logo}
-              size ={{width:24, height: 24}}
+              sx={{width:24, height: 24, border: "solid 1px var(--color3)"}}
             />
-            <Typography gutterBottom variant="subtitle2" component="div" sx={{color: "var(--color3)", marginLeft: 2}}>
+            <Typography gutterBottom variant="subtitle2" component="div" sx={{color: "var(--color3)", marginLeft: 2, fontWeight: 500}}>
               {props.details.title}
             </Typography>
           </Box>
@@ -34,7 +34,7 @@ function ProjectCard(props) {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <OutlinedButton name="follow" />
+      {/* <OutlinedButton name="follow" /> */}
     </Card>
   );
 }
