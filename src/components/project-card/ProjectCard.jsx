@@ -3,6 +3,7 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import AvatarComponent from "../avatar/Avatar";
 
 function ProjectCard(props) {
   return (
@@ -15,6 +16,7 @@ function ProjectCard(props) {
           alt="green iguana"
         />
         <CardContent>
+          <AvatarComponent imgAlt={props.details.title} imgUrl={props.details.logo} />
           <Typography gutterBottom variant="h5" component="div">
             {props.details.title}
           </Typography>
