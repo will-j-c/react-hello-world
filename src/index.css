@@ -8,7 +8,7 @@
   --disable-color: #858C97;
 }
 * {
-  font-family: "Roboto";
+  font-family: 'Roboto Mono', monospace;
 }
 body {
   background-color: var(--color2);
