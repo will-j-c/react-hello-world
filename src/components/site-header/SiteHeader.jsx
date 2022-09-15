@@ -2,9 +2,7 @@ import { Link } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
-  CssBaseline,
   Typography,
-  Stack,
   Button,
   Tab,
   Tabs,
@@ -13,7 +11,6 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { createTheme } from "@mui/material";
 
 import TitleHomepage from "../title-homepage/TitleHomepage";
 import { useState } from "react";
@@ -23,9 +20,9 @@ function SiteHeader() {
   const theme = useTheme();
   // console.log(theme);
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  console.log(isMatch);
 
-  const [value, setValue] = useState(0);
+  const [valueNavbar, setValueNavbar] = useState(isNaN);
+  const [valueAuth, setValueAuth] = useState(undefined);
   return (
     <AppBar position="static" sx={{ backgroundColor: "var(--color1)" }}>
       <Toolbar>
@@ -45,31 +42,34 @@ function SiteHeader() {
               </Grid>
               <Grid item xs={5}>
                 <Tabs
-                  value={value}
-                  onChange={(e, val) => setValue(val)}
+                  value={valueNavbar}
+                  onChange={(e, val) => setValueNavbar(val)}
                   textColor="inherit"
                   indicatorColor="secondary"
                 >
-                  <Tab label="Products " />
-                  <Tab label="Community" />
-                  <Tab label="Contributors" />
+                  <Tab label="Products " to="/register" component={Link} />
+                  <Tab label="Community" to="/register" component={Link} />
+                  <Tab label="Contributors" to="/register" component={Link} />
                 </Tabs>
               </Grid>
               <Grid item xs={1} />
               <Grid item xs={3}>
                 <Box display="flex">
-                  <Button
-                    sx={{ marginLeft: "auto", background: "var(--color3)" }}
-                    variant="contained"
+                  <Tabs
+                    value={valueAuth}
+                    onChange={(e, val) => setValueAuth(val)}
+                    textColor="inherit"
+                    indicatorColor="secondary"
                   >
-                    Login
-                  </Button>
-                  <Button
+                    <Tab label="Login " to="/register" component={Link} />
+                    <Tab label="Sign up " to="/register" component={Link} />
+                  </Tabs>
+                  {/* <Button
                     sx={{ marginLeft: 1, background: "var(--color3)" }}
                     variant="contained"
                   >
                     Signup
-                  </Button>
+                  </Button> */}
                 </Box>
               </Grid>
             </Grid>
