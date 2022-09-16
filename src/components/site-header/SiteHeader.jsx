@@ -11,6 +11,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Divider from "@mui/material/Divider";
 
 import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
@@ -138,10 +139,19 @@ function SiteHeader() {
                         component={Link}
                         sx={{
                           paddingRight: 0,
-                          borderRight: 1,
                         }}
                       />
                     )}
+                    <Divider
+                      orientation="vertical"
+                      style={{
+                        height: 20,
+                        alignSelf: "center",
+                        color: "true",
+                        backgroundColor: "var(--color3)",
+                      }}
+                      disabled
+                    />
                     {!isAuth && (
                       <Tab
                         key="11"
