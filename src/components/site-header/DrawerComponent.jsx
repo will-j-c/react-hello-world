@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Drawer,
   IconButton,
@@ -7,11 +8,15 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
 const DrawerComponent = () => {
+  const token = true;
+  const pages = token
+    ? ["Login", "Signup", "Products", "Community", "Contributors"]
+    : ["Products", "Community", "Contributors"];
   const [open, setOpen] = useState(false);
-  const links = ["Login", "Signup", "Products", "Community", "Contributors"];
   return (
     <>
       <Drawer
@@ -22,10 +27,21 @@ const DrawerComponent = () => {
         onClose={() => setOpen(false)}
       >
         <List>
-          {links.map((link, index) => (
-            <ListItemButton key={index} divider>
+          <ListItemButton key={0} divider>
+            <IconButton sx={{ p: 0 }}>
+              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+            </IconButton>
+          </ListItemButton>
+
+          {pages.map((page, index) => (
+            <ListItemButton
+              key={index}
+              to={`/${page}`}
+              component={Link}
+              divider
+            >
               <ListItemIcon>
-                <ListItemText sx={{ color: "white" }}>{link}</ListItemText>
+                <ListItemText sx={{ color: "white" }}>{page}</ListItemText>
               </ListItemIcon>
             </ListItemButton>
           ))}

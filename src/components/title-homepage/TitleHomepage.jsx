@@ -27,7 +27,7 @@ function TitleHomepage(props) {
       textAlign={"center"}
       sx={{ color: "var(--color3)" }}
       fontWeight={"bold"}
-      marginTop={5}
+      marginTop={props.marginTop}
       ref={titleRef}
     >
       <span id="title-text"></span>
