@@ -61,7 +61,7 @@ function SiteHeader(props) {
     },
     profile: {
       pageName: "Profile",
-      pageLink: `/profile/${authUserName}`,
+      pageLink: `/${authUserName}`,
     },
     logout: {
       pageName: "Logout",
