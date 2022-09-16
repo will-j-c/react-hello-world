@@ -32,6 +32,7 @@ function DrawerComponent(props) {
         PaperProps={{
           sx: { backgroundColor: "var(--color1)" },
         }}
+        anchor="right"
         open={open}
         onClose={() => setOpen(false)}
       >
