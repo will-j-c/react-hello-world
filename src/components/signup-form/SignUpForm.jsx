@@ -1,7 +1,6 @@
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
@@ -10,7 +9,7 @@ import { useRef, useState } from "react";
 import "./SignUpForm.css";
 import axios from "axios";
 
-import ContainedButton from '../buttons/ContainedButton';
+import Button from '../buttons/Button';
 
 function LoginForm(props) {
   const nameRef = useRef();
@@ -153,13 +152,12 @@ function LoginForm(props) {
           <Box textAlign={"center"}>
             <Button
               variant="outlined"
-              size="small"
               id="sign-up-button"
               type="submit"
-              fullWidth
-            >
-              Sign Up
-            </Button>
+              category="action"
+              title="Sign up"
+              isFullWidth={true} 
+            />
           </Box>
           <Box textAlign={"center"} mt={2} mb={2}>
             <Typography
@@ -173,9 +171,10 @@ function LoginForm(props) {
             </Typography>
           </Box>
           <Box textAlign={"center"}>
-            <ContainedButton
-              title="Login" 
-              type="action"
+            <Button
+              variant="contained"
+              title="Log in" 
+              category="action"
               isFullWidth={true} 
             />
           </Box>
