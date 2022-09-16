@@ -1,0 +1,12 @@
+.login-form {
+  color: var(--color4);
+}
+
+.link {
+  color: var(--color3);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

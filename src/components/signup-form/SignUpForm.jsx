@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useRef, useState } from "react";
+import { Link } from 'react-router-dom';
 import "./SignUpForm.css";
 import axios from "axios";
 
@@ -151,7 +152,7 @@ function LoginForm(props) {
           />
           <Box textAlign={"center"}>
             <Button
-              variant="outlined"
+              variant="contained"
               id="sign-up-button"
               type="submit"
               category="action"
@@ -169,14 +170,9 @@ function LoginForm(props) {
             >
               Already have an account?
             </Typography>
-          </Box>
-          <Box textAlign={"center"}>
-            <Button
-              variant="contained"
-              title="Log in" 
-              category="action"
-              isFullWidth={true} 
-            />
+            <Link className='link' to='/login'>
+              <Typography>Log in here</Typography>
+            </Link>
           </Box>
         </form>
       </Box>

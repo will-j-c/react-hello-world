@@ -16,7 +16,8 @@ root.render(
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />}>
-            <Route path="register" element={<LoginGrid baseUrl={baseUrl} />} />
+            <Route path="register" element={<LoginGrid baseUrl={baseUrl} formType="register" />} />
+            <Route path="login" element={<LoginGrid baseUrl={baseUrl} formType="login"/>} />
             <Route path="" element={<TitleHomepage />} />
           </Route>
         </Routes>
