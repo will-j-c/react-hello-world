@@ -1,14 +1,15 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
+import { Link } from "react-router-dom";
 
-const MenuBar = () => {
-  const settings = ["Profile", "Logout", "Delete Account"];
+function MenuBar(props) {
+  const { profile, logout, deleteAccount } = props.pageLinks;
+  const pages = [profile, logout, deleteAccount];
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -16,7 +17,7 @@ const MenuBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  //TODO: after seting isAuth, replace image photo, profileLink
   return (
     <div>
       <Tooltip title="Open settings">
@@ -40,13 +41,18 @@ const MenuBar = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        {settings.map((setting) => (
-          <MenuItem key={setting} onClick={handleCloseUserMenu}>
-            <Typography textAlign="center">{setting}</Typography>
+        {pages.map((page, index) => (
+          <MenuItem
+            key={index}
+            onClick={handleCloseUserMenu}
+            to={`${page.pageLink}`}
+            component={Link}
+          >
+            <Typography textAlign="center">{page.pageName}</Typography>
           </MenuItem>
         ))}
       </Menu>
     </div>
   );
-};
+}
 export default MenuBar;

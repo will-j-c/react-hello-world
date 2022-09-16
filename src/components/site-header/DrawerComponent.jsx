@@ -1,21 +1,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Drawer,
-  IconButton,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import Avatar from "@mui/material/Avatar";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import TitleHomepage from "../title-homepage/TitleHomepage";
+import AvatarComponent from "../avatar/Avatar";
 
-const DrawerComponent = () => {
-  const token = true;
-  const pages = token
-    ? ["Login", "Signup", "Products", "Community", "Contributors"]
-    : ["Products", "Community", "Contributors"];
+function DrawerComponent(props) {
+  const {
+    products,
+    community,
+    contributors,
+    login,
+    signup,
+    profile,
+    logout,
+    deleteAccount,
+  } = props.pageLinks;
+  const pages = props.isAuth
+    ? [products, community, contributors, logout, deleteAccount]
+    : [login, signup, products, community, contributors];
+
   const [open, setOpen] = useState(false);
   return (
     <>
@@ -27,21 +36,39 @@ const DrawerComponent = () => {
         onClose={() => setOpen(false)}
       >
         <List>
-          <ListItemButton key={0} divider>
-            <IconButton sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-            </IconButton>
-          </ListItemButton>
+          {props.isAuth ? (
+            <>
+              <ListItemButton
+                key={0}
+                to={`${profile.pageLink}`}
+                component={Link}
+                divider
+              >
+                <IconButton sx={{ p: 0 }}>
+                  <AvatarComponent
+                    imgAlt="profileOwner"
+                    src="/static/images/avatar/2.jpg"
+                  />
+                </IconButton>
+              </ListItemButton>
+            </>
+          ) : (
+            <>
+              <TitleHomepage variant="h6" marginTop="0" />
+            </>
+          )}
 
           {pages.map((page, index) => (
             <ListItemButton
               key={index}
-              to={`/${page}`}
+              to={`${page.pageLink}`}
               component={Link}
               divider
             >
               <ListItemIcon>
-                <ListItemText sx={{ color: "white" }}>{page}</ListItemText>
+                <ListItemText sx={{ color: "white" }}>
+                  {page.pageName}
+                </ListItemText>
               </ListItemIcon>
             </ListItemButton>
           ))}
@@ -55,6 +82,6 @@ const DrawerComponent = () => {
       </IconButton>
     </>
   );
-};
+}
 
 export default DrawerComponent;

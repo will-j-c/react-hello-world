@@ -1,69 +1,114 @@
 import { Link } from "react-router-dom";
-import { Tab, Tabs, Grid, useTheme, useMediaQuery, List } from "@mui/material";
-import * as React from "react";
+import { useState } from "react";
+import { useTheme } from "@mui/material";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Grid from "@mui/material/Grid";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-import TitleHomepage from "../title-homepage/TitleHomepage";
-import { useState } from "react";
 import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
+import SearchBar from "./SearchBar";
+import TitleHomepage from "../title-homepage/TitleHomepage";
+
+//TODO: after seting isAuth, replace image photo, profileLink
 
 function SiteHeader() {
-  const token = true;
-  const pages = token
-    ? ["Products", "Community", "Contributors", "Login", "Signup"]
-    : ["Products", "Community", "Contributors"];
+  const isAuth = false;
+  const pageLinks = {
+    products: { pageName: "Products", pageLink: "/products" },
+    community: {
+      pageName: "Community",
+      pageLink: "/community",
+    },
+    contributors: {
+      pageName: "Contributors",
+      pageLink: "/contributors",
+    },
+    login: {
+      pageName: "Login",
+      pageLink: "/login",
+    },
+    signup: {
+      pageName: "Signup",
+      pageLink: "/register",
+    },
+    profile: {
+      pageName: "Profile",
+      pageLink: "/profile",
+    },
+    logout: {
+      pageName: "Logout",
+      pageLink: "/logout",
+    },
+    deleteAccount: {
+      pageName: "Delete Account",
+      pageLink: "/delete",
+    },
+  };
+  const { products, community, contributors, login, signup } = pageLinks;
+  const pages = [products, community, contributors];
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-
   const [valueNavbar, setValueNavbar] = useState(0);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "var(--color1)" }}>
-      <Container maxWidth="xl">
-        <Toolbar>
-          {isMatch ? (
-            <>
-              <Grid item xs={2}>
-                <Link to="/">Hello world</Link>
-              </Grid>
-              <DrawerComponent />
-            </>
-          ) : (
-            <>
+      <Toolbar sx={{ backgroundColor: "var(--color1)" }}>
+        {isMatch ? (
+          <>
+            <Grid container sx={{ placeItems: "center" }}>
               <AdbIcon sx={{ mr: 1 }} />
-              <Grid container sx={{ placeItems: "center" }}>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component={Link}
-                  to="/"
-                  sx={{
-                    mr: 2,
-                    fontFamily: "Roboto mono",
-                    fontWeight: 700,
-                    letterSpacing: ".2rem",
-                    color: "var(--color3)",
-                    textDecoration: "none",
-                  }}
-                >
-                  <TitleHomepage variant="h5" marginTop="0" />
-                </Typography>
-
-                <Grid item sx={{ marginLeft: "auto", color: "var(--color4)" }}>
+              <Typography
+                variant="h6"
+                marginTop="6"
+                noWrap
+                component={Link}
+                to="/"
+                sx={{
+                  mr: 2,
+                  textDecoration: "none",
+                }}
+              >
+                <TitleHomepage variant="h5" marginTop="4" />
+              </Typography>
+              <Box
+                sx={{
+                  marginLeft: "auto",
+                  display: "inline-flex",
+                }}
+              >
+                <SearchBar />
+                <DrawerComponent isAuth={isAuth} pageLinks={pageLinks} />
+              </Box>
+            </Grid>
+          </>
+        ) : (
+          <>
+            <Grid container sx={{ placeItems: "center" }}>
+              <AdbIcon sx={{ mr: 1 }} />
+              <Typography
+                variant="h6"
+                noWrap
+                component={Link}
+                to="/"
+                sx={{
+                  mr: 2,
+                  textDecoration: "none",
+                }}
+              >
+                <TitleHomepage variant="h5" marginTop="0" />
+              </Typography>
+              <Grid item sx={{ marginLeft: "auto", color: "var(--color4)" }}>
+                <Box sx={{ display: "flex", marginLeft: "auto" }}>
+                  <SearchBar />
                   <Tabs
                     value={valueNavbar}
                     onChange={(e, val) => setValueNavbar(val)}
@@ -78,22 +123,46 @@ function SiteHeader() {
                     {pages.map((page, index) => (
                       <Tab
                         key={index}
-                        label={page}
-                        to={`/${page}`}
+                        label={page.pageName}
+                        to={`${page.pageLink}`}
                         component={Link}
-                        sx={{ paddingX: 1.2 }}
+                        sx={{ paddingX: 0.8 }}
                       />
                     ))}
+                    {!isAuth && (
+                      <Tab
+                        key="10"
+                        label={login.pageName}
+                        to={`${login.pageLink}`}
+                        component={Link}
+                        sx={{
+                          paddingRight: 0,
+                          borderRight: 1,
+                        }}
+                      />
+                    )}
+                    {!isAuth && (
+                      <Tab
+                        key="11"
+                        label={signup.pageName}
+                        to={`${signup.pageLink}`}
+                        component={Link}
+                        sx={{ paddingLeft: 0 }}
+                      />
+                    )}
                   </Tabs>
-                </Grid>
+                </Box>
               </Grid>
-              <Box sx={{ flexGrow: 0 }}>
-                <MenuBar />
+            </Grid>
+
+            {isAuth && (
+              <Box sx={{ flexGrow: 1, marginLeft: 1 }}>
+                <MenuBar pageLinks={pageLinks} />
               </Box>
-            </>
-          )}
-        </Toolbar>
-      </Container>
+            )}
+          </>
+        )}
+      </Toolbar>
     </AppBar>
   );
 }
