@@ -5,6 +5,7 @@ import LoginGrid from "./components/login-grid/LoginGrid";
 import "./index.css";
 import App from "./App";
 import TitleHomepage from "./components/title-homepage/TitleHomepage";
+import ProfilePage from "./components/profile-page/ProfilePage";
 import { StyledEngineProvider } from "@mui/material/styles";
 
 const baseUrl = "http://localhost:8800";
@@ -18,6 +19,10 @@ root.render(
           <Route path="/" element={<App baseUrl={baseUrl} />}>
             <Route path="register" element={<LoginGrid baseUrl={baseUrl} />} />
             <Route path="" element={<TitleHomepage />} />
+            <Route
+              path="/:username"
+              element={<ProfilePage baseUrl={baseUrl} />}
+            />
             <Route
               path="*"
               element={
