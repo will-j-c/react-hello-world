@@ -12,7 +12,7 @@ import AvatarComponent from "../avatar/Avatar";
 
 function DrawerComponent(props) {
   const {
-    products,
+    projects,
     community,
     contributors,
     login,
@@ -22,8 +22,8 @@ function DrawerComponent(props) {
     deleteAccount,
   } = props.pageLinks;
   const pages = props.isAuth
-    ? [products, community, contributors, logout, deleteAccount]
-    : [login, signup, products, community, contributors];
+    ? [projects, community, contributors, logout, deleteAccount]
+    : [login, signup, projects, community, contributors];
 
   const [open, setOpen] = useState(false);
   return (

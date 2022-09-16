@@ -20,12 +20,13 @@ import TitleHomepage from "../title-homepage/TitleHomepage";
 //TODO: after seting isAuth, replace image photo, profileLink
 
 function SiteHeader() {
-  const isAuth = false;
+  const isAuth = true;
+  const authUserName = "harold";
   const pageLinks = {
-    products: { pageName: "Products", pageLink: "/products" },
+    projects: { pageName: "Products", pageLink: "/projects" },
     community: {
       pageName: "Community",
-      pageLink: "/community",
+      pageLink: "/users",
     },
     contributors: {
       pageName: "Contributors",
@@ -41,7 +42,7 @@ function SiteHeader() {
     },
     profile: {
       pageName: "Profile",
-      pageLink: "/profile",
+      pageLink: `/profile/${authUserName}`,
     },
     logout: {
       pageName: "Logout",
@@ -52,8 +53,8 @@ function SiteHeader() {
       pageLink: "/delete",
     },
   };
-  const { products, community, contributors, login, signup } = pageLinks;
-  const pages = [products, community, contributors];
+  const { projects, community, contributors, login, signup } = pageLinks;
+  const pages = [projects, community, contributors];
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
