@@ -1,15 +1,58 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import './ProjectAboutPanel.css'
+import "./ProjectAboutPanel.css";
 
 function ProjectAboutPanel(props) {
-  console.log(props);
   if (props.project) {
     const { description, image_urls, categories } = props.project;
-
+    const images = image_urls.length ? (
+      image_urls.map((image, idx, array) => {
+        return (
+          <Box width={1 / 4} height={1 / 4} key={idx} marginRight={2}>
+            <img src={image} alt="Project snaps" className="project-img-show" />
+          </Box>
+        );
+      })
+    ) : (
+      <Typography
+        sx={{ color: "var(--color3)" }}
+        variant={"body2"}
+        marginY={2}
+      >
+        Nothing here yet!
+      </Typography>
+    );
+    const categoriesToDisplay = categories.length ? (
+      categories.map((category, idx) => {
+        return (
+          <Box
+            key={idx}
+            sx={{ backgroundColor: "var(--color7a)" }}
+            padding={1}
+            marginRight={1}
+            borderRadius={1}
+          >
+            {category}
+          </Box>
+        );
+      })
+    ) : (
+      <Typography
+        sx={{ color: "var(--color3)" }}
+        variant={"body2"}
+        marginY={2}
+      >
+        Nothing here yet!
+      </Typography>
+    );
     return (
       <Box marginTop={2}>
-        <Typography sx={{ color: "var(--color4)" }} variant={"subtitle1"}>
+        <Typography
+          sx={{ color: "var(--color4)" }}
+          fontWeight={"bold"}
+          variant={"subtitle1"}
+          marginY={2}
+        >
           About Project:
         </Typography>
         <Box sx={{ backgroundColor: "var(--color1)" }} padding={2}>
@@ -17,27 +60,24 @@ function ProjectAboutPanel(props) {
             {description || "Nothing here yet!"}
           </Typography>
         </Box>
-        <Typography sx={{ color: "var(--color4)" }} variant={"subtitle1"}>
+        <Typography
+          sx={{ color: "var(--color4)" }}
+          fontWeight={"bold"}
+          variant={"subtitle1"}
+          marginY={2}
+        >
           Categories:
         </Typography>
-        {categories.map(category => {
-          return <Box backgroundColor="var(--color3)" width={50}/> 
-        })}
-        <Typography sx={{ color: "var(--color4)" }} variant={"subtitle1"}>
+        <Box display={"flex"}>{categoriesToDisplay}</Box>
+        <Typography
+          sx={{ color: "var(--color4)" }}
+          fontWeight={"bold"}
+          variant={"subtitle1"}
+          marginY={2}
+        >
           Images:
         </Typography>
-        <Box display="flex">
-          {image_urls.map((image, idx, array) => {
-            if (!array.length) {
-              return 'Nothing here yet!';
-            }
-            return (
-              <Box width={1/4} height={1/4} key={idx}>
-                <img src={image} alt="Project snaps" className="project-img-show" />
-              </Box>
-            );
-          })}
-        </Box>
+        <Box display="flex">{images}</Box>
       </Box>
     );
   }

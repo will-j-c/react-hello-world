@@ -9,6 +9,7 @@ import axios from "axios";
 import AvatarComponent from "../avatar/Avatar";
 import ProjectAboutPanel from "../project-about-panel/ProjectAboutPanel";
 import ProjectContributorsPanel from "../project-contributors-panel/ProjectContributorsPanel";
+import './ProjectShowGrid.css'
 
 function ProjectShowGrid(props) {
   const location = useLocation();
@@ -38,11 +39,13 @@ function ProjectShowGrid(props) {
   useEffect(() => {
     if (project) {
       return setPanel(<ProjectAboutPanel project={project} />);
-    }    
+    }
   }, [project]);
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue);
-    return newTabValue === "1" ? setPanel(<ProjectAboutPanel project={project} />) : setPanel(<ProjectContributorsPanel />)
+    return newTabValue === "1"
+      ? setPanel(<ProjectAboutPanel project={project} />)
+      : setPanel(<ProjectContributorsPanel />);
   };
   return project ? (
     <>
@@ -70,14 +73,25 @@ function ProjectShowGrid(props) {
         container
         spacing={8}
         columns={{ xs: 1, md: 12 }}
-        justifyContent="center"
+        justifyContent="space-between"
+        marginTop={4}
       >
-        <Grid md={8} item>
-          <Tabs value={tabValue} onChange={handleTabChange}>
-            <Tab value="1" label="About" />
-            <Tab value="2" label="Contributors" />
-          </Tabs>
-          {project ? panel : ''}
+        <Grid md={8} alignSelf={"flex-start"} item>
+          <Box
+            sx={{
+              border: "solid 1px var(--color3)",
+              backgroundColor: "var(--color1",
+            }}
+            paddingX={4}
+            paddingBottom={4}
+            id="panel-box"
+          >
+            <Tabs value={tabValue} onChange={handleTabChange}>
+              <Tab value="1" label="About" />
+              <Tab value="2" label="Contributors" />
+            </Tabs>
+              {project ? panel : ""}
+          </Box>
         </Grid>
         <Grid item></Grid>
       </Grid>
