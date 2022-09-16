@@ -15,7 +15,7 @@ root.render(
     <StyledEngineProvider injectFirst>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />}>
+          <Route path="/" element={<App baseUrl={baseUrl} />}>
             <Route path="register" element={<LoginGrid baseUrl={baseUrl} />} />
             <Route path="" element={<TitleHomepage />} />
             <Route

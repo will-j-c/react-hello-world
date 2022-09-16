@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import AvatarComponent from "../avatar/Avatar";
+import Avatar from "@mui/material/Avatar";
 import { Link } from "react-router-dom";
 
 function MenuBar(props) {
@@ -22,10 +23,7 @@ function MenuBar(props) {
     <div>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <AvatarComponent
-            imgAlt="profileOwner"
-            src="/static/images/avatar/2.jpg"
-          />
+          <Avatar alt="profileOwner" src={props.profileAvatarUrl} />
         </IconButton>
       </Tooltip>
       <Menu
