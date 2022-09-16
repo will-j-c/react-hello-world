@@ -6,11 +6,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AvatarComponent from "../avatar/Avatar";
 import OutlinedButton from "../outlined-button/OutlinedButton";
-import ContainedButton from "../buttons/ContainedButton";
+// import ContainedButton from "../buttons/ContainedButton";
 
 function ProjectCard(props) {
   const categories = props.details.categories.map((category) => {
-    return <ContainedButton title={category} />;
+    // return <ContainedButton title={category} />;
   });
   return (
     <Card
@@ -73,7 +73,7 @@ function ProjectCard(props) {
         sx={{ position: "absolute", bottom: 10, right: 5 }}
       >
         <OutlinedButton title="Follow" />
-        <ContainedButton title="See more" />
+        {/* <ContainedButton title="See more" /> */}
       </Box>
     </Card>
   );

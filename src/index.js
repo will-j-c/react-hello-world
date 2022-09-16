@@ -8,6 +8,7 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
+import { StyledEngineProvider } from '@mui/material/styles';
 
 const baseUrl = "http://localhost:8800";
 const theme = createTheme({
@@ -20,6 +21,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
+    <StyledEngineProvider injectFirst>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />}>
@@ -31,6 +33,7 @@ root.render(
           </Route>
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
+      </StyledEngineProvider>
+    </ThemeProvider> 
   </React.StrictMode>
 );
