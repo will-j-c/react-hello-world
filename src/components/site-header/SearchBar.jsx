@@ -52,7 +52,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-const onSearchSubmit = () => {};
+const onSearchSubmit = () => {
+  return;
+};
 
 export default function SearchBar() {
   return (
