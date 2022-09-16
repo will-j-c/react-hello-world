@@ -17,7 +17,7 @@
 }
 body {
   background-color: var(--color2);
-  font-family: "Roboto Mono", monospace;
+  font-family: "Roboto Mono", monospace!;
 }
 html {
   height: 100%;

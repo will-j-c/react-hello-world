@@ -20,7 +20,7 @@ import TitleHomepage from "../title-homepage/TitleHomepage";
 //TODO: after seting isAuth, replace image photo, profileLink
 
 function SiteHeader() {
-  const isAuth = true;
+  const isAuth = false;
   const authUserName = "harold";
   const pageLinks = {
     projects: { pageName: "Products", pageLink: "/projects" },
