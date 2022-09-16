@@ -12,7 +12,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import Divider from "@mui/material/Divider";
 
 import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
@@ -27,7 +26,7 @@ function SiteHeader(props) {
   const isAuth = !token ? false : jwt_decode(token);
   let authUserName = "harold";
   if (isAuth) {
-    const authUserName = isAuth?.data.username; // this is for testing only
+    authUserName = isAuth?.data.username; // this is for testing only
   }
   const [profile, setProfile] = useState(null);
   useEffect(() => {

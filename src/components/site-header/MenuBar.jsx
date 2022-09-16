@@ -4,7 +4,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import AvatarComponent from "../avatar/Avatar";
 import Avatar from "@mui/material/Avatar";
 import { Link } from "react-router-dom";
 
