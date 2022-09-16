@@ -7,6 +7,7 @@ import App from "./App";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import HomeGrid from "./components/home-grid/HomeGrid";
+import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
 
 const baseUrl = "http://localhost:8800";
 const theme = createTheme({
@@ -23,7 +24,10 @@ root.render(
         <Routes>
           <Route path="/" element={<App />}>
             <Route path="register" element={<LoginGrid baseUrl={baseUrl} />} />
-            <Route path="" element={<HomeGrid baseUrl={baseUrl}/>} />
+            <Route path="projects">
+              <Route path=":slug"  element={<ProjectShowGrid baseUrl={baseUrl} />}/>
+            </Route>
+            <Route index element={<HomeGrid baseUrl={baseUrl}/>} />
           </Route>
         </Routes>
       </BrowserRouter>
