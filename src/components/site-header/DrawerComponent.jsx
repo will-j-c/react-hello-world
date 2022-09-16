@@ -9,7 +9,6 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import TitleHomepage from "../title-homepage/TitleHomepage";
 import Avatar from "@mui/material/Avatar";
-import AvatarComponent from "../avatar/Avatar";
 
 function DrawerComponent(props) {
   const {
