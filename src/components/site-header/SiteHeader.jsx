@@ -35,9 +35,9 @@ function SiteHeader(props) {
         setProfile(response.data);
       });
   }, []);
-  const profileAvatarUrl =
-    profile?.profile_pic_url ||
+  const defaultProfileAvatarUrl =
     "https://i.pinimg.com/564x/3a/88/6a/3a886a5b90c687d0904b884b639157cc.jpg";
+  const profileAvatarUrl = profile?.profile_pic_url || defaultProfileAvatarUrl;
   const pageLinks = {
     projects: { pageName: "Projects", pageLink: "/projects" },
     community: {
