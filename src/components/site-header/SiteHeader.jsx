@@ -24,8 +24,11 @@ import axios from "axios";
 
 function SiteHeader(props) {
   const token = localStorage.getItem("user_token");
-  const isAuth = jwt_decode(token);
-  const authUserName = isAuth.data.username || "harold"; // this is for testing only
+  const isAuth = !token ? false : jwt_decode(token);
+  let authUserName = "harold";
+  if (isAuth) {
+    const authUserName = isAuth?.data.username; // this is for testing only
+  }
   const [profile, setProfile] = useState(null);
   useEffect(() => {
     axios
@@ -162,21 +165,8 @@ function SiteHeader(props) {
                       />
                     )}
                     {!isAuth && (
-                      <Divider
-                        orientation="vertical"
-                        style={{
-                          height: 20,
-                          alignSelf: "center",
-                          color: "true",
-                          backgroundColor: "var(--color3)",
-                        }}
-                        disabled
-                      />
-                    )}
-
-                    {!isAuth && (
                       <Tab
-                        key="11"
+                        key="12"
                         label={signup.pageName}
                         to={`${signup.pageLink}`}
                         component={Link}
