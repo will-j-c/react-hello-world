@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useRef, useState } from "react";
-import './LoginForm.scss'
+import styles from '../login-grid/LoginGrid.module.scss';
 import axios from "axios";
 
 import Button from '../buttons/Button';
@@ -23,11 +23,12 @@ export default function LogInForm(props) {
   })
 
   return (
-    <Box className="login-form">
+    <Box className={styles['form']}>
       <Typography
-        variant="subtitle1"
-        textAlign={"center"}
-        id="box-title"
+        variant='h6'
+        component="h1"
+        textAlign={'center'}
+        className={styles['title']}
         gutterBottom
       >
         Log in by
@@ -38,7 +39,7 @@ export default function LogInForm(props) {
         </Grid>
       </Grid>
 
-      <Typography variant="subtitle1" id="or" gutterBottom>
+      <Typography variant="subtitle1" className={styles['or']} gutterBottom>
         <span>or</span>
       </Typography>
 
@@ -61,12 +62,12 @@ export default function LogInForm(props) {
             required
             hiddenLabel
             fullWidth
-            defaultValue="Ex. McSpicy"
-            variant="filled"
-            size="small"
-            form="registration-form"
+            defaultValue='Ex. McSpicy'
+            variant='filled'
+            size='small'
+            form='login-form'
             sx={{ marginBottom: 2 }}
-            className="input-text"
+            className={styles['input-text']}
           />
           <Typography variant="subtitle1" gutterBottom>
             Password
@@ -80,7 +81,7 @@ export default function LogInForm(props) {
             variant="filled"
             size="small"
             sx={{ marginBottom: 2 }}
-            className="input-text"
+            className={styles['input-text']}
             // inputRef={passwordRef}
           />
           <Box textAlign={"center"}>
@@ -104,7 +105,7 @@ export default function LogInForm(props) {
             
           </Typography>
           
-          <Link className={'link'} to='/register'>
+          <Link className={styles['link']} to='/register'>
             <Typography>Sign up</Typography>
           </Link>
           

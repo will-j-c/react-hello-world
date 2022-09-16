@@ -7,7 +7,8 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useRef, useState } from "react";
 import { Link } from 'react-router-dom';
-import "./SignUpForm.css";
+// import "./SignUpForm.css";
+// import styles from '../login-grid/LoginGrid.scss';
 import axios from "axios";
 
 import Button from '../buttons/Button';
@@ -45,7 +46,7 @@ function LoginForm(props) {
       });
   };
   return (
-    <Box className="sign-up-form">
+    <Box className='sign-up-form'>
       <Typography
         variant="subtitle1"
         textAlign={"center"}

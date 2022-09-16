@@ -18,7 +18,6 @@ function LoginGrid(props) {
         <ProjectIndexGrid baseUrl={baseUrl}/>
       </Grid>
 
-
       <Grid item md={4}>
         { formType === 'register' ? <SignUpForm baseUrl={baseUrl}/> : <LogInForm baseUrl={baseUrl}/>}
       </Grid>
