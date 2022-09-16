@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useTheme } from "@mui/material";
+import jwt_decode from "jwt-decode";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -21,8 +22,10 @@ import TitleHomepage from "../title-homepage/TitleHomepage";
 //TODO: after seting isAuth, replace image photo, profileLink
 
 function SiteHeader() {
-  const isAuth = false;
-  const authUserName = "harold";
+  const token = localStorage.getItem("user_token");
+  const isAuth = jwt_decode(token);
+  const authUserName = isAuth.data.username || "harold";
+
   const pageLinks = {
     projects: { pageName: "Projects", pageLink: "/projects" },
     community: {
@@ -142,16 +145,19 @@ function SiteHeader() {
                         }}
                       />
                     )}
-                    <Divider
-                      orientation="vertical"
-                      style={{
-                        height: 20,
-                        alignSelf: "center",
-                        color: "true",
-                        backgroundColor: "var(--color3)",
-                      }}
-                      disabled
-                    />
+                    {!isAuth && (
+                      <Divider
+                        orientation="vertical"
+                        style={{
+                          height: 20,
+                          alignSelf: "center",
+                          color: "true",
+                          backgroundColor: "var(--color3)",
+                        }}
+                        disabled
+                      />
+                    )}
+
                     {!isAuth && (
                       <Tab
                         key="11"
