@@ -27,7 +27,6 @@ function SiteHeader(props) {
   const isAuth = jwt_decode(token);
   const authUserName = isAuth.data.username || "harold"; // this is for testing only
   const [profile, setProfile] = useState(null);
-  const profileOwnerInformation = {};
   useEffect(() => {
     axios
       .get(`${props.baseUrl}/api/v1/users/${authUserName}`)
@@ -38,6 +37,7 @@ function SiteHeader(props) {
   const defaultProfileAvatarUrl =
     "https://i.pinimg.com/564x/3a/88/6a/3a886a5b90c687d0904b884b639157cc.jpg";
   const profileAvatarUrl = profile?.profile_pic_url || defaultProfileAvatarUrl;
+
   const pageLinks = {
     projects: { pageName: "Projects", pageLink: "/projects" },
     community: {
