@@ -23,7 +23,7 @@ function SiteHeader() {
   const isAuth = false;
   const authUserName = "harold";
   const pageLinks = {
-    projects: { pageName: "Products", pageLink: "/projects" },
+    projects: { pageName: "Projects", pageLink: "/projects" },
     community: {
       pageName: "Community",
       pageLink: "/users",
