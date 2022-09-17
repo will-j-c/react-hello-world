@@ -13,6 +13,7 @@ function CommentAddField(props) {
       return;
     }
     props.postComment(formObj.commentRef.current.value);
+    formObj.commentRef.current.value = "";
   };
   return (
     <Box
