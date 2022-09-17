@@ -7,8 +7,6 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import AdbIcon from "@mui/icons-material/Adb";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import List from "@mui/material/List";
@@ -40,7 +38,7 @@ function SiteHeader() {
     "https://i.pinimg.com/564x/3a/88/6a/3a886a5b90c687d0904b884b639157cc.jpg";
   if (profile) {
     profileAvatarUrl = profile?.profile_pic_url;
-  }
+  } else profileAvatarUrl = defaultProfileAvatarUrl;
 
   const pageLinks = {
     projects: { pageName: "Projects", pageLink: "/projects" },
@@ -77,13 +75,9 @@ function SiteHeader() {
   const pages = isAuth
     ? [projects, community, contributors]
     : [projects, community, contributors, login, signup];
-  const pagesAuth = [projects, community, contributors];
-  const pagesUnAuth = [projects, community, contributors, login, signup];
-  // const pages = [projects, community, contributors];
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  const [value, setValue] = useState(0);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "var(--color1)" }}>
