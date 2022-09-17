@@ -11,6 +11,10 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Grid from "@mui/material/Grid";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 
 import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
@@ -133,57 +137,34 @@ function SiteHeader() {
                 <TitleHomepage variant="h5" marginTop="0" />
               </Typography>
               <Grid item sx={{ marginLeft: "auto", color: "var(--color4)" }}>
-                <Box sx={{ display: "flex", marginLeft: "auto" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    marginLeft: "auto",
+                  }}
+                >
                   <SearchBar />
-                  {isAuth ? (
-                    <Tabs
-                      value={value}
-                      onChange={(e, val) => {
-                        setValue(val);
-                      }}
-                      textColor="inherit"
-                      indicatorColor="secondary"
-                      TabIndicatorProps={{
-                        style: {
-                          backgroundColor: "var(--color3)",
-                        },
-                      }}
-                    >
-                      {pagesAuth.map((page, index) => (
-                        <Tab
-                          key={index}
-                          label={page.pageName}
-                          to={page.pageLink}
-                          component={Link}
-                          sx={{ paddingX: 0.8 }}
-                        />
-                      ))}
-                    </Tabs>
-                  ) : (
-                    <Tabs
-                      value={value}
-                      onChange={(e, val) => {
-                        setValue(val);
-                      }}
-                      textColor="inherit"
-                      indicatorColor="secondary"
-                      TabIndicatorProps={{
-                        style: {
-                          backgroundColor: "var(--color3)",
-                        },
-                      }}
-                    >
-                      {pagesUnAuth.map((page, index) => (
-                        <Tab
-                          key={index}
-                          label={page.pageName}
-                          to={page.pageLink}
-                          component={Link}
-                          sx={{ paddingX: 0.8 }}
-                        />
-                      ))}
-                    </Tabs>
-                  )}
+                  <List
+                    sx={{
+                      display: "flex",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    {pages.map((page, index) => (
+                      <ListItemButton
+                        key={index}
+                        to={`${page.pageLink}`}
+                        component={Link}
+                        divider
+                      >
+                        <ListItemIcon>
+                          <ListItemText sx={{ color: "white" }}>
+                            {page.pageName}
+                          </ListItemText>
+                        </ListItemIcon>
+                      </ListItemButton>
+                    ))}
+                  </List>
                 </Box>
               </Grid>
             </Grid>
