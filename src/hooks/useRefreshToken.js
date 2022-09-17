@@ -1,17 +1,14 @@
 import axios from '../api/axios';
 import useAuth from './useAuth';
-import { getCookie } from 'react-use-cookie';
+import { useCookies } from 'react-cookie';
 
 export default function useRefreshToken() {
   const { setAuth } = useAuth();
-  const userRefreshToken = getCookie('token');
+  const [cookies, setCookie] = useCookies(); 
   const refresh = async () => {
     const response = await axios.post(
       '/auth/refresh',
-      {
-        refreshToken: userRefreshToken ,
-        withCredentials: true
-      }
+      { refreshToken: cookies.refreshToken}
     );
 
     const newAccessToken = response.data.accessToken;
@@ -19,6 +16,8 @@ export default function useRefreshToken() {
     setAuth(prev => {
       return {...prev, accessToken: newAccessToken};
     })
+
+    setCookie('accessToken', newAccessToken);
 
     return newAccessToken;
   }
