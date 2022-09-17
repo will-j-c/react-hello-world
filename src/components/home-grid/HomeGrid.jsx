@@ -6,7 +6,7 @@ function HomeGrid(props) {
   return (
     <Grid container spacing={10} direction='column'>
       <Grid item >
-        <TitleHomepage />
+        <TitleHomepage fontSize={"6.75rem"}/>
       </Grid>
       <Grid item >
         <ProjectIndexGrid baseUrl={props.baseUrl}/>

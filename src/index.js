@@ -8,7 +8,6 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
-import { StyledEngineProvider } from "@mui/material/styles";
 
 const baseUrl = "http://localhost:8800";
 const theme = createTheme({
@@ -42,26 +41,39 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    {/* <StyledEngineProvider injectFirst> */}
     <ThemeProvider theme={theme}>
-      <StyledEngineProvider injectFirst>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App baseUrl={baseUrl} />}>
+            <Route
+              path="register"
+              element={<LoginGrid baseUrl={baseUrl} formType="register" />}
+            />
+            <Route
+              path="login"
+              element={<LoginGrid baseUrl={baseUrl} formType="login" />}
+            />
+            <Route path="projects">
               <Route
-                path="register"
-                element={<LoginGrid baseUrl={baseUrl} />}
+                path={":slug"}
+                element={<ProjectShowGrid baseUrl={baseUrl} />}
               />
-              <Route path="projects">
-                <Route
-                  path=":slug"
-                  element={<ProjectShowGrid baseUrl={baseUrl} />}
-                />
-              </Route>
-              <Route index element={<HomeGrid baseUrl={baseUrl} />} />
+              <Route index element={<ProjectShowGrid baseUrl={baseUrl} />} />
             </Route>
-          </Routes>
-        </BrowserRouter>
-      </StyledEngineProvider>
+            <Route index element={<HomeGrid baseUrl={baseUrl} />} />
+            <Route
+              path="*"
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <p style={{ color: "white" }}>There's nothing here!</p>
+                </main>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
+    {/* </StyledEngineProvider> */}
   </React.StrictMode>
 );

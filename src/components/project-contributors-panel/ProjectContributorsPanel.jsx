@@ -1,55 +1,77 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import TableHead from '@mui/material/TableHead';
-import Paper from '@mui/material/Paper';
-import TableContainer from '@mui/material/TableContainer';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import TableHead from "@mui/material/TableHead";
+import TableContainer from "@mui/material/TableContainer";
+import AvatarGroup from "@mui/material/AvatarGroup";
+import AvatarComponent from "../avatar/Avatar";
+import Button from "../buttons/Button"
 
 function ProjectContributorsPanel(props) {
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
+  const contributors = props.contributors;
+  const contibutorsAvatars = contributors.map((contributor, idx) => {});
+  console.log(contributors);
   return (
     <Box>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
+      <TableContainer>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="left" sx={{ color: "var(--color4)" }}>
+                Contributor
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              <TableCell align="center" sx={{ color: "var(--color4)" }}>
+                Available
+              </TableCell>
+              <TableCell align="left" sx={{ color: "var(--color4)" }}>
+                Filled by
+              </TableCell>
+              <TableCell align="center" />
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {contributors.map((contributor) => (
+              <TableRow
+                key={contributor.title}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell
+                  component="th"
+                  scope="row"
+                  sx={{ color: "var(--color4)" }}
+                >
+                  {contributor.title}
+                </TableCell>
+                <TableCell align="center" sx={{ color: "var(--color4)" }}>
+                  {contributor.available_slots}{" "}
+                </TableCell>
+                <TableCell align="left" >
+                  {contributor.contributors.map((user, idx) => {
+                    if (user.state === "accepted") {
+                      return (
+                        <AvatarGroup max={4} spacing={"small"} key={idx} sx={{flexDirection: "row"}}>
+                          <AvatarComponent
+                            imgAlt={user.user.username}
+                            imgUrl={user.user.profile_pic_url}
+                          />
+                        </AvatarGroup>
+                      );
+                    }
+                  })}
+                </TableCell>
+                <TableCell>
+                  <Box display={"flex"} justifyContent={"space-between"}>
+                    <Button variant={"outlined"} category={"action"} title={"See more"} />
+                    <Button variant={"contained"} category={"action"} title={"Apply"} />
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 }

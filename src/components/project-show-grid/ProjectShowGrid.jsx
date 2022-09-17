@@ -1,8 +1,6 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -51,7 +49,7 @@ function ProjectShowGrid(props) {
     setTabValue(newTabValue);
     return newTabValue === "1"
       ? setPanel(<ProjectAboutPanel project={project} />)
-      : setPanel(<ProjectContributorsPanel />);
+      : setPanel(<ProjectContributorsPanel creator={creator} contributors={contributors} />);
   };
 
   return project ? (

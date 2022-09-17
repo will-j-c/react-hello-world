@@ -1,6 +1,5 @@
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { useState, useEffect } from "react";
 
 function ShowTabs(props) {
   return (
