@@ -47,8 +47,6 @@ function ProfilePage(props) {
       setProjectAccepted(response.data);
     });
   }, []);
-  // console.log("profile: ", profile);
-  // console.log("projectAccprojectAccepted: ", projectAccepted);
 
   // Logic for handling tabs
   useEffect(() => {
@@ -145,7 +143,6 @@ function ProfilePage(props) {
             />
           </Box>
         </Box>
-
         <Box
           sx={{
             border: "solid 1px var(--color3)",
@@ -153,6 +150,7 @@ function ProfilePage(props) {
           }}
           paddingX={4}
           paddingBottom={4}
+          marginTop={4}
           id="panel-box"
         >
           <ProfileShowTabs
@@ -161,33 +159,6 @@ function ProfilePage(props) {
           />
           {profile ? panel : ""}
         </Box>
-
-        {/* <Grid
-          container
-          spacing={8}
-          columns={{ xs: 1, md: 12 }}
-          justifyContent="space-between"
-          marginTop={4}
-        >
-          <Grid md={8} alignSelf={"flex-start"} item>
-            <Box
-              sx={{
-                border: "solid 1px var(--color3)",
-                backgroundColor: "var(--color2)",
-              }}
-              paddingX={4}
-              paddingBottom={4}
-              id="panel-box"
-            >
-              <ProfileShowTabs
-                tabValue={tabValue}
-                handleTabChange={handleTabChange}
-              />
-              {profile ? panel : ""}
-            </Box>
-          </Grid>
-          <Grid item></Grid>
-        </Grid> */}
       </Container>
     </>
   ) : (
