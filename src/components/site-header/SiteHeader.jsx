@@ -137,6 +137,7 @@ function SiteHeader() {
                   sx={{
                     display: "flex",
                     marginLeft: "auto",
+                    alignItems: "center",
                   }}
                 >
                   <SearchBar />
@@ -151,10 +152,23 @@ function SiteHeader() {
                         key={index}
                         to={`${page.pageLink}`}
                         component={Link}
+                        sx={{
+                          borderBottom: "0",
+                          "&:hover": {
+                            backgroundColor: "var(--color2)",
+                          },
+                        }}
                         divider
                       >
                         <ListItemIcon>
-                          <ListItemText sx={{ color: "white" }}>
+                          <ListItemText
+                            sx={{
+                              color: "var(--color4)",
+                              "&:hover": {
+                                color: "var(--color3)",
+                              },
+                            }}
+                          >
                             {page.pageName}
                           </ListItemText>
                         </ListItemIcon>
