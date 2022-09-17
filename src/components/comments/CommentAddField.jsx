@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import ArrowForwardOutlinedIcon from "@mui/icons-material/ArrowForwardOutlined";
 import { useRef } from "react";
-import styles from '../login-grid/LoginGrid.module.scss'
+import styles from './CommentAddField.module.scss'
 
 function CommentAddField(props) {
   const formObj = {
@@ -13,6 +13,7 @@ function CommentAddField(props) {
       return;
     }
     props.postComment(formObj.commentRef.current.value);
+    formObj.commentRef.current.value = "";
   };
   return (
     <Box
@@ -21,6 +22,7 @@ function CommentAddField(props) {
       sx={{ backgroundColor: "var(--color1)" }}
       paddingX={1}
       width={1}
+      className={styles['form']}
     >
       <TextField
         required
