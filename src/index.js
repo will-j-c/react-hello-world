@@ -5,6 +5,7 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
+import LogOut from "./components/logout/LogOut";
 
 import App from "./App";
 import "./index.css";
@@ -56,6 +57,7 @@ root.render(
                   element={<LoginGrid formType="register" />}
                 />
                 <Route path="login" element={<LoginGrid formType="login" />} />
+                <Route path="logout" element={<LogOut />} />
                 <Route path="users" element={<UserIndexGrid />} />
                 <Route path="projects" >
                   <Route path=":slug" element={<ProjectShowGrid />}/>
