@@ -8,6 +8,7 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
+import ProfilePage from "./components/profile-page/ProfilePage";
 import TitleHomepage from "./components/title-homepage/TitleHomepage";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
@@ -58,6 +59,7 @@ root.render(
                 <Route path="projects">
                   <Route path=":slug" element={<ProjectShowGrid />} />
                 </Route>
+                <Route path="/:username" element={<ProfilePage />} />
                 <Route path="" element={<TitleHomepage />} />
                 <Route
                   path="*"

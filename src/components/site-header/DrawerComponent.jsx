@@ -7,7 +7,6 @@ import IconButton from "@mui/material/IconButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import TitleHomepage from "../title-homepage/TitleHomepage";
 import Avatar from "@mui/material/Avatar";
 
 function DrawerComponent(props) {
