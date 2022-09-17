@@ -25,7 +25,6 @@ import AuthContext from "../../context/AuthProvider";
 function SiteHeader() {
   const { auth } = useContext(AuthContext);
   const isAuth = !!auth.username;
-  console.log(isAuth);
   const [profile, setProfile] = useState(null);
   useEffect(() => {
     if (auth?.username) {
@@ -72,7 +71,6 @@ function SiteHeader() {
       pageLink: "/delete",
     },
   };
-  console.log(pageLinks);
   const { projects, community, contributors, login, signup } = pageLinks;
   const pages = isAuth
     ? [projects, community, contributors]
