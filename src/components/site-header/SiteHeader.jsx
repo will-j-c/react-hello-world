@@ -60,7 +60,7 @@ function SiteHeader() {
     },
     profile: {
       pageName: "Profile",
-      pageLink: `/${auth?.username}`,
+      pageLink: `/users/${auth?.username}`,
     },
     logout: {
       pageName: "Logout",
@@ -97,7 +97,7 @@ function SiteHeader() {
                   textDecoration: "none",
                 }}
               >
-                <TitleHomepage marginTop="4" fontSize={"1em"}/>
+                <TitleHomepage marginTop="4" fontSize={"1em"} />
               </Typography>
               <Box
                 sx={{
