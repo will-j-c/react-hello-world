@@ -59,7 +59,7 @@ root.render(
                 <Route path="login" element={<LoginGrid formType="login" />} />
                 <Route path="logout" element={<LogOut />} />
                 <Route path="users" element={<UserIndexGrid />} />
-                <Route path="/:username" element={<ProfilePage />} />
+                <Route path="users/:username" element={<ProfilePage />} />
                 <Route path="projects">
                   <Route path=":slug" element={<ProjectShowGrid />} />
                 </Route>
