@@ -9,6 +9,7 @@ import ProjectContributorsPanel from "../project-contributors-panel/ProjectContr
 import ShowTabs from "../show-tabs/ShowTabs";
 import './ProjectShowGrid.css'
 import axios from "../../api/axios"
+import CommentPanel from "../comments/CommentPanel";
 
   const baseProjectLogo =
     "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
@@ -30,12 +31,16 @@ function ProjectShowGrid(props) {
         setCreator(response.data.createdBy);
       },
       (error) => {
-        // setIsLoaded(true);
-        // setError(error);
+        
       }
     );
+
+    axios.get(`/comments/${slug}`).then((response) => {
+      setComments(response.data);
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   // Logic for handling tabs
   useEffect(() => {
@@ -54,7 +59,7 @@ function ProjectShowGrid(props) {
 
   return project ? (
     <>
-      <Box display={"flex"}>
+      <Box display={"flex"} marginTop={4} >
         <AvatarComponent
           imgAlt={project.title}
           imgUrl={project.logo_url || baseProjectLogo}
@@ -66,7 +71,7 @@ function ProjectShowGrid(props) {
           justifyContent={"center"}
           marginLeft={5}
         >
-          <Typography sx={{ color: "var(--color3)" }}>
+          <Typography sx={{ color: "var(--color3)" }} variant={"h4"}>
             {project.title}
           </Typography>
           <Typography sx={{ color: "var(--color4)" }}>
@@ -76,12 +81,12 @@ function ProjectShowGrid(props) {
       </Box>
       <Grid
         container
-        spacing={8}
+        spacing={4}
         columns={{ xs: 1, md: 12 }}
         justifyContent="space-between"
         marginTop={4}
       >
-        <Grid md={8} alignSelf={"flex-start"} item>
+        <Grid md={7} alignSelf={"flex-start"} paddingTop={0} height={1} item>
           <Box
             sx={{
               border: "solid 1px var(--color3)",
@@ -90,12 +95,15 @@ function ProjectShowGrid(props) {
             paddingX={4}
             paddingBottom={4}
             id="panel-box"
+            height={1}
           >
             <ShowTabs tabValue={tabValue} handleTabChange={handleTabChange}/>
               {project ? panel : ""}
           </Box>
         </Grid>
-        <Grid item></Grid>
+        <Grid md={5} item>
+          <CommentPanel comments={comments}/>
+        </Grid>
       </Grid>
     </>
   ) : (
