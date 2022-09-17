@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material";
-import jwt_decode from "jwt-decode";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -20,8 +19,6 @@ import TitleHomepage from "../title-homepage/TitleHomepage";
 import axios from "../../api/axios";
 
 import AuthContext from "../../context/AuthProvider";
-
-//TODO: after seting isAuth, replace image photo, profileLink
 
 function SiteHeader() {
   const { auth } = useContext(AuthContext);
@@ -73,7 +70,12 @@ function SiteHeader() {
     },
   };
   const { projects, community, contributors, login, signup } = pageLinks;
-  const pages = [projects, community, contributors];
+  const pages = isAuth
+    ? [projects, community, contributors]
+    : [projects, community, contributors, login, signup];
+  const pagesAuth = [projects, community, contributors];
+  const pagesUnAuth = [projects, community, contributors, login, signup];
+  // const pages = [projects, community, contributors];
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
@@ -133,66 +135,55 @@ function SiteHeader() {
               <Grid item sx={{ marginLeft: "auto", color: "var(--color4)" }}>
                 <Box sx={{ display: "flex", marginLeft: "auto" }}>
                   <SearchBar />
-                  <Tabs
-                    value={value}
-                    onChange={(e, val) => {
-                      setValue(val);
-                    }}
-                    textColor="inherit"
-                    indicatorColor="secondary"
-                    TabIndicatorProps={{
-                      style: {
-                        backgroundColor: "var(--color3)",
-                      },
-                    }}
-                  >
-                    {pages.map((page, index) => (
-                      <Tab
-                        key={index}
-                        label={page.pageName}
-                        to={page.pageLink}
-                        component={Link}
-                        sx={{ paddingX: 0.8 }}
-                      />
-                    ))}
-                    {/* <Tab
-                      key="3"
-                      label={login.pageName}
-                      to={`${login.pageLink}`}
-                      component={Link}
-                      sx={{
-                        paddingRight: 0,
+                  {isAuth ? (
+                    <Tabs
+                      value={value}
+                      onChange={(e, val) => {
+                        setValue(val);
                       }}
-                    />
-                    <Tab
-                      key="4"
-                      label={signup.pageName}
-                      to={`${signup.pageLink}`}
-                      component={Link}
-                      sx={{ paddingLeft: 0 }}
-                    /> */}
-
-                    {!isAuth && (
-                      <Tab
-                        key="3"
-                        label={login.pageName}
-                        to={`${login.pageLink}`}
-                        component={Link}
-                        sx={{
-                          paddingRight: 0,
-                        }}
-                      />
-                    )}
-                    {!isAuth && (
-                      <Tab
-                        key="4"
-                        label={signup.pageName}
-                        to={`${signup.pageLink}`}
-                        component={Link}
-                        sx={{ paddingLeft: 0 }}
-                      />
-                    )}
-                  </Tabs>
+                      textColor="inherit"
+                      indicatorColor="secondary"
+                      TabIndicatorProps={{
+                        style: {
+                          backgroundColor: "var(--color3)",
+                        },
+                      }}
+                    >
+                      {pagesAuth.map((page, index) => (
+                        <Tab
+                          key={index}
+                          label={page.pageName}
+                          to={page.pageLink}
+                          component={Link}
+                          sx={{ paddingX: 0.8 }}
+                        />
+                      ))}
+                    </Tabs>
+                  ) : (
+                    <Tabs
+                      value={value}
+                      onChange={(e, val) => {
+                        setValue(val);
+                      }}
+                      textColor="inherit"
+                      indicatorColor="secondary"
+                      TabIndicatorProps={{
+                        style: {
+                          backgroundColor: "var(--color3)",
+                        },
+                      }}
+                    >
+                      {pagesUnAuth.map((page, index) => (
+                        <Tab
+                          key={index}
+                          label={page.pageName}
+                          to={page.pageLink}
+                          component={Link}
+                          sx={{ paddingX: 0.8 }}
+                        />
+                      ))}
+                    </Tabs>
+                  )}
                 </Box>
               </Grid>
             </Grid>
