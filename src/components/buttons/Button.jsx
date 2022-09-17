@@ -14,7 +14,7 @@ function StyledButton(props) {
       to={route} 
       onClick={onClick}
       fullWidth={isFullWidth}
-      disableRipple={disabled}
+      disabled={disabled}
     >
       {title}
     </Button>
