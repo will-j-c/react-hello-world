@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -18,6 +18,8 @@ import Button from "../buttons/Button";
 
 import "./ProfilePage.scss";
 import axios from "../../api/axios";
+import AuthContext from "../../context/AuthProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const baseProfileAvatar =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
@@ -26,6 +28,9 @@ function ProfilePage(props) {
   const params = useParams();
   const username = params.username;
   const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useContext(AuthContext);
+  const profileOwnerName = auth.username;
   const [profile, setProfile] = useState(null);
   const [projectPublic, setProjectPublic] = useState(null);
   const [projectAccepted, setProjectAccepted] = useState(null);
@@ -65,7 +70,7 @@ function ProfilePage(props) {
       });
   }, []);
   useEffect(() => {
-    axios
+    axiosPrivate
       .get(`/users/${username}/projects`)
       .then((response) => {
         setUserProjects(response.data);
@@ -145,7 +150,7 @@ function ProfilePage(props) {
               {profile.username}
             </Typography>
             <Typography sx={{ color: "var(--color4)" }}>
-              {profile.tagline || "Hello world"}
+              {profile.tagline || "Hello world, this is my empty tagline"}
             </Typography>
             <Box>
               <GitHubIcon
@@ -160,22 +165,30 @@ function ProfilePage(props) {
           </Box>
           <Box
             marginLeft="auto"
-            display={"flex"}
+            // display={"flex"}
             flexDirection={"column"}
             justifyContent={"center"}
             sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
           >
-            <EditIcon
-              sx={{
-                marginY: 1,
-                color: "var(--color2)",
-                "&:hover": {
-                  color: "var(--color3a)",
-                },
-              }}
-              fontSize={"large"}
-            />
-            <Button category={"action"} title={"Follow"} variant={"outlined"} />
+            {username === profileOwnerName && (
+              <EditIcon
+                sx={{
+                  marginY: 1,
+                  color: "var(--color2)",
+                  "&:hover": {
+                    color: "var(--color3a)",
+                  },
+                }}
+                fontSize={"large"}
+              />
+            )}
+            {username !== profileOwnerName && (
+              <Button
+                category={"action"}
+                title={"Follow"}
+                variant={"outlined"}
+              />
+            )}
           </Box>
         </Box>
         <Box
