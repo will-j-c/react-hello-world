@@ -1,0 +1,59 @@
+.skill {
+  &.MuiButton-contained {
+    background-color: var(--color7);
+    color: var(--color2);
+    
+    &:hover {
+      background-color: var(--color7a);
+      color: var(--color2);
+    }
+  }
+  
+  &.MuiButton-outlined {
+    border: 1px solid var(--color7);
+    color: var(--color7);
+    
+    &:hover {
+      background-color: var(--color7);
+      color: var(--color2);
+    }
+  }
+}
+
+.action {
+  &.MuiButton-contained {
+    background-color: var(--color3);
+    color: var(--color2);
+    margin-left: 0.5em;
+    &:hover {
+      background-color: var(--color3a);
+      color: var(--color2);
+    }
+  }
+  
+  &.MuiButton-outlined {
+    border: 1px solid var(--color3);
+    color: var(--color3);
+    margin-left: 0.5em;
+    &:hover {
+      background-color: var(--color3);
+      color: var(--color2);
+    }
+  }
+}
+
+.category {
+  &.MuiButton-contained {
+    background-color: var(--color7);
+    color: var(--color2);
+    margin-right: 0.5em;
+    max-height: 48px;
+    pointer-events: none;
+  }
+  
+  &.MuiButton-outlined {
+    border: 1px solid var(--color7);
+    color: var(--color7);
+    pointer-events: none;
+  }
+}
