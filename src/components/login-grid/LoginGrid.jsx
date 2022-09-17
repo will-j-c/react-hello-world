@@ -5,7 +5,7 @@ import ProjectCard from "../project-card/ProjectCard";
 import ProjectIndexGrid from "../project-index-grid/ProjectIndexGrid";
 
 function LoginGrid(props) {
-  const { baseUrl, formType } = props;
+  const { formType } = props;
   return (
     <Grid
       container
@@ -15,11 +15,11 @@ function LoginGrid(props) {
     >
 
       <Grid item md={8}>
-        <ProjectIndexGrid baseUrl={baseUrl}/>
+        <ProjectIndexGrid />
       </Grid>
 
       <Grid item md={4}>
-        { formType === 'register' ? <SignUpForm baseUrl={baseUrl}/> : <LogInForm baseUrl={baseUrl}/>}
+        { formType === 'register' ? <SignUpForm /> : <LogInForm />}
       </Grid>
     </Grid>
   );

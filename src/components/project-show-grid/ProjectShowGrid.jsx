@@ -3,12 +3,12 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import AvatarComponent from "../avatar/Avatar";
 import ProjectAboutPanel from "../project-about-panel/ProjectAboutPanel";
 import ProjectContributorsPanel from "../project-contributors-panel/ProjectContributorsPanel";
 import ShowTabs from "../show-tabs/ShowTabs";
 import './ProjectShowGrid.css'
+import axios from "../../api/axios"
 
   const baseProjectLogo =
     "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
@@ -23,7 +23,7 @@ function ProjectShowGrid(props) {
 
 
   useEffect(() => {
-    axios.get(`${props.baseUrl}/api/v1/projects/${slug}`).then(
+    axios.get(`/projects/${slug}`).then(
       (response) => {
         setProject(response.data.project);
         setContributors(response.data.jobs);

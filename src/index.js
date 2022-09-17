@@ -8,6 +8,9 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
+import TitleHomepage from "./components/title-homepage/TitleHomepage";
+import { StyledEngineProvider } from "@mui/material/styles";
+import { AuthProvider } from "./context/AuthProvider";
 
 const baseUrl = "http://localhost:8800";
 const theme = createTheme({
@@ -41,39 +44,34 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    {/* <StyledEngineProvider injectFirst> */}
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App baseUrl={baseUrl} />}>
-            <Route
-              path="register"
-              element={<LoginGrid baseUrl={baseUrl} formType="register" />}
-            />
-            <Route
-              path="login"
-              element={<LoginGrid baseUrl={baseUrl} formType="login" />}
-            />
-            <Route path="projects">
-              <Route
-                path={":slug"}
-                element={<ProjectShowGrid baseUrl={baseUrl} />}
-              />
-              <Route index element={<ProjectShowGrid baseUrl={baseUrl} />} />
-            </Route>
-            <Route index element={<HomeGrid baseUrl={baseUrl} />} />
-            <Route
-              path="*"
-              element={
-                <main style={{ padding: "1rem" }}>
-                  <p style={{ color: "white" }}>There's nothing here!</p>
-                </main>
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
-    {/* </StyledEngineProvider> */}
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <StyledEngineProvider injectFirst>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route
+                  path="register"
+                  element={<LoginGrid formType="register" />}
+                />
+                <Route path="login" element={<LoginGrid formType="login" />} />
+                <Route path="projects" >
+                  <Route path=":slug" element={<ProjectShowGrid />}/>
+                </Route>
+                <Route path="" element={<TitleHomepage />} />
+                <Route
+                  path="*"
+                  element={
+                    <main style={{ padding: "1rem" }}>
+                      <p style={{ color: "white" }}>There's nothing here!</p>
+                    </main>
+                  }
+                />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </StyledEngineProvider>
+      </ThemeProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
