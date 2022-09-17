@@ -2,15 +2,15 @@ import Grid from "@mui/material/Unstable_Grid2";
 import SignUpForm from "../signup-form/SignUpForm";
 import ProjectCard from "../project-card/ProjectCard";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from '../../api/axios';
 
-function ProjectIndexGrid(props) {
+function ProjectIndexGrid() {
   const [projects, setProjects] = useState([]);
   const baseProjectImage =
     "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
   const baseProjectLogo = 'https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png';
   useEffect(() => {
-    axios.get(`${props.baseUrl}/api/v1/projects`).then((response) => {
+    axios.get('projects').then((response) => {
       setProjects(response.data);
     });
   }, []);

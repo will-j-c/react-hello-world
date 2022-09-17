@@ -5,27 +5,21 @@ import LoginGrid from "./components/login-grid/LoginGrid";
 import "./index.css";
 import App from "./App";
 import TitleHomepage from "./components/title-homepage/TitleHomepage";
-import { StyledEngineProvider } from "@mui/material/styles";
-
-const baseUrl = "http://localhost:8800";
+import { StyledEngineProvider } from '@mui/material/styles';
+import { AuthProvider } from './context/AuthProvider';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <StyledEngineProvider injectFirst>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App baseUrl={baseUrl} />}>
-            <Route
-              path="register"
-              element={<LoginGrid baseUrl={baseUrl} formType="register" />}
-            />
-            <Route
-              path="login"
-              element={<LoginGrid baseUrl={baseUrl} formType="login" />}
-            />
-            <Route path="" element={<TitleHomepage />} />
-            <Route
+    <AuthProvider>
+      <StyledEngineProvider injectFirst>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route path="register" element={<LoginGrid formType="register" />} />
+              <Route path="login" element={<LoginGrid formType="login"/>} />
+              <Route path="" element={<TitleHomepage />} />
+              <Route
               path="*"
               element={
                 <main style={{ padding: "1rem" }}>
@@ -33,9 +27,11 @@ root.render(
                 </main>
               }
             />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </StyledEngineProvider>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </StyledEngineProvider>
+    </AuthProvider>
+
   </React.StrictMode>
 );
