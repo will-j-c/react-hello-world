@@ -7,20 +7,55 @@ import Grid from "@mui/material/Grid";
 import { Link } from 'react-router-dom';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext} from "react";
+import AuthContext from '../../context/AuthProvider';
 import styles from '../login-grid/LoginGrid.module.scss';
-import axios from "axios";
+import axios from '../../api/axios';
+import useCookie from 'react-use-cookie';
 
 import Button from '../buttons/Button';
 
-export default function LogInForm(props) {
+export default function LogInForm() {
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
+  const [userRefreshToken, setUserRefreshToken] = useCookie('token', '0');
+  const { setAuth } = useContext(AuthContext);
 
-  const { baseUrl } = props;
+  const formObj = {
+    usernameRef: useRef(),
+    passwordRef: useRef(),
+  }
 
-  const [formData, setFormData] = useState({
-    username: '',
-    password: '',
-  })
+  const loginSubmit = async (evnt) => {
+    evnt.preventDefault();
+    const username = formObj.usernameRef.current.value;
+    const hash = formObj.passwordRef.current.value;
+
+    try {
+      const response = await axios.post(
+        '/auth/login', 
+        { username, hash }
+      );
+      const {accessToken, refreshToken} = response.data;
+
+      setUserRefreshToken(refreshToken);
+      setAuth({ accessToken, username });
+
+      setOpen(true);
+      setMessage('Login successful');
+      setSeverity('success');
+
+      // navigate(from, { replace: true });
+
+    } catch (err) {
+      console.log(err);
+      setOpen(true);
+      setMessage(err?.response?.data?.error);
+      setSeverity('error');
+      return
+    }
+  }
 
   return (
     <Box className={styles['form']}>
@@ -68,6 +103,7 @@ export default function LogInForm(props) {
             form='login-form'
             sx={{ marginBottom: 2 }}
             className={styles['input-text']}
+            inputRef={formObj.usernameRef}
           />
           <Typography variant="subtitle1" gutterBottom>
             Password
@@ -82,7 +118,7 @@ export default function LogInForm(props) {
             size="small"
             sx={{ marginBottom: 2 }}
             className={styles['input-text']}
-            // inputRef={passwordRef}
+            inputRef={formObj.passwordRef}
           />
           <Box textAlign={"center"}>
             <Button
@@ -90,6 +126,7 @@ export default function LogInForm(props) {
               title="Log in" 
               category="action"
               isFullWidth={true} 
+              onClick={loginSubmit}
             />
           </Box>
         </form>
@@ -112,7 +149,13 @@ export default function LogInForm(props) {
         </Box>
         
       </Box>
-
+      <Snackbar open={open} autoHideDuration={6000} onClose={((event, reason) => {
+        if (reason === 'timeout') {
+          setOpen(false);
+        }
+      })}>
+        <Alert variant="filled" severity={severity} sx={{ width: '100%' }}>{message}</Alert>
+      </Snackbar>
     </Box>
   )
 }
