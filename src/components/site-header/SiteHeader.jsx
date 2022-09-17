@@ -60,7 +60,7 @@ function SiteHeader() {
     },
     profile: {
       pageName: "Profile",
-      pageLink: `/${auth?.username}`,
+      pageLink: `/users/${auth?.username}`,
     },
     logout: {
       pageName: "Logout",
