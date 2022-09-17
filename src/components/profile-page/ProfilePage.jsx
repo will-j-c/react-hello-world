@@ -111,12 +111,7 @@ function ProfilePage(props) {
         setPanel(<ProfileConnectionPanel profile={profile} />);
         break;
       case "3":
-        setPanel(
-          <ProfileMyProjectsPanel
-            projectPublic={projectPublic}
-            projectAccepted={projectAccepted}
-          />
-        );
+        setPanel(<ProfileMyProjectsPanel userProjects={userProjects} />);
         break;
       case "4":
         setPanel(<ProfileOtherProjectsPanel profile={profile} />);
