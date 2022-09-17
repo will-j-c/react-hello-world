@@ -37,7 +37,7 @@ function DrawerComponent(props) {
         onClose={() => setOpen(false)}
       >
         <List>
-          {props.isAuth ? (
+          {props.isAuth && (
             <>
               <ListItemButton
                 key={0}
@@ -49,10 +49,6 @@ function DrawerComponent(props) {
                   <Avatar alt="profileOwner" src={props.profileAvatarUrl} />
                 </IconButton>
               </ListItemButton>
-            </>
-          ) : (
-            <>
-              <TitleHomepage variant="h6" marginTop="0" />
             </>
           )}
 
