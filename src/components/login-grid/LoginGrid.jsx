@@ -12,13 +12,9 @@ function LoginGrid(props) {
       spacing={4}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
+      marginTop={4}
     >
-
-      <Grid item md={8}>
-        <ProjectIndexGrid />
-      </Grid>
-
-      <Grid item md={4}>
+      <Grid item md={5}>
         { formType === 'register' ? <SignUpForm /> : <LogInForm />}
       </Grid>
     </Grid>
