@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material";
-// import jwt_decode from "jwt-decode";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -25,7 +24,6 @@ import AuthContext from '../../context/AuthProvider';
 
 function SiteHeader(props) {
   const { auth } = useContext(AuthContext);
-  console.log(`auth: ${JSON.stringify(auth)}`);
   const isAuth = !!auth.username;
   const [profile, setProfile] = useState(null);
   useEffect(() => {
