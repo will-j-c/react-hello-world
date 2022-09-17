@@ -26,7 +26,6 @@ function ProfilePage(props) {
         setProfile(response.data);
       });
   }, []);
-  console.log("profile content:", profile);
   return (
     <>
       <Container>
@@ -39,16 +38,61 @@ function ProfilePage(props) {
               {profile?.name}
             </Typography>
             <Typography variant="h6" component="h6" className="profileAvatar">
-              {profile?.tagline}
+              {profile?.tagline || "nothing"}
             </Typography>
-            <Link to="/about">
+            <Link to="/">
               <img
-                src="https://bobbyhadz.com/images/blog/react-usestate-dynamic-key/thumbnail.webp"
-                alt="example"
+                src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+                alt="github-logo"
+                className="socmed-logo"
               />
             </Link>
           </Grid>
         </Grid>
+        <>
+          <Box display={"flex"}>
+            <AvatarComponent
+              imgAlt="haha"
+              imgUrl="https://i.pinimg.com/564x/8b/ee/af/8beeafe15422ea45639a5565f69576bd.jpg"
+              sx={{
+                width: 300,
+                height: 300,
+                border: "solid 1px var(--color3)",
+              }}
+            />
+            <Box
+              display={"flex"}
+              flexDirection={"column"}
+              justifyContent={"center"}
+              marginLeft={5}
+            >
+              <Typography sx={{ color: "var(--color3)" }}>"haha"</Typography>
+              <Typography sx={{ color: "var(--color4)" }}>"tagline"</Typography>
+            </Box>
+          </Box>
+          <Grid
+            container
+            spacing={8}
+            columns={{ xs: 1, md: 12 }}
+            justifyContent="space-between"
+            marginTop={4}
+          >
+            <Grid md={8} alignSelf={"flex-start"} item>
+              <Box
+                sx={{
+                  border: "solid 1px var(--color3)",
+                  backgroundColor: "var(--color2)",
+                }}
+                paddingX={4}
+                paddingBottom={4}
+                id="panel-box"
+              >
+                "haha"
+              </Box>
+            </Grid>
+            <Grid item></Grid>
+          </Grid>
+        </>
       </Container>
     </>
   );
