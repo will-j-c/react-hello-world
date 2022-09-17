@@ -1,66 +1,41 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import React from "react";
+import Grid from "@mui/material/Unstable_Grid2";
+import ProjectCard from "../cards/project-card/ProjectCard";
 import "./ProfileMyProjectsPanel.css";
 
 function ProfileMyProjectsPanel(props) {
-  if (props.profile) {
-    const { skills, interests } = props.profile;
+  const projectsToShow = [...props.projectPublic, ...props.projectAccepted];
+  console.log(projectsToShow);
 
-    const skillsToDisplay = skills.length ? (
-      skills.map((skill, idx) => {
-        return (
-          <Box
-            key={idx}
-            sx={{ backgroundColor: "var(--color7a)" }}
-            padding={1}
-            marginRight={1}
-            borderRadius={1}
-          >
-            {skill}
-          </Box>
-        );
-      })
-    ) : (
-      <Typography sx={{ color: "var(--color3)" }} variant={"body2"} marginY={2}>
-        Nothing here yet!
-      </Typography>
-    );
+  const baseProjectImage =
+    "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
+  const baseProjectLogo =
+    "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
+  const projectCardsToShow = projectsToShow.map((project, idx) => {
+    const projectCardDetails = {
+      projectImg: project.image_urls[0] || baseProjectImage,
+      title: project.title,
+      tagline: project.tagline,
+      logo: project.logo_url,
+      categories: project.categories || baseProjectLogo,
+      slug: project.slug,
+    };
     return (
-      <Box marginTop={2}>
-        <Typography
-          sx={{ color: "var(--color4)" }}
-          fontWeight={"bold"}
-          variant={"subtitle1"}
-          marginY={2}
-        >
-          About me:
-        </Typography>
-        <Box sx={{ backgroundColor: "var(--color1)" }} padding={2}>
-          <Typography sx={{ color: "var(--color4)" }} variant={"body2"}>
-            {"about_me about_meabout_meabout_meabout_me" || "Nothing here yet!"}
-          </Typography>
-        </Box>
-        <Typography
-          sx={{ color: "var(--color4)" }}
-          fontWeight={"bold"}
-          variant={"subtitle1"}
-          marginY={2}
-        >
-          Categories:
-        </Typography>
-        <Box display={"flex"}>{skillsToDisplay}</Box>
-        <Typography
-          sx={{ color: "var(--color4)" }}
-          fontWeight={"bold"}
-          variant={"subtitle1"}
-          marginY={2}
-        >
-          Images:
-        </Typography>
-        {/* <Box display="flex">{images}</Box> */}
-      </Box>
+      <Grid key={idx} xs={true} md={true} item>
+        <ProjectCard details={projectCardDetails} />
+      </Grid>
     );
-  }
+  });
+  return (
+    <Grid
+      container
+      spacing={2}
+      columns={{ xs: 1, md: 12 }}
+      justifyContent="center"
+    >
+      {projectCardsToShow}
+    </Grid>
+  );
 }
 
 export default ProfileMyProjectsPanel;

@@ -48,13 +48,18 @@ function ProfilePage(props) {
     });
   }, []);
   // console.log("profile: ", profile);
-  // console.log("projectPublic: ", projectPublic);
   // console.log("projectAccprojectAccepted: ", projectAccepted);
 
   // Logic for handling tabs
   useEffect(() => {
     if (profile) {
-      return setPanel(<ProfileAboutPanel profile={profile} />);
+      return setPanel(
+        <ProfileAboutPanel
+          profile={profile}
+          projectPublic={projectPublic}
+          projectAccepted={projectAccepted}
+        />
+      );
     }
   }, [profile]);
   const [tabValue, setTabValue] = useState("1");
@@ -63,13 +68,24 @@ function ProfilePage(props) {
     setTabValue(newTabValue);
     switch (newTabValue) {
       case "1":
-        setPanel(<ProfileAboutPanel profile={profile} />);
+        setPanel(
+          <ProfileAboutPanel
+            profile={profile}
+            projectPublic={projectPublic}
+            projectAccepted={projectAccepted}
+          />
+        );
         break;
       case "2":
         setPanel(<ProfileConnectionPanel profile={profile} />);
         break;
       case "3":
-        setPanel(<ProfileMyProjectsPanel profile={profile} />);
+        setPanel(
+          <ProfileMyProjectsPanel
+            projectPublic={projectPublic}
+            projectAccepted={projectAccepted}
+          />
+        );
         break;
       case "4":
         setPanel(<ProfileOtherProjectsPanel profile={profile} />);
@@ -130,7 +146,23 @@ function ProfilePage(props) {
           </Box>
         </Box>
 
-        <Grid
+        <Box
+          sx={{
+            border: "solid 1px var(--color3)",
+            backgroundColor: "var(--color2)",
+          }}
+          paddingX={4}
+          paddingBottom={4}
+          id="panel-box"
+        >
+          <ProfileShowTabs
+            tabValue={tabValue}
+            handleTabChange={handleTabChange}
+          />
+          {profile ? panel : ""}
+        </Box>
+
+        {/* <Grid
           container
           spacing={8}
           columns={{ xs: 1, md: 12 }}
@@ -155,7 +187,7 @@ function ProfilePage(props) {
             </Box>
           </Grid>
           <Grid item></Grid>
-        </Grid>
+        </Grid> */}
       </Container>
     </>
   ) : (
