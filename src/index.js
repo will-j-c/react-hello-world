@@ -8,12 +8,34 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
-import { StyledEngineProvider } from '@mui/material/styles';
+import { StyledEngineProvider } from "@mui/material/styles";
 
 const baseUrl = "http://localhost:8800";
 const theme = createTheme({
-  typograpy: {
-    fontFamily: 'Roboto Mono, monospace',
+  components: {
+    typograpy: {
+      fontFamily: "Roboto Mono, monospace",
+    },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          display: "none",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "var(--color4)",
+          color: "var(--color2)",
+          fontWeight: "bold",
+          "&.Mui-selected": {
+            backgroundColor: "var(--color2)",
+            color: "var(--color3)",
+          },
+        },
+      },
+    },
   },
 });
 
@@ -21,19 +43,25 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-    <StyledEngineProvider injectFirst>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route path="register" element={<LoginGrid baseUrl={baseUrl} />} />
-            <Route path="projects">
-              <Route path=":slug"  element={<ProjectShowGrid baseUrl={baseUrl} />}/>
+      <StyledEngineProvider injectFirst>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route
+                path="register"
+                element={<LoginGrid baseUrl={baseUrl} />}
+              />
+              <Route path="projects">
+                <Route
+                  path=":slug"
+                  element={<ProjectShowGrid baseUrl={baseUrl} />}
+                />
+              </Route>
+              <Route index element={<HomeGrid baseUrl={baseUrl} />} />
             </Route>
-            <Route index element={<HomeGrid baseUrl={baseUrl}/>} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
       </StyledEngineProvider>
-    </ThemeProvider> 
+    </ThemeProvider>
   </React.StrictMode>
 );

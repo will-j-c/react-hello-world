@@ -21,6 +21,7 @@ function ProjectIndexGrid(props) {
       tagline: project.tagline,
       logo: project.logo_url,
       categories: project.categories || baseProjectLogo,
+      slug: project.slug
     };
     return (
       <Grid key={idx} xs={true} md={true} item>

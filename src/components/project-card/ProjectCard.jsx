@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AvatarComponent from "../avatar/Avatar";
 import OutlinedButton from "../outlined-button/OutlinedButton";
+import { Link as RouterLink } from 'react-router-dom';
 // import ContainedButton from "../buttons/ContainedButton";
 
 function ProjectCard(props) {
@@ -24,7 +25,7 @@ function ProjectCard(props) {
       }}
       raised={true}
     >
-      <CardActionArea>
+      <CardActionArea component={RouterLink} to={`/projects/${props.details.slug}`}>
         <CardMedia
           component="img"
           height={150}

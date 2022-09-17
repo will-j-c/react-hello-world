@@ -1,6 +1,7 @@
 :root {
   --color1: #1C2E4F;
   --color2: #0A192F;
+  --color2a: #020D1E;
   --color3: #64FFDA;
   --color3a: #33BB9A;
   --color4: #F2EFEF;
@@ -14,5 +15,5 @@
   font-family: 'Roboto Mono', monospace;
 }
 body {
-  background-color: var(--color2);
+  background-color: var(--color2a);
 }
