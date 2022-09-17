@@ -1,6 +1,7 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import "./ProjectAboutPanel.css";
+import Button from "../buttons/Button"
 
 function ProjectAboutPanel(props) {
   if (props.project) {
@@ -14,34 +15,23 @@ function ProjectAboutPanel(props) {
         );
       })
     ) : (
-      <Typography
-        sx={{ color: "var(--color3)" }}
-        variant={"body2"}
-        marginY={2}
-      >
+      <Typography sx={{ color: "var(--color3)" }} variant={"body2"} marginY={2}>
         Nothing here yet!
       </Typography>
     );
     const categoriesToDisplay = categories.length ? (
       categories.map((category, idx) => {
         return (
-          <Box
+          <Button
+            variant={"contained"}
+            category={"category"}
+            title={category}
             key={idx}
-            sx={{ backgroundColor: "var(--color7a)" }}
-            padding={1}
-            marginRight={1}
-            borderRadius={1}
-          >
-            {category}
-          </Box>
+          />
         );
       })
     ) : (
-      <Typography
-        sx={{ color: "var(--color3)" }}
-        variant={"body2"}
-        marginY={2}
-      >
+      <Typography sx={{ color: "var(--color3)" }} variant={"body2"} marginY={2}>
         Nothing here yet!
       </Typography>
     );
@@ -52,6 +42,7 @@ function ProjectAboutPanel(props) {
           fontWeight={"bold"}
           variant={"subtitle1"}
           marginY={2}
+          height={1}
         >
           About Project:
         </Typography>

@@ -11,8 +11,6 @@ import Button from "../buttons/Button"
 
 function ProjectContributorsPanel(props) {
   const contributors = props.contributors;
-  const contibutorsAvatars = contributors.map((contributor, idx) => {});
-  console.log(contributors);
   return (
     <Box>
       <TableContainer>
@@ -42,10 +40,10 @@ function ProjectContributorsPanel(props) {
                   scope="row"
                   sx={{ color: "var(--color4)" }}
                 >
-                  {contributor.title}
+                  <Button variant={"contained"} category={"category"} title={contributor.title} />
                 </TableCell>
                 <TableCell align="center" sx={{ color: "var(--color4)" }}>
-                  {contributor.available_slots}{" "}
+                  {contributor.available_slots}
                 </TableCell>
                 <TableCell align="left" >
                   {contributor.contributors.map((user, idx) => {

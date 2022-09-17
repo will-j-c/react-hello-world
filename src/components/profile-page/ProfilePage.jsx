@@ -1,9 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Grid from "@mui/material/Unstable_Grid2";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useLocation } from "react-router-dom";
 import AvatarComponent from "../avatar/Avatar";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -15,8 +14,7 @@ import ProfileAboutPanel from "../profile-about-panel/ProfileAboutPanel";
 import ProfileConnectionPanel from "../profile-connection-panel/ProfileConnectionPanel";
 import ProfileMyProjectsPanel from "../profile-my-projects-panel/ProfileMyProjectsPanel";
 import ProfileOtherProjectsPanel from "../profile-other-projects-panel/ProfileOtherProjectsPanel";
-
-import AuthContext from "../../context/AuthProvider";
+import Button from "../buttons/Button";
 
 import "./ProfilePage.scss";
 import axios from "../../api/axios";
@@ -130,7 +128,13 @@ function ProfilePage(props) {
               />
             </Box>
           </Box>
-          <Box marginLeft="auto">
+          <Box
+            marginLeft="auto"
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+            sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
+          >
             <EditIcon
               sx={{
                 marginY: 1,
@@ -141,6 +145,7 @@ function ProfilePage(props) {
               }}
               fontSize={"large"}
             />
+            <Button category={"action"} title={"Follow"} variant={"outlined"} />
           </Box>
         </Box>
         <Box
