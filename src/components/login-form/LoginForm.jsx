@@ -22,11 +22,6 @@ export default function LogInForm() {
   const [userRefreshToken, setUserRefreshToken] = useCookie('token', '0');
   const { setAuth } = useContext(AuthContext);
 
-  // const [formData, setFormData] = useState({
-  //   username: '',
-  //   password: '',
-  // })
-
   const formObj = {
     usernameRef: useRef(),
     passwordRef: useRef(),
