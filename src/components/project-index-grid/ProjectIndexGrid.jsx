@@ -38,7 +38,7 @@ function ProjectIndexGrid(props) {
       slug: project.slug
     };
     return (
-      <Grid key={idx} xs={true} md={true} item>
+      <Grid key={idx} xs={1} md={true} item>
         <ProjectCard details={projectCardDetails} />
       </Grid>
     );
