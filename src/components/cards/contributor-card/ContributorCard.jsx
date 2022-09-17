@@ -5,14 +5,17 @@ import Typography from "@mui/material/Typography";
 import CardActions from '@mui/material/CardActions';
 import Box from "@mui/material/Box";
 import AvatarComponent from "../../avatar/Avatar";
-import { Link as RouterLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "../../buttons/Button";
 
 import '../Card.scss';
 
-export default function UserCard(props) {
+export default function ContributorCard(props) {
 
-  const { name, username, tagline, skills, interests, profile_pic_url } = props.user;
+  const { _id, title, project_id, skills } = props.contributor;
+  const { logo_url, slug } = project_id;
+  const projectTitle = project_id.title;
+  const projectUrl = `/projects/${slug}`;
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -23,37 +26,32 @@ export default function UserCard(props) {
     )
   })
 
-  const interestsDisplay = interests.map((interest, idx) => {
-    return (
-      <Typography className='card-subtitle' key={idx} variant='caption'>
-        {interest}
-        {idx < interests.length - 1 ? ' |' : ''}
-      </Typography>
-    )
-  })
-
   return (
     <Card raised={true}>
       <Box sx={{display: 'flex', flexDirection: 'row'}}>
         <AvatarComponent
-          imgAlt={name}
-          imgUrl={profile_pic_url}
+          imgAlt={projectTitle}
+          imgUrl={logo_url}
           sx={{ width: 80, height: 80 }}
         />
 
         <CardContent>
 
           <Typography variant='h6' className='card-title'>
-            {name}
+            {title}
           </Typography>
-          <Typography variant="body2" className='card-tagline'>
-            {tagline}
-          </Typography>
+          
+          <Box className='card-captions'>
+            <Typography className='card-subtitle' variant='body2'>
+              For&nbsp; 
+              <Link className='link' to={projectUrl}>
+                <span id='card-highlightext'>{projectTitle}</span>
+              </Link>
+            </Typography>
+          </Box>
+
           <Box className='card-captions'>
             {skillsDisplay}
-          </Box>
-          <Box className='card-captions'>
-            {interestsDisplay}
           </Box>
 
         </CardContent>
@@ -65,11 +63,11 @@ export default function UserCard(props) {
             category={'action'}
             title={'View'}
             variant={"outlined"}
-            route={`/users/${username}`}
+            route={`/contributor/${_id}`}
           />
           <Button
             category={'action'}
-            title={'Follow'}
+            title={'Apply'}
             variant={"contained"}
           />
         </Box>
