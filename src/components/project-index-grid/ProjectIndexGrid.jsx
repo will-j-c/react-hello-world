@@ -3,7 +3,7 @@ import ProjectCard from "../cards/project-card/ProjectCard";
 import { useState, useEffect } from "react";
 import axios from '../../api/axios';
 
-function ProjectIndexGrid() {
+function ProjectIndexGrid(props) {
   const [projects, setProjects] = useState([]);
   const baseProjectImage =
     "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
@@ -11,7 +11,21 @@ function ProjectIndexGrid() {
   useEffect(() => {
     axios.get('projects').then((response) => {
       setProjects(response.data);
+    }, (error) => {
+      console.log(error);
     });
+    if (props.getFilter) {
+      console.log(projects)
+      const categoryFilters = projects.map(project => {
+        const categories = [];
+        project.categories.forEach(category => {
+          categories.push(category);
+        })
+        return categories;
+      })
+      const uniqueCategories = [...new Set(...categoryFilters)]
+      console.log(categoryFilters.flat(1))
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const projectCardsToShow = projects.map((project, idx) => {
