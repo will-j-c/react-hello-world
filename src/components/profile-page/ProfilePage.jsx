@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Container from "@mui/material/Container";
@@ -12,20 +12,22 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import AvatarComponent from "../avatar/Avatar";
+import GitHubIcon from "@mui/icons-material/GitHub";
+
+import AuthContext from "../../context/AuthProvider";
 
 import "./ProfilePage.scss";
 
 function ProfilePage(props) {
+  const { auth } = useContext(AuthContext);
   const params = useParams();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
-  useEffect(() => {
-    axios
-      .get(`${props.baseUrl}/api/v1/users/${params.username}`)
-      .then((response) => {
-        setProfile(response.data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`/users/${params.username}`).then((response) => {
+  //     setProfile(response.data);
+  //   });
+  // }, [auth]);
   return (
     <>
       <Container>
@@ -40,13 +42,9 @@ function ProfilePage(props) {
             <Typography variant="h6" component="h6" className="profileAvatar">
               {profile?.tagline || "nothing"}
             </Typography>
-            <Link to="/">
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                alt="github-logo"
-                className="socmed-logo"
-              />
-            </Link>
+            <Grid item>
+              <GitHubIcon sx={{ marginY: 1 }} fontSize={"large"} />
+            </Grid>
           </Grid>
         </Grid>
         <>

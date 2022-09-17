@@ -17,22 +17,21 @@ import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
 import SearchBar from "./SearchBar";
 import TitleHomepage from "../title-homepage/TitleHomepage";
-import axios from '../../api/axios';
+import axios from "../../api/axios";
 
-import AuthContext from '../../context/AuthProvider';
+import AuthContext from "../../context/AuthProvider";
 
 //TODO: after seting isAuth, replace image photo, profileLink
 
 function SiteHeader(props) {
   const { auth } = useContext(AuthContext);
   const isAuth = !!auth.username;
+  console.log(isAuth);
   const [profile, setProfile] = useState(null);
   useEffect(() => {
-    axios
-      .get(`/users/${auth.username}`)
-      .then((response) => {
-        setProfile(response.data);
-      });
+    axios.get(`/users/${auth.username}`).then((response) => {
+      setProfile(response.data);
+    });
   }, [auth]);
   const defaultProfileAvatarUrl =
     "https://i.pinimg.com/564x/3a/88/6a/3a886a5b90c687d0904b884b639157cc.jpg";
@@ -69,6 +68,7 @@ function SiteHeader(props) {
       pageLink: "/delete",
     },
   };
+  console.log(pageLinks);
   const { projects, community, contributors, login, signup } = pageLinks;
   const pages = [projects, community, contributors];
 
