@@ -11,6 +11,7 @@ import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
 import TitleHomepage from "./components/title-homepage/TitleHomepage";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
+import LogOut from "./components/logout/LogOut";
 
 const baseUrl = "http://localhost:8800";
 const theme = createTheme({
@@ -55,6 +56,7 @@ root.render(
                   element={<LoginGrid formType="register" />}
                 />
                 <Route path="login" element={<LoginGrid formType="login" />} />
+                <Route path="logout" element={<LogOut />} />
                 <Route path="projects" >
                   <Route path=":slug" element={<ProjectShowGrid />}/>
                 </Route>
