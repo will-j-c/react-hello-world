@@ -22,7 +22,7 @@ import AuthContext from '../../context/AuthProvider';
 
 //TODO: after seting isAuth, replace image photo, profileLink
 
-function SiteHeader(props) {
+function SiteHeader() {
   const { auth } = useContext(AuthContext);
   const isAuth = !!auth.username;
   const [profile, setProfile] = useState(null);
