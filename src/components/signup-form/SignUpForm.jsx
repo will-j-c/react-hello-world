@@ -8,11 +8,12 @@ import Alert from "@mui/material/Alert";
 import { useRef, useState } from "react";
 import { Link } from 'react-router-dom';
 import styles from '../login-grid/LoginGrid.module.scss';
-import axios from "axios";
+// import axios from "axios";
+import axios from '../../api/axios';
 
 import Button from '../buttons/Button';
 
-function LoginForm(props) {
+function LoginForm() {
   const nameRef = useRef();
   const usernameRef = useRef();
   const emailRef = useRef();
@@ -24,7 +25,7 @@ function LoginForm(props) {
   const handleRegistrationPost = (event) => {
     event.preventDefault();
     axios
-      .post(`${props.baseUrl}/api/v1/auth/register`, {
+      .post('/auth/register', {
         name: nameRef.current.value,
         username: usernameRef.current.value,
         email: emailRef.current.value,
@@ -33,7 +34,7 @@ function LoginForm(props) {
       })
       .then((response) => {
         setOpen(true);
-        setMessage('PLease check your emails for the activation link');
+        setMessage('Please check your emails for the activation link');
         setSeverity('success');
         return;
       })
