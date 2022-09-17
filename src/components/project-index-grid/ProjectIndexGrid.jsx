@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import ProjectCard from "../project-card/ProjectCard";
+import ProjectCard from "../cards/project-card/ProjectCard";
 import { useState, useEffect } from "react";
 import axios from '../../api/axios';
 
