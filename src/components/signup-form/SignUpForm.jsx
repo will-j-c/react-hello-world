@@ -6,7 +6,8 @@ import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useRef, useState } from "react";
-import "./SignUpForm.css";
+import { Link } from 'react-router-dom';
+import styles from '../login-grid/LoginGrid.module.scss';
 import axios from "axios";
 
 import Button from '../buttons/Button';
@@ -44,11 +45,11 @@ function LoginForm(props) {
       });
   };
   return (
-    <Box className="sign-up-form">
+    <Box className={styles['form']}>
       <Typography
         variant="subtitle1"
         textAlign={"center"}
-        id="box-title"
+        className={styles['title']}
         gutterBottom
       >
         Sign up by
@@ -59,7 +60,7 @@ function LoginForm(props) {
         </Grid>
       </Grid>
 
-      <Typography variant="subtitle1" id="or" gutterBottom>
+      <Typography variant="subtitle1" className={styles['or']} gutterBottom>
         <span>or</span>
       </Typography>
       <Box
@@ -73,7 +74,7 @@ function LoginForm(props) {
           backgroundColor: "var(--color1)",
         }}
       >
-        <form id="registration-form" onSubmit={handleRegistrationPost}>
+        <form id="registration-form">
           <Typography variant="subtitle1" gutterBottom>
             Name
           </Typography>
@@ -86,7 +87,7 @@ function LoginForm(props) {
             size="small"
             form="registration-form"
             sx={{ marginBottom: 2 }}
-            className="input-text"
+            className={styles['input-text']}
             inputRef={nameRef}
           />
           <Typography variant="subtitle1" gutterBottom>
@@ -101,7 +102,7 @@ function LoginForm(props) {
             size="small"
             form="registration-form"
             sx={{ marginBottom: 2 }}
-            className="input-text"
+            className={styles['input-text']}
             inputRef={usernameRef}
           />
           <Typography variant="subtitle1" gutterBottom>
@@ -116,7 +117,7 @@ function LoginForm(props) {
             variant="filled"
             size="small"
             sx={{ marginBottom: 2 }}
-            className="input-text"
+            className={styles['input-text']}
             inputRef={emailRef}
           />
           <Typography variant="subtitle1" gutterBottom>
@@ -131,7 +132,7 @@ function LoginForm(props) {
             variant="filled"
             size="small"
             sx={{ marginBottom: 2 }}
-            className="input-text"
+            className={styles['input-text']}
             inputRef={passwordRef}
           />
           <Typography variant="subtitle1" gutterBottom>
@@ -146,17 +147,18 @@ function LoginForm(props) {
             variant="filled"
             size="small"
             sx={{ marginBottom: 2 }}
-            className="input-text"
+            className={styles['input-text']}
             inputRef={confirmPasswordRef}
           />
           <Box textAlign={"center"}>
             <Button
-              variant="outlined"
+              variant="contained"
               id="sign-up-button"
               type="submit"
               category="action"
               title="Sign up"
-              isFullWidth={true} 
+              isFullWidth={true}
+              onClick={handleRegistrationPost} 
             />
           </Box>
           <Box textAlign={"center"} mt={2} mb={2}>
@@ -169,14 +171,9 @@ function LoginForm(props) {
             >
               Already have an account?
             </Typography>
-          </Box>
-          <Box textAlign={"center"}>
-            <Button
-              variant="contained"
-              title="Log in" 
-              category="action"
-              isFullWidth={true} 
-            />
+            <Link className={styles['link']} to='/login'>
+              <Typography>Log in here</Typography>
+            </Link>
           </Box>
         </form>
       </Box>
