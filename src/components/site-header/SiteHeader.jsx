@@ -25,7 +25,6 @@ import AuthContext from '../../context/AuthProvider';
 
 function SiteHeader(props) {
   const { auth } = useContext(AuthContext);
-  console.log(`auth.username: ${auth.username}`);
   const isAuth = !!auth.username;
   const [profile, setProfile] = useState(null);
   useEffect(() => {
