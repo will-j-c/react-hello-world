@@ -48,8 +48,10 @@ function ProfileAboutPanel(props) {
       </Typography>
     );
     let projectCardsToShow = null;
-    if (props.projectPublic || props.projectAccepted) {
-      const projectsToShow = [...props.projectPublic, ...props.projectAccepted];
+    let projectPublic = props.projectPublic ? props.projectPublic : [];
+    let projectAccepted = props.projectAccepted ? props.projectAccepted : [];
+    if (projectPublic || projectAccepted) {
+      const projectsToShow = [...projectPublic, ...projectAccepted];
       const baseProjectImage =
         "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
       const baseProjectLogo =
@@ -65,7 +67,7 @@ function ProfileAboutPanel(props) {
           slug: project.slug,
         };
         return (
-          <Grid key={idx} xs={true} md={true} item>
+          <Grid key={idx} item xs={12} sm={6} md={4}>
             <ProjectCard details={projectCardDetails} />
           </Grid>
         );
@@ -114,12 +116,7 @@ function ProfileAboutPanel(props) {
         >
           Projects:
         </Typography>
-        <Grid
-          container
-          spacing={2}
-          columns={{ xs: 1, md: 12 }}
-          justifyContent="center"
-        >
+        <Grid container spacing={2}>
           {projectCardsToShow}
         </Grid>
       </Box>

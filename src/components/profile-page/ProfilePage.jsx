@@ -29,21 +29,51 @@ function ProfilePage(props) {
   const [profile, setProfile] = useState(null);
   const [projectPublic, setProjectPublic] = useState(null);
   const [projectAccepted, setProjectAccepted] = useState(null);
+  const [userProjects, setUserProjects] = useState(null);
 
   useEffect(() => {
-    axios.get(`/users/${username}`).then((response) => {
-      setProfile(response.data);
-    });
+    axios
+      .get(`/users/${username}`)
+      .then((response) => {
+        setProfile(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
   }, []);
   useEffect(() => {
-    axios.get(`/users/${username}/projects/public`).then((response) => {
-      setProjectPublic(response.data);
-    });
+    axios
+      .get(`/users/${username}/projects/public`)
+      .then((response) => {
+        setProjectPublic(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
   }, []);
   useEffect(() => {
-    axios.get(`/users/${username}/projects/accepted`).then((response) => {
-      setProjectAccepted(response.data);
-    });
+    axios
+      .get(`/users/${username}/projects/accepted`)
+      .then((response) => {
+        setProjectAccepted(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get(`/users/${username}/projects`)
+      .then((response) => {
+        setUserProjects(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
   }, []);
 
   // Logic for handling tabs

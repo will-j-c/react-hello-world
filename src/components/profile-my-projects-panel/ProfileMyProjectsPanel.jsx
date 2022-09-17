@@ -21,18 +21,13 @@ function ProfileMyProjectsPanel(props) {
       slug: project.slug,
     };
     return (
-      <Grid key={idx} xs={true} md={true} item>
+      <Grid key={idx} item xs={12} sm={6} md={4}>
         <ProjectCard details={projectCardDetails} />
       </Grid>
     );
   });
   return (
-    <Grid
-      container
-      spacing={2}
-      columns={{ xs: 1, md: 12 }}
-      justifyContent="center"
-    >
+    <Grid container spacing={2}>
       {projectCardsToShow}
     </Grid>
   );
