@@ -13,6 +13,8 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import AvatarComponent from "../avatar/Avatar";
 
+import "./ProfilePage.scss";
+
 function ProfilePage(props) {
   const params = useParams();
   const navigate = useNavigate();
@@ -27,21 +29,24 @@ function ProfilePage(props) {
   console.log("profile content:", profile);
   return (
     <>
-      <Container sx={{ width: 900 }}>
+      <Container>
         <Grid container>
-          <Grid item xs={3}>
-            <Box>
-              <img
-                src={profile?.profile_pic_url}
-                width="100"
-                className="profileAvatar"
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant="h3" component="h3" color="text.secondary">
-              Explore the world
+          <Box>
+            <img src={profile?.profile_pic_url} className="profileAvatar" />
+          </Box>
+          <Grid item className="TitlePage">
+            <Typography variant="h4" component="h4" className="title-name">
+              {profile?.name}
             </Typography>
+            <Typography variant="h6" component="h6" className="profileAvatar">
+              {profile?.tagline}
+            </Typography>
+            <Link to="/about">
+              <img
+                src="https://bobbyhadz.com/images/blog/react-usestate-dynamic-key/thumbnail.webp"
+                alt="example"
+              />
+            </Link>
           </Grid>
         </Grid>
       </Container>
