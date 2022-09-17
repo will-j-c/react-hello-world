@@ -72,7 +72,6 @@ function ProjectShowGrid(props) {
     if (!auth.username) {
       return navigate("/login");
     }
-    console.log(auth);
     // If authorised, send post request for new comment
     axiosPrivate.post(`/comments/${slug}`, { content }).then(
       (response) => {
@@ -142,7 +141,7 @@ function ProjectShowGrid(props) {
             {project ? panel : ""}
           </Box>
         </Grid>
-        <Grid md={4} sx={{ height: "100%" }} item>
+        <Grid md={4} sx={{ height: "100%" }} paddingTop={0} item>
           <CommentPanel comments={comments} postComment={postComment} />
         </Grid>
       </Grid>

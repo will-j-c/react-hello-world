@@ -1,10 +1,10 @@
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Unstable_Grid2";
 import Comment from "./Comment";
 import CommentAddField from "./CommentAddField";
 
-
 function CommentPanel(props) {
-  const comments = props.comments;
+  const comments = props.comments ? props.comments : [];
   const commentsToShow = comments.map((comment, idx) => {
     return (
       <Grid padding={1} width={1} item key={idx}>
@@ -13,26 +13,28 @@ function CommentPanel(props) {
     );
   });
   return (
-    <>
-    <Grid
-      flexDirection={"column-reverse"}
-      alignItems={"center"}
-      width={1}
+    <Box
       sx={{
         border: "solid 1px var(--color3)",
         height: "100%",
         backgroundColor: "var(--color2)",
       }}
-      height={1}
-      container
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
     >
-      {commentsToShow}
-      <Grid width={1} paddingX={1} alignSelf={"flex-end"} item>
-        
+      <Grid
+        flexDirection={"column-reverse"}
+        alignItems={"center"}
+        width={1}
+        height={1}
+        container
+        marginBottom={2}
+      >
+        {commentsToShow}
       </Grid>
-    </Grid>
-    <CommentAddField postComment={props.postComment} />
-    </>
+      <CommentAddField postComment={props.postComment} />
+    </Box>
   );
 }
 
