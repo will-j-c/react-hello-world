@@ -24,7 +24,7 @@ import axios from "axios";
 function SiteHeader(props) {
   const token = localStorage.getItem("user_token");
   const isAuth = !token ? false : jwt_decode(token);
-  let authUserName = "harold";
+  let authUserName = isAuth?.username || "harold";
   if (isAuth) {
     authUserName = isAuth?.data.username; // this is for testing only
   }
