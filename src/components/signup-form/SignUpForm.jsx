@@ -74,7 +74,7 @@ function LoginForm(props) {
           backgroundColor: "var(--color1)",
         }}
       >
-        <form id="registration-form" onSubmit={handleRegistrationPost}>
+        <form id="registration-form">
           <Typography variant="subtitle1" gutterBottom>
             Name
           </Typography>
@@ -157,7 +157,8 @@ function LoginForm(props) {
               type="submit"
               category="action"
               title="Sign up"
-              isFullWidth={true} 
+              isFullWidth={true}
+              onClick={handleRegistrationPost} 
             />
           </Box>
           <Box textAlign={"center"} mt={2} mb={2}>
