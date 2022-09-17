@@ -58,7 +58,7 @@ root.render(
                 <Route path="projects" >
                   <Route path=":slug" element={<ProjectShowGrid />}/>
                 </Route>
-                <Route path="" element={<TitleHomepage />} />
+                <Route path="" element={<HomeGrid />} />
                 <Route
                   path="*"
                   element={
