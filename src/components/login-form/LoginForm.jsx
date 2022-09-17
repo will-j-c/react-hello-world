@@ -12,7 +12,6 @@ import AuthContext from '../../context/AuthProvider';
 import styles from '../login-grid/LoginGrid.module.scss';
 import axios from '../../api/axios';
 import useCookie from 'react-use-cookie';
-import useRefreshToken from '../../hooks/useRefreshToken';
 
 import Button from '../buttons/Button';
 
@@ -22,8 +21,6 @@ export default function LogInForm() {
   const [severity, setSeverity] = useState('success');
   const [userRefreshToken, setUserRefreshToken] = useCookie('token', '0');
   const { setAuth } = useContext(AuthContext);
-
-  const refresh = useRefreshToken();
 
   // const [formData, setFormData] = useState({
   //   username: '',
@@ -135,15 +132,6 @@ export default function LogInForm() {
               category="action"
               isFullWidth={true} 
               onClick={loginSubmit}
-            />
-          </Box>
-          <Box textAlign={"center"}>
-            <Button
-              variant="contained"
-              title="Refresh" 
-              category="action"
-              isFullWidth={true} 
-              onClick={() => refresh()}
             />
           </Box>
         </form>
