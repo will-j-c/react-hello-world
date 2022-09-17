@@ -1,19 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
-import LoginGrid from "./components/login-grid/LoginGrid";
-import "./index.css";
-import App from "./App";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
-import HomeGrid from "./components/home-grid/HomeGrid";
-import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
-import TitleHomepage from "./components/title-homepage/TitleHomepage";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
 import LogOut from "./components/logout/LogOut";
 
-const baseUrl = "http://localhost:8800";
+import App from "./App";
+import "./index.css";
+import LoginGrid from "./components/login-grid/LoginGrid";
+import UserIndexGrid from "./components/user-index-grid/UserIndexGrid";
+import HomeGrid from "./components/home-grid/HomeGrid";
+import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
+import TitleHomepage from "./components/title-homepage/TitleHomepage"
+
 const theme = createTheme({
   components: {
     typograpy: {
@@ -57,6 +58,7 @@ root.render(
                 />
                 <Route path="login" element={<LoginGrid formType="login" />} />
                 <Route path="logout" element={<LogOut />} />
+                <Route path="users" element={<UserIndexGrid />} />
                 <Route path="projects" >
                   <Route path=":slug" element={<ProjectShowGrid />}/>
                 </Route>
