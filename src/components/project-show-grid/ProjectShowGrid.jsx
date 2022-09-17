@@ -1,6 +1,8 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Pagination from "@mui/material/Pagination";
+import PaginationItem from "@mui/material/PaginationItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
@@ -8,10 +10,10 @@ import AvatarComponent from "../avatar/Avatar";
 import ProjectAboutPanel from "../project-about-panel/ProjectAboutPanel";
 import ProjectContributorsPanel from "../project-contributors-panel/ProjectContributorsPanel";
 import ShowTabs from "../show-tabs/ShowTabs";
-import "./ProjectShowGrid.css";
 import axios from "../../api/axios";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CommentPanel from "../comments/CommentPanel";
+import styles from "./ProjectShowGrid.module.scss";
 
 const baseProjectLogo =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
@@ -26,6 +28,7 @@ function ProjectShowGrid(props) {
   const [contributors, setContributors] = useState(null);
   const [creator, setCreator] = useState(null);
   const [comments, setComments] = useState(null);
+  const [commentCount, setCommentCount] = useState(null);
 
   useEffect(() => {
     axios.get(`/projects/${slug}`).then(
@@ -39,7 +42,8 @@ function ProjectShowGrid(props) {
 
     axios.get(`/comments/${slug}`).then(
       (response) => {
-        setComments(response.data);
+        setComments(response.data.commentsToSend);
+        setCommentCount(response.data.commentCount);
       },
       (error) => {}
     );
@@ -78,7 +82,8 @@ function ProjectShowGrid(props) {
         // Update comments with a fetch request
         axios.get(`/comments/${slug}`).then(
           (response) => {
-            setComments(response.data);
+            setComments(response.data.commentsToSend);
+            setCommentCount(response.data.commentCount);
           },
           (error) => {}
         );
@@ -88,7 +93,21 @@ function ProjectShowGrid(props) {
       }
     );
   };
-
+  const [page, setPage] = useState(1);
+  const handlePageChange = (error, value) => {
+    setPage(value);
+    
+    axios.get(`/comments/${slug}?page=${page}`).then(
+      (response) => {
+        setComments(response.data.commentsToSend);
+      },
+      (error) => {}
+    );
+  };
+  useEffect(() => {
+    navigate(`/projects/${slug}?page=${page}`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
   return project ? (
     <>
       <Box display={"flex"} marginTop={4}>
@@ -143,6 +162,16 @@ function ProjectShowGrid(props) {
         </Grid>
         <Grid md={4} sx={{ height: "100%" }} paddingTop={0} item>
           <CommentPanel comments={comments} postComment={postComment} />
+          <Pagination
+            count={
+              commentCount ? Math.floor(commentCount / comments.length) : 1
+            }
+            defaultPage={1}
+            shape={"rounded"}
+            className={styles["pagination"]}
+            onChange={handlePageChange}
+            page={page}
+          />
         </Grid>
       </Grid>
     </>
