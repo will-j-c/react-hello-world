@@ -11,7 +11,7 @@ import { useRef, useState, useContext} from "react";
 import AuthContext from '../../context/AuthProvider';
 import styles from '../login-grid/LoginGrid.module.scss';
 import axios from '../../api/axios';
-import useCookie from 'react-use-cookie';
+import { useCookies } from 'react-cookie';
 
 import Button from '../buttons/Button';
 
@@ -19,7 +19,7 @@ export default function LogInForm() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
-  const [userRefreshToken, setUserRefreshToken] = useCookie('token', '0');
+  const [cookies, setCookie] = useCookies(); 
   const { setAuth } = useContext(AuthContext);
 
   const formObj = {
@@ -39,14 +39,15 @@ export default function LogInForm() {
       );
       const {accessToken, refreshToken} = response.data;
 
-      setUserRefreshToken(refreshToken);
+      setCookie('refreshToken', refreshToken);
+      setCookie('accessToken', accessToken);
+      setCookie('username', username);
+
       setAuth({ accessToken, username });
 
       setOpen(true);
       setMessage('Login successful');
       setSeverity('success');
-
-      // navigate(from, { replace: true });
 
     } catch (err) {
       console.log(err);
