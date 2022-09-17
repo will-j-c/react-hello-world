@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material";
 import jwt_decode from "jwt-decode";
 
@@ -17,25 +17,24 @@ import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
 import SearchBar from "./SearchBar";
 import TitleHomepage from "../title-homepage/TitleHomepage";
-import axios from "axios";
+import { axiosPrivate } from '../../api/axios';
+
+import AuthContext from '../../context/AuthProvider';
 
 //TODO: after seting isAuth, replace image photo, profileLink
 
 function SiteHeader(props) {
-  const token = localStorage.getItem("user_token");
-  const isAuth = !token ? false : jwt_decode(token);
-  let authUserName = isAuth?.username || "harold";
-  if (isAuth) {
-    authUserName = isAuth?.data.username; // this is for testing only
-  }
+  const { auth } = useContext(AuthContext);
+  console.log(`auth.username: ${auth.username}`);
+  const isAuth = !!auth.username;
   const [profile, setProfile] = useState(null);
   useEffect(() => {
-    axios
-      .get(`${props.baseUrl}/api/v1/users/${authUserName}`)
+    axiosPrivate
+      .get(`/users/${auth.username}`)
       .then((response) => {
         setProfile(response.data);
       });
-  }, []);
+  }, [auth]);
   const defaultProfileAvatarUrl =
     "https://i.pinimg.com/564x/3a/88/6a/3a886a5b90c687d0904b884b639157cc.jpg";
   const profileAvatarUrl = profile?.profile_pic_url || defaultProfileAvatarUrl;
@@ -60,7 +59,7 @@ function SiteHeader(props) {
     },
     profile: {
       pageName: "Profile",
-      pageLink: `/${authUserName}`,
+      pageLink: `/${auth.username}`,
     },
     logout: {
       pageName: "Logout",
