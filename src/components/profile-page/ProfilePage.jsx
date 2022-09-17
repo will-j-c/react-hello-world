@@ -5,14 +5,19 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useLocation } from "react-router-dom";
 import AvatarComponent from "../avatar/Avatar";
-import ProjectAboutPanel from "../project-about-panel/ProjectAboutPanel";
-import ProjectContributorsPanel from "../project-contributors-panel/ProjectContributorsPanel";
-import ShowTabs from "../show-tabs/ShowTabs";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import Container from "@mui/material/Container";
+import EditIcon from "@mui/icons-material/Edit";
+
+import ProfileShowTabs from "../profile-show-tabs/ProfileShowTabs";
+import ProfileAboutPanel from "../profile-about-panel/ProfileAboutPanel";
+import ProfileConnectionPanel from "../profile-connection-panel/ProfileConnectionPanel";
+import ProfileMyProjectsPanel from "../profile-my-projects-panel/ProfileMyProjectsPanel";
+import ProfileOtherProjectsPanel from "../profile-other-projects-panel/ProfileOtherProjectsPanel";
+
 import AuthContext from "../../context/AuthProvider";
 
-import "./ProjectShowGrid.css";
 import "./ProfilePage.scss";
 import axios from "../../api/axios";
 
@@ -47,80 +52,111 @@ function ProfilePage(props) {
   // console.log("projectAccprojectAccepted: ", projectAccepted);
 
   // Logic for handling tabs
-  // useEffect(() => {
-  //   if (project) {
-  //     return setPanel(<ProjectAboutPanel project={project} />);
-  //   }
-  // }, [project]);
-  // const [tabValue, setTabValue] = useState("1");
-  // const [panel, setPanel] = useState(null);
-  // const handleTabChange = (event, newTabValue) => {
-  //   setTabValue(newTabValue);
-  //   return newTabValue === "1"
-  //     ? setPanel(<ProjectAboutPanel project={project} />)
-  //     : setPanel(
-  //         <ProjectContributorsPanel
-  //           creator={creator}
-  //           contributors={contributors}
-  //         />
-  //       );
-  // };
+  useEffect(() => {
+    if (profile) {
+      return setPanel(<ProfileAboutPanel profile={profile} />);
+    }
+  }, [profile]);
+  const [tabValue, setTabValue] = useState("1");
+  const [panel, setPanel] = useState(null);
+  const handleTabChange = (event, newTabValue) => {
+    setTabValue(newTabValue);
+    switch (newTabValue) {
+      case "1":
+        setPanel(<ProfileAboutPanel profile={profile} />);
+        break;
+      case "2":
+        setPanel(<ProfileConnectionPanel profile={profile} />);
+        break;
+      case "3":
+        setPanel(<ProfileMyProjectsPanel profile={profile} />);
+        break;
+      case "4":
+        setPanel(<ProfileOtherProjectsPanel profile={profile} />);
+        break;
+      default:
+        setPanel(<ProfileAboutPanel profile={profile} />);
+    }
+    // return;
+  };
 
   return profile ? (
     <>
-      <Box display={"flex"}>
-        <AvatarComponent
-          imgAlt={profile.username}
-          imgUrl={profile.profile_pic_url || baseProfileAvatar}
-          sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
-        />
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          marginLeft={5}
-        >
-          <Typography sx={{ color: "var(--color3)" }}>
-            {profile.username}
-          </Typography>
-          <Typography sx={{ color: "var(--color4)" }}>
-            {profile.tagline || "Hello world"}
-          </Typography>
-          <Box>
-            <GitHubIcon
-              sx={{ marginY: 1, color: "var(--color4)" }}
-              fontSize={"large"}
-            />
-            <LinkedInIcon
-              sx={{ marginY: 1, color: "var(--color4)" }}
+      <Container>
+        <Box display={"flex"} marginTop={5}>
+          <AvatarComponent
+            imgAlt={profile.username}
+            imgUrl={profile.profile_pic_url || baseProfileAvatar}
+            sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
+          />
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"center"}
+            marginLeft={5}
+          >
+            <Typography
+              variant="h4"
+              component="h4"
+              sx={{ color: "var(--color3)", textTransform: "capitalize" }}
+            >
+              {profile.username}
+            </Typography>
+            <Typography sx={{ color: "var(--color4)" }}>
+              {profile.tagline || "Hello world"}
+            </Typography>
+            <Box>
+              <GitHubIcon
+                sx={{ marginY: 1, color: "var(--color4)" }}
+                fontSize={"large"}
+              />
+              <LinkedInIcon
+                sx={{ marginY: 1, color: "var(--color4)" }}
+                fontSize={"large"}
+              />
+            </Box>
+          </Box>
+          <Box marginLeft="auto">
+            <EditIcon
+              sx={{
+                marginY: 1,
+                color: "var(--color2)",
+                "&:hover": {
+                  color: "var(--color3a)",
+                },
+              }}
               fontSize={"large"}
             />
           </Box>
         </Box>
-      </Box>
-      <Grid
-        container
-        spacing={8}
-        columns={{ xs: 1, md: 12 }}
-        justifyContent="space-between"
-        marginTop={4}
-      >
-        <Grid md={8} alignSelf={"flex-start"} item>
-          <Box
-            sx={{
-              border: "solid 1px var(--color3)",
-              backgroundColor: "var(--color2)",
-            }}
-            paddingX={4}
-            paddingBottom={4}
-            id="panel-box"
-          >
-            {/* <ShowTabs tabValue={tabValue} handleTabChange={handleTabChange} />
-            {profile ? panel : ""} */}
-          </Box>
+
+        <Grid
+          container
+          spacing={8}
+          columns={{ xs: 1, md: 12 }}
+          justifyContent="space-between"
+          marginTop={4}
+        >
+          <Grid md={8} alignSelf={"flex-start"} item>
+            <Box
+              sx={{
+                border: "solid 1px var(--color3)",
+                backgroundColor: "var(--color2)",
+              }}
+              paddingX={4}
+              paddingBottom={4}
+              id="panel-box"
+            >
+              <ProfileShowTabs
+                tabValue={tabValue}
+                handleTabChange={handleTabChange}
+              />
+              {profile ? panel : ""}
+            </Box>
+          </Grid>
+          <Grid item></Grid>
         </Grid>
-        <Grid item></Grid>
-      </Grid>
+      </Container>
     </>
   ) : (
     ""
