@@ -94,7 +94,7 @@ function SiteHeader(props) {
                   textDecoration: "none",
                 }}
               >
-                <TitleHomepage variant="h5" marginTop="4" />
+                <TitleHomepage marginTop="4" fontSize={"1em"}/>
               </Typography>
               <Box
                 sx={{

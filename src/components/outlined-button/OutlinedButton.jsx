@@ -5,6 +5,7 @@ function OutlinedButton(props) {
     <Button
     variant="outlined"
     size="small"
+    sx={{textTransform: "none"}}
   >
     {props.name}
   </Button>
