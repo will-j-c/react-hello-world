@@ -17,26 +17,29 @@ import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
 import SearchBar from "./SearchBar";
 import TitleHomepage from "../title-homepage/TitleHomepage";
-import axios from '../../api/axios';
+import axios from "../../api/axios";
 
-import AuthContext from '../../context/AuthProvider';
+import AuthContext from "../../context/AuthProvider";
 
 //TODO: after seting isAuth, replace image photo, profileLink
 
-function SiteHeader(props) {
+function SiteHeader() {
   const { auth } = useContext(AuthContext);
   const isAuth = !!auth.username;
   const [profile, setProfile] = useState(null);
   useEffect(() => {
-    axios
-      .get(`/users/${auth.username}`)
-      .then((response) => {
+    if (auth?.username) {
+      axios.get(`/users/${auth?.username}`).then((response) => {
         setProfile(response.data);
       });
+    }
   }, [auth]);
+  let profileAvatarUrl;
   const defaultProfileAvatarUrl =
     "https://i.pinimg.com/564x/3a/88/6a/3a886a5b90c687d0904b884b639157cc.jpg";
-  const profileAvatarUrl = profile?.profile_pic_url || defaultProfileAvatarUrl;
+  if (profile) {
+    profileAvatarUrl = profile?.profile_pic_url;
+  }
 
   const pageLinks = {
     projects: { pageName: "Projects", pageLink: "/projects" },
@@ -58,7 +61,7 @@ function SiteHeader(props) {
     },
     profile: {
       pageName: "Profile",
-      pageLink: `/${auth.username}`,
+      pageLink: `/${auth?.username}`,
     },
     logout: {
       pageName: "Logout",
@@ -74,7 +77,7 @@ function SiteHeader(props) {
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  const [valueNavbar, setValueNavbar] = useState(0);
+  const [value, setValue] = useState(0);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "var(--color1)" }}>
@@ -131,8 +134,10 @@ function SiteHeader(props) {
                 <Box sx={{ display: "flex", marginLeft: "auto" }}>
                   <SearchBar />
                   <Tabs
-                    value={valueNavbar}
-                    onChange={(e, val) => setValueNavbar(val)}
+                    value={value}
+                    onChange={(e, val) => {
+                      setValue(val);
+                    }}
                     textColor="inherit"
                     indicatorColor="secondary"
                     TabIndicatorProps={{
@@ -145,14 +150,31 @@ function SiteHeader(props) {
                       <Tab
                         key={index}
                         label={page.pageName}
-                        to={`${page.pageLink}`}
+                        to={page.pageLink}
                         component={Link}
                         sx={{ paddingX: 0.8 }}
                       />
                     ))}
+                    {/* <Tab
+                      key="3"
+                      label={login.pageName}
+                      to={`${login.pageLink}`}
+                      component={Link}
+                      sx={{
+                        paddingRight: 0,
+                      }}
+                    />
+                    <Tab
+                      key="4"
+                      label={signup.pageName}
+                      to={`${signup.pageLink}`}
+                      component={Link}
+                      sx={{ paddingLeft: 0 }}
+                    /> */}
+
                     {!isAuth && (
                       <Tab
-                        key="10"
+                        key="3"
                         label={login.pageName}
                         to={`${login.pageLink}`}
                         component={Link}
@@ -163,7 +185,7 @@ function SiteHeader(props) {
                     )}
                     {!isAuth && (
                       <Tab
-                        key="12"
+                        key="4"
                         label={signup.pageName}
                         to={`${signup.pageLink}`}
                         component={Link}
