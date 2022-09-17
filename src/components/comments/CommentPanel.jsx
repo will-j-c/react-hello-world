@@ -10,7 +10,7 @@ function CommentPanel(props) {
       </Grid>
     );
   });
-  return <Grid flexDirection={"column"} alignItems={"center"} width={1} sx={{border: "solid 1px var(--color3)"}} container>{commentsToShow}</Grid>;
+  return <Grid flexDirection={"column"} alignItems={"center"} width={1} sx={{border: "solid 1px var(--color3)", height: "100%", backgroundColor: "var(--color2)"}} height={1} container>{commentsToShow}</Grid>;
 }
 
 export default CommentPanel;

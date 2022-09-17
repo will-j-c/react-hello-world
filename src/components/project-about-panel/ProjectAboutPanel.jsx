@@ -42,6 +42,7 @@ function ProjectAboutPanel(props) {
           fontWeight={"bold"}
           variant={"subtitle1"}
           marginY={2}
+          height={1}
         >
           About Project:
         </Typography>

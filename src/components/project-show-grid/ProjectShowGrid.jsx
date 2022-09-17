@@ -85,12 +85,14 @@ function ProjectShowGrid(props) {
         columns={{ xs: 1, md: 12 }}
         justifyContent="space-between"
         marginTop={4}
+        sx={{height: "70vh"}}
       >
-        <Grid md={7} alignSelf={"flex-start"} paddingTop={0} height={1} item>
+        <Grid md={7} alignSelf={"flex-start"} paddingTop={0} height={1} sx={{height: "100%"}} item>
           <Box
             sx={{
               border: "solid 1px var(--color3)",
               backgroundColor: "var(--color2)",
+              height: "100%"
             }}
             paddingX={4}
             paddingBottom={4}
@@ -101,7 +103,7 @@ function ProjectShowGrid(props) {
               {project ? panel : ""}
           </Box>
         </Grid>
-        <Grid md={5} item>
+        <Grid md={5} sx={{height: "100%"}} item>
           <CommentPanel comments={comments}/>
         </Grid>
       </Grid>
