@@ -94,7 +94,7 @@ function SiteHeader(props) {
                   textDecoration: "none",
                 }}
               >
-                <TitleHomepage variant="h5" marginTop="4" />
+                <TitleHomepage marginTop="4" fontSize={"1em"} />
               </Typography>
               <Box
                 sx={{
@@ -131,7 +131,8 @@ function SiteHeader(props) {
                 <Box sx={{ display: "flex", marginLeft: "auto" }}>
                   <SearchBar />
                   <Tabs
-                    value={valueNavbar}
+                    // value={valueNavbar}
+                    value="false"
                     onChange={(e, val) => setValueNavbar(val)}
                     textColor="inherit"
                     indicatorColor="secondary"

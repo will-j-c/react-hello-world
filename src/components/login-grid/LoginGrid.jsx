@@ -9,7 +9,7 @@ function LoginGrid(props) {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={4}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
     >

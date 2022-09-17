@@ -1,5 +1,4 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import SignUpForm from "../signup-form/SignUpForm";
 import ProjectCard from "../project-card/ProjectCard";
 import { useState, useEffect } from "react";
 import axios from '../../api/axios';
@@ -13,6 +12,7 @@ function ProjectIndexGrid() {
     axios.get('projects').then((response) => {
       setProjects(response.data);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const projectCardsToShow = projects.map((project, idx) => {
     const projectCardDetails = {
@@ -21,9 +21,10 @@ function ProjectIndexGrid() {
       tagline: project.tagline,
       logo: project.logo_url,
       categories: project.categories || baseProjectLogo,
+      slug: project.slug
     };
     return (
-      <Grid key={idx} item>
+      <Grid key={idx} xs={true} md={true} item>
         <ProjectCard details={projectCardDetails} />
       </Grid>
     );
@@ -31,7 +32,7 @@ function ProjectIndexGrid() {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={8}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
     >
