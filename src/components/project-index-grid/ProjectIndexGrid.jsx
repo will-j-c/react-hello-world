@@ -32,7 +32,7 @@ function ProjectIndexGrid() {
   return (
     <Grid
       container
-      spacing={8}
+      spacing={2}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
     >
