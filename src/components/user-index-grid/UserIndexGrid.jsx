@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import axios from '../../api/axios';
-import UserCard from '../user-card/UserCard';
+import UserCard from '../cards/user-card/UserCard';
 
 export default function UserIndexGrid() {
   const [users, setUsers] = useState([]);
@@ -29,6 +29,7 @@ export default function UserIndexGrid() {
       spacing={2}
       columns={{ xs: 1, md: 12 }}
       justifyContent="center"
+      alignItems="stretch"
     >
       {userCards}
     </Grid>
