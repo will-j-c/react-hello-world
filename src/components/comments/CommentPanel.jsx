@@ -13,8 +13,9 @@ function CommentPanel(props) {
     );
   });
   return (
+    <>
     <Grid
-      flexDirection={"column"}
+      flexDirection={"column-reverse"}
       alignItems={"center"}
       width={1}
       sx={{
@@ -27,9 +28,11 @@ function CommentPanel(props) {
     >
       {commentsToShow}
       <Grid width={1} paddingX={1} alignSelf={"flex-end"} item>
-        <CommentAddField postComment={props.postComment} />
+        
       </Grid>
     </Grid>
+    <CommentAddField postComment={props.postComment} />
+    </>
   );
 }
 

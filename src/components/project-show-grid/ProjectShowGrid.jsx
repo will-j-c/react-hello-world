@@ -10,7 +10,7 @@ import ProjectContributorsPanel from "../project-contributors-panel/ProjectContr
 import ShowTabs from "../show-tabs/ShowTabs";
 import "./ProjectShowGrid.css";
 import axios from "../../api/axios";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CommentPanel from "../comments/CommentPanel";
 
 const baseProjectLogo =
@@ -72,17 +72,22 @@ function ProjectShowGrid(props) {
     if (!auth.username) {
       return navigate("/login");
     }
-    console.log(auth)
+    console.log(auth);
     // If authorised, send post request for new comment
     axiosPrivate.post(`/comments/${slug}`, { content }).then(
       (response) => {
-        console.log('Response', response);
+        // Update comments with a fetch request
+        axios.get(`/comments/${slug}`).then(
+          (response) => {
+            setComments(response.data);
+          },
+          (error) => {}
+        );
       },
       (error) => {
-        console.log('Error', error);
+        console.log("Error", error);
       }
     );
-    // Update comments with a fetch request
   };
 
   return project ? (
