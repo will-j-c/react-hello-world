@@ -17,7 +17,7 @@ import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
 import SearchBar from "./SearchBar";
 import TitleHomepage from "../title-homepage/TitleHomepage";
-import { axiosPrivate } from '../../api/axios';
+import axios from '../../api/axios';
 
 import AuthContext from '../../context/AuthProvider';
 
@@ -28,7 +28,7 @@ function SiteHeader(props) {
   const isAuth = !!auth.username;
   const [profile, setProfile] = useState(null);
   useEffect(() => {
-    axiosPrivate
+    axios
       .get(`/users/${auth.username}`)
       .then((response) => {
         setProfile(response.data);
