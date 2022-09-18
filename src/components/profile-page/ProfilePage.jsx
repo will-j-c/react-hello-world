@@ -120,7 +120,7 @@ function ProfilePage(props) {
               <EditIcon
                 sx={{
                   marginY: 1,
-                  color: "var(--color2)",
+                  color: "var(--disable-color)",
                   "&:hover": {
                     color: "var(--color3a)",
                   },

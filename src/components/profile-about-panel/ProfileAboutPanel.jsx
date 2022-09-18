@@ -44,7 +44,6 @@ function ProfileAboutPanel(props) {
         // toast(err.response.data.message);
       });
   }, [params]);
-  console.log("projectsAccepted:", projectsAccepted);
 
   if (props.profile) {
     const { skills, interests } = props.profile;
@@ -87,8 +86,11 @@ function ProfileAboutPanel(props) {
         Nothing here yet!
       </Typography>
     );
-
-    let projectsToShow = [...projectsPublic, ...projectsAccepted];
+    //Logic to show only accepted Public projects
+    const projectsAcceptedPublic = projectsAccepted?.filter(
+      (item) => item.state === "published"
+    );
+    let projectsToShow = [...projectsPublic, ...projectsAcceptedPublic];
     let projectCardsToShow = null;
 
     if (projectsToShow?.length) {
@@ -108,7 +110,7 @@ function ProfileAboutPanel(props) {
         };
         return (
           <Grid key={idx} item xs={12} sm={6} md={4}>
-            <ProjectCard details={projectCardDetails} />
+            <ProjectCard project={projectCardDetails} />
           </Grid>
         );
       });
