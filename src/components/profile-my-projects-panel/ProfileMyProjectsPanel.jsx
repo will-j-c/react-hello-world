@@ -8,7 +8,6 @@ import "./ProfileMyProjectsPanel.css";
 
 function ProfileMyProjectsPanel(props) {
   if (props.userProjects) {
-    const username = "mcspicy/hehe";
     const projectsToShow = props.userProjects;
     const baseProjectImage =
       "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
@@ -32,9 +31,7 @@ function ProfileMyProjectsPanel(props) {
     return (
       <>
         <Box
-          // marginLeft="auto"
           display={"flex"}
-          // flexDirection={"column"}
           justifyContent={"center"}
           alignItems={"center"}
           marginY={5}

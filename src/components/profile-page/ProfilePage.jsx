@@ -9,7 +9,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Container from "@mui/material/Container";
 import EditIcon from "@mui/icons-material/Edit";
 
-import ProfileShowTabs from "../profile-show-tabs/ProfileShowTabs";
+import { ProfileShowTabs } from "../profile-show-tabs/ProfileShowTabs";
 import ProfileAboutPanel from "../profile-about-panel/ProfileAboutPanel";
 import ProfileConnectionPanel from "../profile-connection-panel/ProfileConnectionPanel";
 import ProfileMyProjectsPanel from "../profile-my-projects-panel/ProfileMyProjectsPanel";
@@ -31,6 +31,7 @@ function ProfilePage(props) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const profileOwnerName = auth.username;
+
   const [profile, setProfile] = useState(null);
   const [projectPublic, setProjectPublic] = useState(null);
   const [projectAccepted, setProjectAccepted] = useState(null);
@@ -108,7 +109,7 @@ function ProfilePage(props) {
         );
         break;
       case "2":
-        setPanel(<ProfileConnectionPanel profile={profile} />);
+        setPanel(<ProfileConnectionPanel />);
         break;
       case "3":
         setPanel(<ProfileMyProjectsPanel userProjects={userProjects} />);
@@ -119,7 +120,6 @@ function ProfilePage(props) {
       default:
         setPanel(<ProfileAboutPanel profile={profile} />);
     }
-    // return;
   };
 
   return profile ? (

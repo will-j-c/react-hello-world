@@ -1,66 +1,36 @@
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import ProfileConnectionFollowerPanel from "../profile-connection-follower-panel/ProfileConnectionFollowerPanel";
+import ProfileConnectionFollowingPanel from "../profile-connection-following-panel/ProfileConnectionFollowingPanel";
+import { ShowTabsConnection } from "../profile-show-tabs/ProfileShowTabs";
 import "./ProfileConnectionPanel.css";
 
 function ProfileConnectionPanel(props) {
-  if (props.profile) {
-    const { skills, interests } = props.profile;
+  let userFollowings = props.userFollowings;
+  let userFollowers = props.userFollowers;
+  // Logic for handling tabs
+  const [tabValue, setTabValue] = useState("1");
+  const [panel, setPanel] = useState(null);
+  useEffect(() => {
+    return setPanel(<ProfileConnectionFollowingPanel />);
+  }, [userFollowings]);
 
-    const skillsToDisplay = skills.length ? (
-      skills.map((skill, idx) => {
-        return (
-          <Box
-            key={idx}
-            sx={{ backgroundColor: "var(--color7a)" }}
-            padding={1}
-            marginRight={1}
-            borderRadius={1}
-          >
-            {skill}
-          </Box>
-        );
-      })
-    ) : (
-      <Typography sx={{ color: "var(--color3)" }} variant={"body2"} marginY={2}>
-        Nothing here yet!
-      </Typography>
-    );
-    return (
-      <Box marginTop={2}>
-        <Typography
-          sx={{ color: "var(--color4)" }}
-          fontWeight={"bold"}
-          variant={"subtitle1"}
-          marginY={2}
-        >
-          About me:
-        </Typography>
-        <Box sx={{ backgroundColor: "var(--color1)" }} padding={2}>
-          <Typography sx={{ color: "var(--color4)" }} variant={"body2"}>
-            {"about_me about_meabout_meabout_meabout_me" || "Nothing here yet!"}
-          </Typography>
-        </Box>
-        <Typography
-          sx={{ color: "var(--color4)" }}
-          fontWeight={"bold"}
-          variant={"subtitle1"}
-          marginY={2}
-        >
-          Categories:
-        </Typography>
-        <Box display={"flex"}>{skillsToDisplay}</Box>
-        <Typography
-          sx={{ color: "var(--color4)" }}
-          fontWeight={"bold"}
-          variant={"subtitle1"}
-          marginY={2}
-        >
-          Images:
-        </Typography>
-        {/* <Box display="flex">{images}</Box> */}
-      </Box>
-    );
-  }
+  const handleTabChange = (event, newTabValue) => {
+    setTabValue(newTabValue);
+    return newTabValue === "1"
+      ? setPanel(<ProfileConnectionFollowingPanel />)
+      : setPanel(<ProfileConnectionFollowerPanel />);
+  };
+  return (
+    <Box marginY={4}>
+      <ShowTabsConnection
+        tabValue={tabValue}
+        handleTabChange={handleTabChange}
+      />
+      {panel}
+    </Box>
+  );
 }
 
 export default ProfileConnectionPanel;
