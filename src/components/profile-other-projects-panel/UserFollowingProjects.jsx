@@ -8,7 +8,7 @@ import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-function UserAcceptedProjects() {
+function UserFollowingProjects() {
   const params = useParams();
   const username = params.username;
   const { auth } = useContext(AuthContext);
@@ -17,34 +17,25 @@ function UserAcceptedProjects() {
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
-  const [UserAcceptedProjects, setUserAcceptedProjects] = useState([]);
-  const [projectsAccepted, setProjectsAccepted] = useState([]);
+  const [UserFollowingProjects, setUserFollowingProjects] = useState([]);
 
   useEffect(() => {
-    axios
-      .get(`/users/${username}/projects/accepted`)
-      .then((response) => {
-        setUserAcceptedProjects(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
+    if (profileOwnerName === username) {
+      axiosPrivate
+        .get(`/users/${username}/projects`)
+        .then((response) => {
+          console.log("hehe");
+          setUserFollowingProjects(response.data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+          // toast(err.response.data.message);
+        });
+    }
   }, []);
-  useEffect(() => {
-    axios
-      .get(`/users/${username}/projects/accepted`)
-      .then((response) => {
-        setProjectsAccepted(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
-  }, [params]);
-  let UserAcceptedProjectsCards = [];
-  if (UserAcceptedProjects?.length) {
-    UserAcceptedProjectsCards = UserAcceptedProjects?.map((project, idx) => {
+  let UserFollowingProjectsCards = [];
+  if (UserFollowingProjects?.length) {
+    UserFollowingProjectsCards = UserFollowingProjects?.map((project, idx) => {
       const projectCardDetails = {
         projectImg: project.image_urls[0],
         title: project.title,
@@ -62,9 +53,9 @@ function UserAcceptedProjects() {
   }
   return (
     <Grid container spacing={2} marginTop={4}>
-      {UserAcceptedProjectsCards}
+      {UserFollowingProjectsCards}
     </Grid>
   );
 }
 
-export default UserAcceptedProjects;
+export default UserFollowingProjects;

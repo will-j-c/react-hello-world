@@ -24,7 +24,6 @@ function UserAppliedProjects() {
       axiosPrivate
         .get(`/users/${username}/projects`)
         .then((response) => {
-          console.log("hehe");
           setUserAppliedProjects(response.data);
         })
         .catch((err) => {
@@ -46,7 +45,7 @@ function UserAppliedProjects() {
       };
       return (
         <Grid key={idx} item xs={12} sm={6} md={4}>
-          <ProjectCard details={projectCardDetails} />
+          <ProjectCard project={projectCardDetails} />
         </Grid>
       );
     });
