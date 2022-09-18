@@ -17,7 +17,6 @@ function UserAcceptedProjects() {
   const axiosPrivate = useAxiosPrivate();
 
   const [UserAcceptedProjects, setUserAcceptedProjects] = useState([]);
-  const [projectsAccepted, setProjectsAccepted] = useState([]);
 
   useEffect(() => {
     axios
@@ -29,18 +28,8 @@ function UserAcceptedProjects() {
         console.log(err.response);
         // toast(err.response.data.message);
       });
-  }, []);
-  useEffect(() => {
-    axios
-      .get(`/users/${username}/projects/accepted`)
-      .then((response) => {
-        setProjectsAccepted(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
   }, [params]);
+
   let UserAcceptedProjectsCards = [];
   if (UserAcceptedProjects?.length) {
     UserAcceptedProjectsCards = UserAcceptedProjects?.map((project, idx) => {
