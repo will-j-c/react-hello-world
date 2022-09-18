@@ -40,9 +40,7 @@ export default function UserIndexGrid() {
             )
           );
         }
-
       } catch (error) {
-        console.log(error);
       }
     }
 
@@ -50,16 +48,16 @@ export default function UserIndexGrid() {
   }, [])
 
   const userCards = users.map((user, idx) => {
-    return (
-      <Grid key={idx} xs={6} md={4} item>
-        <UserCard 
-        user={user} 
-        followed={followingUsers.includes(user.username)}
-        // folllowAction={followUser}
-        // unfollowAction={unfollowUser}
-      />
-      </Grid>
-    )
+    if (user.username !== username) {
+      return (
+        <Grid key={idx} xs={6} md={4} item>
+          <UserCard 
+          user={user} 
+          followed={followingUsers.includes(user.username)}
+        />
+        </Grid>
+      )
+    }
   });
 
   return (

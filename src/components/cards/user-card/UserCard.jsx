@@ -15,12 +15,16 @@ export default function UserCard(props) {
 
   const { name, username, tagline, skills, interests, profile_pic_url } = props.user;
   const [ buttonTitle, setButtonTitle ] = useState('Following');
-  console.log(`followStatus for ${username}: ${props.followed}`);
   const [ followStatus, setFollowStatus ] = useState(props.followed);
 
   const axiosPrivate = useAxiosPrivate();
 
-  // useEffect(() => {setFollowStatus(props.followed)}, []);
+  useEffect(() => {
+    setFollowStatus(props.followed)
+  }, [props.followed]);
+
+  useEffect(() => {
+  }, [followStatus]);
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -50,21 +54,16 @@ export default function UserCard(props) {
 
   const handleFollowAction = async function() {
     try {
-      console.log(`this function is triggered`);
-      console.log(`current followStatus: ${followStatus}`);
       if (followStatus) {
-        const response = await axiosPrivate.delete(`/users/${username}/unfollow`);
-        console.log(`response: ${JSON.stringify(response)}`);
+        await axiosPrivate.delete(`/users/${username}/unfollow`);
+        setFollowStatus(false);
       } else {
-        const response = await axiosPrivate.post(`/users/${username}/follow`);
-        console.log(`response: ${JSON.stringify(response)}`);
+        await axiosPrivate.post(`/users/${username}/follow`);
+        setFollowStatus(true);
       }
-
-      setFollowStatus(prev => !prev);
       return
 
     } catch (err) {
-      console.log(err);
     }
   }
 
