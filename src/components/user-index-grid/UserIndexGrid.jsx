@@ -1,13 +1,13 @@
-import React from 'react';
-import { useEffect, useState, useContext } from 'react';
+import React from "react";
+import { useEffect, useState, useContext } from "react";
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from "@mui/material/Unstable_Grid2";
 
-import axios from '../../api/axios';
-import useAxiosPrivate from '../../hooks/useAxiosPrivate';
-import UserCard from '../cards/user-card/UserCard';
-import AuthContext from '../../context/AuthProvider';
-import LoginModal from '../modals/LoginModal';
+import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import UserCard from "../cards/user-card/UserCard";
+import AuthContext from "../../context/AuthProvider";
+import LoginModal from "../modals/LoginModal";
 
 export default function UserIndexGrid() {
   const [users, setUsers] = useState([]);
@@ -17,51 +17,48 @@ export default function UserIndexGrid() {
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
 
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
-
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-
     async function getData() {
       try {
-        const usersResponse = await axios.get('/users');
+        const usersResponse = await axios.get("/users");
         setUsers(usersResponse.data);
 
         if (username) {
-          const followingUsersResponse = await axiosPrivate
-            .get(`/users/${username}/following`)
+          const followingUsersResponse = await axiosPrivate.get(
+            `/users/${username}/following`
+          );
           setFollowingUsers(
             followingUsersResponse.data.map(
-              relation => relation.followee.username
+              (relation) => relation.followee.username
             )
           );
 
-          const followersResponse = await axiosPrivate
-            .get(`/users/${username}/followers`)
+          const followersResponse = await axiosPrivate.get(
+            `/users/${username}/followers`
+          );
           setFollowers(
-            followersResponse.data.map(
-              relation => relation.follower.username
-            )
+            followersResponse.data.map((relation) => relation.follower.username)
           );
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
 
     getData();
-  }, [])
+  }, []);
 
   const userCards = users.map((user, idx) => {
     if (user.username !== username) {
       return (
         <Grid key={idx} xs={6} md={4} item>
-          <UserCard 
-          user={user} 
-          followed={followingUsers.includes(user.username)}
-          triggerLogin={() => setModalIsOpen(true)}
-        />
+          <UserCard
+            user={user}
+            followed={followingUsers.includes(user.username)}
+            triggerLogin={() => setModalIsOpen(true)}
+          />
         </Grid>
-      )
+      );
     }
   });
 
@@ -76,11 +73,7 @@ export default function UserIndexGrid() {
       >
         {userCards}
       </Grid>
-      <LoginModal 
-        isOpen={modalIsOpen} 
-        onClose={() => setModalIsOpen(false)}
-      />
+      <LoginModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} />
     </>
-    
-  )
+  );
 }
