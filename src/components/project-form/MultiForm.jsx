@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Confirmation from "./Confirmation";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import initialCheckState from "./categories";
+import axios from "axios";
 
 function MultiForm() {
   const location = useLocation();
@@ -55,7 +56,7 @@ function MultiForm() {
       ...prevState,
       ...checkedBoxes,
     }));
-  }
+  };
   // Set the step to 1 if coming in via /projects/create
   useEffect(() => {
     if (!location.search) {
@@ -126,11 +127,16 @@ function MultiForm() {
       },
     };
     // Send post request to projects
-    axiosPrivate.post("/projects", { ...form, state: "draft" }, config).then(
+    axiosPrivate.post("/projects", { ...form, state: "draft" }).then(
       (response) => {
-        console.log("Response: ", response);
-        // Reroute to project you just created in draft
-        navigate(`/projects/${response.data.slug}`);
+        axiosPrivate.post(`/projects/upload?slug=${response.data.slug}`, form.logo_url, config).then(
+          (responseTwo) => {
+            navigate(`/projects/${response.data.slug}`);
+          },
+          (error) => {
+            console.log("Image Error: ", error);
+          }
+        );
       },
       (error) => {
         // TODO error handling
@@ -147,20 +153,24 @@ function MultiForm() {
         "Content-Type": "multipart/form-data",
       },
     };
-    axiosPrivate
-      .post("/projects", { ...form, state: "published" }, config)
-      .then(
-        (response) => {
-          console.log("Response: ", response);
-          // Reroute to project you just published
-          navigate(`/projects/${response.data.slug}`);
-        },
-        (error) => {
-          // TODO error handling
-          // If error snack bar with details
-          console.log("Error: ", error);
-        }
-      );
+    axiosPrivate.post("/projects", {...form, state: "published"}).then(
+      (response) => {
+        axiosPrivate.post(`/projects/upload?slug=${response.data.slug}`, form.logo_url, config).then(
+          (responseTwo) => {
+            navigate(`/projects/${response.data.slug}`);
+          },
+          (error) => {
+            console.log("Image Error: ", error);
+          }
+        );
+        // Reroute to project you just published
+      },
+      (error) => {
+        // TODO error handling
+        // If error snack bar with details
+        console.log("Error: ", error);
+      }
+    );
   };
   switch (step) {
     case 1:
