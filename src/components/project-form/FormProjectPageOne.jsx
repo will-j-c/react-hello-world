@@ -5,13 +5,29 @@ import styles from "./MultiForm.module.scss";
 import Button from "../buttons/Button";
 import Grid from "@mui/material/Unstable_Grid2";
 import AvatarComponent from "../avatar/Avatar";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import { categories } from "./categories";
 
 function FormProjectPageOne(props) {
-  const { values, handleChange, nextStep, handleFileInput, previewLogo } =
-    props;
+  const {
+    values,
+    handleChange,
+    nextStep,
+    handleFileInput,
+    previewLogo,
+    checkBoxTrack,
+    checkedState,
+  } = props;
+
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
+  };
+
+  const onCheck = (event) => {
+    checkBoxTrack({ [event.target.value]: event.target.checked });
   };
   return (
     <Grid
@@ -26,7 +42,15 @@ function FormProjectPageOne(props) {
     >
       <Grid md={4} item>
         <Box display="flex" flexDirection={"column"} alignItems={"center"}>
-          <AvatarComponent imgUrl={previewLogo} sx={{ width: 128, height: 128, border: "solid 1px var(--color3)", marginBottom: 2 }}/>
+          <AvatarComponent
+            imgUrl={previewLogo}
+            sx={{
+              width: 128,
+              height: 128,
+              border: "solid 1px var(--color3)",
+              marginBottom: 2,
+            }}
+          />
           <Button
             variant="outlined"
             title="Upload"
@@ -79,6 +103,24 @@ function FormProjectPageOne(props) {
             sx={{ marginBottom: 2 }}
             className={styles["input-text"]}
           />
+          <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
+            {categories.map((category) => {
+              return (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value={category}
+                      onChange={handleChange("categories")}
+                      onClick={onCheck}
+                      checked={checkedState[category] || false}
+                    />
+                  }
+                  key={category}
+                  label={category}
+                />
+              );
+            })}
+          </FormGroup>
           <Box textAlign={"center"} alignSelf={"flex-end"}>
             <Button
               variant="outlined"

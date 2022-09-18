@@ -1,10 +1,11 @@
 import FormProjectPageOne from "./FormProjectPageOne";
 import FormProjectPageTwo from "./FormProjectPageTwo";
-import { useState, useContext, useEffect, useCallback } from "react";
+import { useState, useContext, useEffect } from "react";
 import AuthContext from "../../context/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Confirmation from "./Confirmation";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import initialCheckState from "./categories";
 
 function MultiForm() {
   const location = useLocation();
@@ -13,6 +14,8 @@ function MultiForm() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const [previewLogo, setPreviewLogo] = useState(null);
+  const [checkedCategories, setCheckedCategories] = useState([]);
+  const [checkedState, setCheckedState] = useState({});
   const [form, setForm] = useState({
     step: location.search ? parseInt(location.search.slice(-1)) : 1,
     username: auth.username,
@@ -46,6 +49,13 @@ function MultiForm() {
     description,
     image_urls,
   };
+  // Keep track of the checked boxes
+  const checkboxTrack = (checkedBoxes) => {
+    setCheckedState((prevState) => ({
+      ...prevState,
+      ...checkedBoxes,
+    }));
+  }
   // Set the step to 1 if coming in via /projects/create
   useEffect(() => {
     if (!location.search) {
@@ -68,10 +78,30 @@ function MultiForm() {
   };
   // Handle field change
   const handleChange = (input) => (event) => {
-    setForm((prevState) => ({
-      ...prevState,
-      [input]: event.target.value,
-    }));
+    if (input === "categories") {
+      if (event.target.checked) {
+        setCheckedCategories((prevState) => [...prevState, event.target.value]);
+        setForm((prevState) => ({
+          ...prevState,
+          [input]: checkedCategories,
+        }));
+      } else {
+        setCheckedCategories(
+          checkedCategories.filter((value) => {
+            return value !== event.target.value;
+          })
+        );
+        setForm((prevState) => ({
+          ...prevState,
+          [input]: checkedCategories,
+        }));
+      }
+    } else {
+      setForm((prevState) => ({
+        ...prevState,
+        [input]: event.target.value,
+      }));
+    }
   };
   // Handle file input
   const handleFileInput = (input) => (event) => {
@@ -96,7 +126,7 @@ function MultiForm() {
       },
     };
     // Send post request to projects
-    axiosPrivate.post("/projects", {...form, state: "draft"}, config).then(
+    axiosPrivate.post("/projects", { ...form, state: "draft" }, config).then(
       (response) => {
         console.log("Response: ", response);
         // Reroute to project you just created in draft
@@ -117,19 +147,20 @@ function MultiForm() {
         "Content-Type": "multipart/form-data",
       },
     };
-    axiosPrivate.post("/projects", {...form, state: "published"}, config).then(
-      (response) => {
-        console.log("Response: ", response);
-        // Reroute to project you just published
-        navigate(`/projects/${response.data.slug}`);
-      },
-      (error) => {
-        // TODO error handling
-        // If error snack bar with details
-        console.log("Error: ", error);
-      }
-    );
- 
+    axiosPrivate
+      .post("/projects", { ...form, state: "published" }, config)
+      .then(
+        (response) => {
+          console.log("Response: ", response);
+          // Reroute to project you just published
+          navigate(`/projects/${response.data.slug}`);
+        },
+        (error) => {
+          // TODO error handling
+          // If error snack bar with details
+          console.log("Error: ", error);
+        }
+      );
   };
   switch (step) {
     case 1:
@@ -141,6 +172,8 @@ function MultiForm() {
           handleFileInput={handleFileInput}
           values={values}
           previewLogo={previewLogo}
+          checkBoxTrack={checkboxTrack}
+          checkedState={checkedState}
         />
       );
     case 2:
