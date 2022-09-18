@@ -36,7 +36,6 @@ export default function ContributorShow() {
       const contributorData = await axios.get(`/contributors/${id}`);
       const relationsData = contributorData.data.relations;
       const relation = relationsData.filter(r => r.user_id.username === username);
-      console.log(`relation: ${JSON.stringify(relation)}`);
 
       if (relation.length > 0) {
         let title = null;
