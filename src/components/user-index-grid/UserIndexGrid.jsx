@@ -47,7 +47,7 @@ export default function UserIndexGrid() {
     }
 
     getData();
-  }, [])
+  }, [username])
 
   const userCards = users.map((user, idx) => {
     if (user.username !== username) {

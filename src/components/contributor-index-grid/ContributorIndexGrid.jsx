@@ -43,7 +43,7 @@ export default function UserIndexGrid() {
     }
     getData()
     
-  }, [])
+  }, [username])
 
   const contributorCards = contributors.map((c, idx) => {
     const application = applications.filter(a => a.contributor_id.toString() === c._id.toString());

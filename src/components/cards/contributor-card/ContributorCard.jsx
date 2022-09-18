@@ -22,8 +22,6 @@ export default function ContributorCard(props) {
   const [ buttonTitle, setButtonTitle ] = useState('Following');
   const [ status, setStatus ] = useState(props.status);
 
-  console.log(`contributor ${title}: ${props.status}`);
-
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
@@ -70,6 +68,37 @@ export default function ContributorCard(props) {
     }
     setButtonTitle(title)
   }, [status]);
+
+  const handleAction = async function() {
+    try {
+      if (!auth.username) {
+        props.triggerLogin();
+        return;
+      }
+      if (status === 'not applied') {
+        await axiosPrivate.post(`/contributors/${_id}/apply`);
+        setStatus('applied');
+      } else if (status === 'applied') {
+        await axiosPrivate.delete(`/contributors/${_id}/withdraw`);
+        setStatus('not applied');
+      }
+      return
+
+    } catch (err) {
+    }
+  }
+
+  const handleMouseOver = function() {
+    if (buttonTitle === 'Applied') {
+      setButtonTitle('Withdraw');
+    }
+  }
+
+  const handleMouseLeave = function() {
+    if (buttonTitle === 'Withdraw') {
+      setButtonTitle('Applied');
+    }
+  }
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -123,6 +152,9 @@ export default function ContributorCard(props) {
             category={'action'}
             title={buttonTitle}
             variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleAction}
           />
         </Box>
       </CardActions>
