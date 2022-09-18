@@ -7,7 +7,7 @@ import axios from '../../api/axios';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import UserCard from '../cards/user-card/UserCard';
 import AuthContext from '../../context/AuthProvider';
-import Modal from '../modals/LoginModal';
+import LoginModal from '../modals/LoginModal';
 
 import Button from '../buttons/Button';
 
@@ -60,6 +60,7 @@ export default function UserIndexGrid() {
           <UserCard 
           user={user} 
           followed={followingUsers.includes(user.username)}
+          triggerLogin={() => setModalIsOpen(true)}
         />
         </Grid>
       )
@@ -77,12 +78,7 @@ export default function UserIndexGrid() {
       >
         {userCards}
       </Grid>
-      <Button
-        onClick={ ()=> setModalIsOpen(true) }
-        title='Open Modal'
-        variant='contained'
-      />
-      <Modal 
+      <LoginModal 
         isOpen={modalIsOpen} 
         onClose={() => setModalIsOpen(false)}
       />
