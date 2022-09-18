@@ -35,8 +35,8 @@ function FormProjectPageTwo(props) {
       required
       hiddenLabel
       fullWidth
-      defaultValue={values.projectDescription}
-      onChange={handleChange('projectDescription')}
+      defaultValue={values.description}
+      onChange={handleChange('description')}
       variant="filled"
       size="small"
       type="text"

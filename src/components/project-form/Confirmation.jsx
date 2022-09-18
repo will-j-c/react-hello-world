@@ -30,19 +30,19 @@ function Confirmation(props) {
         <ListItem>
           <ListItemText
             primary="Project Title"
-            secondary={values.projectTitle}
+            secondary={values.title}
           />
         </ListItem>
         <ListItem>
           <ListItemText
             primary="Project Tagline"
-            secondary={values.projectTagline}
+            secondary={values.tagline}
           />
         </ListItem>
         <ListItem>
           <ListItemText
             primary="Project Description"
-            secondary={values.projectDescription}
+            secondary={values.description}
           />
         </ListItem>
       </List>
