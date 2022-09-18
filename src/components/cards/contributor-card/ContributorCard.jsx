@@ -146,7 +146,7 @@ export default function ContributorCard(props) {
             category={'action'}
             title={'View'}
             variant={"outlined"}
-            route={`/contributor/${_id}`}
+            route={`/contributors/${_id}`}
           />
           <Button
             category={'action'}
