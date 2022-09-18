@@ -55,6 +55,8 @@ export default function UserIndexGrid() {
         <UserCard 
         user={user} 
         followed={followingUsers.includes(user.username)}
+        // folllowAction={followUser}
+        // unfollowAction={unfollowUser}
       />
       </Grid>
     )

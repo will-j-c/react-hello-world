@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -9,12 +9,18 @@ import { Link as RouterLink } from "react-router-dom";
 import Button from "../../buttons/Button";
 
 import '../Card.scss';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 
 export default function UserCard(props) {
 
   const { name, username, tagline, skills, interests, profile_pic_url } = props.user;
-  const followed = props.followed;
   const [ buttonTitle, setButtonTitle ] = useState('Following');
+  console.log(`followStatus for ${username}: ${props.followed}`);
+  const [ followStatus, setFollowStatus ] = useState(props.followed);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  // useEffect(() => {setFollowStatus(props.followed)}, []);
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -42,6 +48,25 @@ export default function UserCard(props) {
     setButtonTitle('Following');
   }
 
+  const handleFollowAction = async function() {
+    try {
+      console.log(`this function is triggered`);
+      console.log(`current followStatus: ${followStatus}`);
+      if (followStatus) {
+        const response = await axiosPrivate.delete(`/users/${username}/unfollow`);
+        console.log(`response: ${JSON.stringify(response)}`);
+      } else {
+        const response = await axiosPrivate.post(`/users/${username}/follow`);
+        console.log(`response: ${JSON.stringify(response)}`);
+      }
+
+      setFollowStatus(prev => !prev);
+      return
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   return (
     <Card raised={true}>
@@ -80,10 +105,11 @@ export default function UserCard(props) {
           />
           <Button
             category={'action'}
-            title={followed ? `${buttonTitle}` : 'Follow'}
-            variant={followed ? 'outlined' : 'contained'}
+            title={followStatus ? `${buttonTitle}` : 'Follow'}
+            variant={followStatus ? 'outlined' : 'contained'}
             onMouseOver={handleMouseOver}
             onMouseLeave={handleMouseLeave}
+            onClick={handleFollowAction}
           />
         </Box>
       </CardActions>
