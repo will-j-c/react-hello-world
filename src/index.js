@@ -11,12 +11,13 @@ import App from "./App";
 import "./index.css";
 import LoginGrid from "./components/login-grid/LoginGrid";
 import UserIndexGrid from "./components/user-index-grid/UserIndexGrid";
-import ContributorIndexGrid from './components/contributor-index-grid/ContributorIndexGrid';
+import ContributorIndexGrid from "./components/contributor-index-grid/ContributorIndexGrid";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
-import TitleHomepage from "./components/title-homepage/TitleHomepage"
+import TitleHomepage from "./components/title-homepage/TitleHomepage";
 import ProjectIndexGrid from "./components/project-index-grid/ProjectIndexGrid";
 import ContributorShow from "./components/contributor-show/ContributorShow";
+import ProfilePage from "./components/profile-page/ProfilePage";
 
 const theme = createTheme({
   components: {
@@ -62,9 +63,10 @@ root.render(
                 <Route path="login" element={<LoginGrid formType="login" />} />
                 <Route path="logout" element={<LogOut />} />
                 <Route path="users" element={<UserIndexGrid />} />
+                <Route path="users/:username" element={<ProfilePage />} />
                 <Route path="contributors" element={<ContributorIndexGrid />} />
                 <Route path="projects">
-                  <Route path=":slug" element={<ProjectShowGrid />}/>
+                  <Route path=":slug" element={<ProjectShowGrid />} />
                 </Route>
                 <Route path="contributors">
                   <Route path=":id" element={<ContributorShow />}/>

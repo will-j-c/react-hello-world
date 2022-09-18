@@ -20,6 +20,7 @@ export default function ContributorShow() {
   const username = auth.username;
   const params = useParams();
   const id = params.id;
+  const axiosPrivate = useAxiosPrivate();
 
   const baseProjectAvatar =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
