@@ -146,10 +146,10 @@ export default function ContributorCard(props) {
             category={'action'}
             title={'View'}
             variant={"outlined"}
-            route={`/contributor/${_id}`}
+            route={`/contributors/${_id}`}
           />
           <Button
-            category={'action'}
+            category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
             title={buttonTitle}
             variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
             onMouseOver={handleMouseOver}
