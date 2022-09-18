@@ -26,7 +26,7 @@ function ProfileOtherProjectsPanel() {
         handleTabChange={handleTabChange}
       /> */}
       {UserAcceptedProjects}
-      {UserAppliedProjects}
+      {/* {UserAppliedProjects} */}
     </Box>
   );
 }
