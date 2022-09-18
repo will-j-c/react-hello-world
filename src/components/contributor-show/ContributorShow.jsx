@@ -136,7 +136,7 @@ export default function ContributorShow() {
     </Typography>
   );
 
-  return (
+  return contributor ? (
     <>
       <Container>
         <Box display={"flex"} marginTop={5}>
@@ -270,7 +270,7 @@ export default function ContributorShow() {
         onClose={() => setModalIsOpen(false)}
       />
     </>
-  // ) : (
-  //   ""
+  ) : (
+    ''
   );
 }
