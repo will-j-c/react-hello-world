@@ -33,9 +33,6 @@ function ProfilePage(props) {
   const profileOwnerName = auth.username;
 
   const [profile, setProfile] = useState(null);
-  const [projectPublic, setProjectPublic] = useState(null);
-  const [projectAccepted, setProjectAccepted] = useState(null);
-  const [userProjects, setUserProjects] = useState(null);
 
   useEffect(() => {
     axios
@@ -47,51 +44,11 @@ function ProfilePage(props) {
         console.log(err.response);
         // toast(err.response.data.message);
       });
-  }, []);
-  useEffect(() => {
-    axios
-      .get(`/users/${username}/projects/public`)
-      .then((response) => {
-        setProjectPublic(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
-  }, []);
-  useEffect(() => {
-    axios
-      .get(`/users/${username}/projects/accepted`)
-      .then((response) => {
-        setProjectAccepted(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
-  }, []);
-  useEffect(() => {
-    axiosPrivate
-      .get(`/users/${username}/projects`)
-      .then((response) => {
-        setUserProjects(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
-  }, []);
-
+  }, [params]);
   // Logic for handling tabs
   useEffect(() => {
     if (profile) {
-      return setPanel(
-        <ProfileAboutPanel
-          profile={profile}
-          projectPublic={projectPublic}
-          projectAccepted={projectAccepted}
-        />
-      );
+      return setPanel(<ProfileAboutPanel profile={profile} />);
     }
   }, [profile]);
   const [tabValue, setTabValue] = useState("1");
@@ -100,19 +57,13 @@ function ProfilePage(props) {
     setTabValue(newTabValue);
     switch (newTabValue) {
       case "1":
-        setPanel(
-          <ProfileAboutPanel
-            profile={profile}
-            projectPublic={projectPublic}
-            projectAccepted={projectAccepted}
-          />
-        );
+        setPanel(<ProfileAboutPanel profile={profile} />);
         break;
       case "2":
         setPanel(<ProfileConnectionPanel />);
         break;
       case "3":
-        setPanel(<ProfileMyProjectsPanel userProjects={userProjects} />);
+        setPanel(<ProfileMyProjectsPanel />);
         break;
       case "4":
         setPanel(<ProfileOtherProjectsPanel />);
@@ -169,7 +120,7 @@ function ProfilePage(props) {
               <EditIcon
                 sx={{
                   marginY: 1,
-                  color: "var(--color2)",
+                  color: "var(--disable-color)",
                   "&:hover": {
                     color: "var(--color3a)",
                   },

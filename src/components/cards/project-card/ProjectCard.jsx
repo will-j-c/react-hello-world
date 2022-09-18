@@ -1,17 +1,17 @@
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CardActions from '@mui/material/CardActions';
+import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AvatarComponent from "../../avatar/Avatar";
 import { Link as RouterLink } from "react-router-dom";
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from "react";
 import Button from "../../buttons/Button";
-import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
-import AuthContext from '../../../context/AuthProvider';
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import AuthContext from "../../../context/AuthProvider";
 
-import '../Card.scss';
+import "../Card.scss";
 
 function ProjectCard(props) {
   const { projectImg, title, tagline, logo, categories, slug } = props.project;
@@ -27,28 +27,27 @@ function ProjectCard(props) {
     );
   });
 
-  const [ buttonTitle, setButtonTitle ] = useState('Following');
-  const [ followStatus, setFollowStatus ] = useState(props.followed);
+  const [buttonTitle, setButtonTitle] = useState("Following");
+  const [followStatus, setFollowStatus] = useState(props.followed);
   const { auth } = useContext(AuthContext);
 
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    setFollowStatus(props.followed)
+    setFollowStatus(props.followed);
   }, [props.followed]);
 
-  useEffect(() => {
-  }, [followStatus]);
+  useEffect(() => {}, [followStatus]);
 
-  const handleMouseOver = function() {
-    setButtonTitle('Unfollow');
-  }
+  const handleMouseOver = function () {
+    setButtonTitle("Unfollow");
+  };
 
-  const handleMouseLeave = function() {
-    setButtonTitle('Following');
-  }
+  const handleMouseLeave = function () {
+    setButtonTitle("Following");
+  };
 
-  const handleFollowAction = async function() {
+  const handleFollowAction = async function () {
     try {
       if (!auth.username) {
         props.triggerLogin();
@@ -62,10 +61,9 @@ function ProjectCard(props) {
         await axiosPrivate.post(`/projects/${slug}/follow/${username}`);
         setFollowStatus(true);
       }
-      return
-    } catch (err) {
-    }
-  }
+      return;
+    } catch (err) {}
+  };
 
   return (
     <Card raised={true}>
@@ -82,11 +80,15 @@ function ProjectCard(props) {
             imgUrl={logo}
             sx={{ width: 36, height: 36, border: "solid 1px var(--color3)" }}
           />
-          <Typography className='card-title' variant='h6' sx={{marginLeft: 1}}>
+          <Typography
+            className="card-title"
+            variant="h6"
+            sx={{ marginLeft: 1 }}
+          >
             {title}
           </Typography>
         </Box>
-        <Typography variant='body2' className='card-tagline'>
+        <Typography variant="body2" className="card-tagline">
           {tagline}
         </Typography>
         <Box display="flex" height={0.3} marginBottom={10} marginTop={1}>
@@ -102,8 +104,8 @@ function ProjectCard(props) {
         />
         <Button
           category={"action"}
-          title={followStatus ? `${buttonTitle}` : 'Follow'}
-          variant={followStatus ? 'outlined' : 'contained'}
+          title={followStatus ? `${buttonTitle}` : "Follow"}
+          variant={followStatus ? "outlined" : "contained"}
           onMouseOver={handleMouseOver}
           onMouseLeave={handleMouseLeave}
           onClick={handleFollowAction}

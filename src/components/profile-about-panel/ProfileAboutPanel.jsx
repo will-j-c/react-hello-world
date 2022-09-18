@@ -1,10 +1,50 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
+import axios from "../../api/axios";
+import AuthContext from "../../context/AuthProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 import ProjectCard from "../cards/project-card/ProjectCard";
 
 function ProfileAboutPanel(props) {
+  const params = useParams();
+  const username = params.username;
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useContext(AuthContext);
+  const profileOwnerName = auth.username;
+
+  const [projectsPublic, setProjectsPublic] = useState([]);
+  const [projectsAccepted, setProjectsAccepted] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`/users/${username}/projects/public`)
+      .then((response) => {
+        setProjectsPublic(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
+  }, [params]);
+  useEffect(() => {
+    axios
+      .get(`/users/${username}/projects/accepted`)
+      .then((response) => {
+        setProjectsAccepted(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
+  }, [params]);
+
   if (props.profile) {
     const { skills, interests } = props.profile;
     const skillsToDisplay = skills.length ? (
@@ -46,11 +86,14 @@ function ProfileAboutPanel(props) {
         Nothing here yet!
       </Typography>
     );
+    //Logic to show only accepted Public projects
+    const projectsAcceptedPublic = projectsAccepted?.filter(
+      (item) => item.state === "published"
+    );
+    let projectsToShow = [...projectsPublic, ...projectsAcceptedPublic];
     let projectCardsToShow = null;
-    let projectPublic = props.projectPublic ? props.projectPublic : [];
-    let projectAccepted = props.projectAccepted ? props.projectAccepted : [];
-    if (projectPublic || projectAccepted) {
-      const projectsToShow = [...projectPublic, ...projectAccepted];
+
+    if (projectsToShow?.length) {
       const baseProjectImage =
         "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
       const baseProjectLogo =
@@ -67,7 +110,7 @@ function ProfileAboutPanel(props) {
         };
         return (
           <Grid key={idx} item xs={12} sm={6} md={4}>
-            <ProjectCard details={projectCardDetails} />
+            <ProjectCard project={projectCardDetails} />
           </Grid>
         );
       });
@@ -116,7 +159,13 @@ function ProfileAboutPanel(props) {
           Projects:
         </Typography>
         <Grid container spacing={2}>
-          {projectCardsToShow}
+          {projectCardsToShow ? (
+            projectCardsToShow
+          ) : (
+            <Typography sx={{ color: "var(--color3)" }}>
+              My Project is comming soon
+            </Typography>
+          )}
         </Grid>
       </Box>
     );
