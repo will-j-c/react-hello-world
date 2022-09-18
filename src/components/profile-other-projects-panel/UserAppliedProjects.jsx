@@ -20,15 +20,18 @@ function UserAppliedProjects() {
   const [UserAppliedProjects, setUserAppliedProjects] = useState([]);
 
   useEffect(() => {
-    axiosPrivate
-      .get(`/users/${username}/projects/accepted`)
-      .then((response) => {
-        setUserAppliedProjects(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
+    if (profileOwnerName === username) {
+      axiosPrivate
+        .get(`/users/${username}/projects`)
+        .then((response) => {
+          console.log("hehe");
+          setUserAppliedProjects(response.data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+          // toast(err.response.data.message);
+        });
+    }
   }, []);
   let UserAppliedProjectsCards = [];
   if (UserAppliedProjects?.length) {

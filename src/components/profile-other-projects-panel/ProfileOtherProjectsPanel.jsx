@@ -9,23 +9,25 @@ import UserAppliedProjects from "./UserAppliedProjects";
 function ProfileOtherProjectsPanel() {
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
-  // useEffect(() => {
-  //   return setPanel(<UserAcceptedProjects />);
-  // }, []);
+  useEffect(() => {
+    return setPanel(<UserAcceptedProjects />);
+  }, []);
 
-  // const handleTabChange = (event, newTabValue) => {
-  //   setTabValue(newTabValue);
-  //   return newTabValue === "1"
-  //     ? setPanel(<UserAcceptedProjects />)
-  //     : setPanel(<UserAcceptedProjects />);
-  // };
+  const handleTabChange = (event, newTabValue) => {
+    setTabValue(newTabValue);
+    return newTabValue === "1"
+      ? setPanel(<UserAcceptedProjects />)
+      : setPanel(<UserAcceptedProjects />);
+  };
   return (
     <Box marginY={4}>
       {/* <ShowTabsOtherProjects
         tabValue={tabValue}
         handleTabChange={handleTabChange}
       /> */}
-      {UserAcceptedProjects}
+      {/* {UserAcceptedProjects} */}
+      {/* <UserAcceptedProjects /> */}
+      <Typography>hehe</Typography>
       {/* {UserAppliedProjects} */}
     </Box>
   );

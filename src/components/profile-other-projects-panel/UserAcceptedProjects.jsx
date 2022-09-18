@@ -18,39 +18,52 @@ function UserAcceptedProjects() {
   const axiosPrivate = useAxiosPrivate();
 
   const [UserAcceptedProjects, setUserAcceptedProjects] = useState([]);
+  const [projectsAccepted, setProjectsAccepted] = useState([]);
 
+  // useEffect(() => {
+  //   axios
+  //     .get(`/users/${username}/projects/accepted`)
+  //     .then((response) => {
+  //       console.log(response);
+  //       // setUserAcceptedProjects(response.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //       // toast(err.response.data.message);
+  //     });
+  // }, []);
   useEffect(() => {
-    axiosPrivate
+    axios
       .get(`/users/${username}/projects/accepted`)
       .then((response) => {
-        setUserAcceptedProjects(response.data);
+        setProjectsAccepted(response.data);
       })
       .catch((err) => {
         console.log(err.response);
         // toast(err.response.data.message);
       });
-  }, []);
+  }, [params]);
   let UserAcceptedProjectsCards = [];
-  if (UserAcceptedProjects?.length) {
-    UserAcceptedProjectsCards = UserAcceptedProjects?.map((project, idx) => {
-      const projectCardDetails = {
-        projectImg: project.image_urls[0],
-        title: project.title,
-        tagline: project.tagline,
-        logo: project.logo_url,
-        categories: project.categories,
-        slug: project.slug,
-      };
-      return (
-        <Grid key={idx} item xs={12} sm={6} md={4}>
-          <ProjectCard details={projectCardDetails} />
-        </Grid>
-      );
-    });
-  }
+  // if (UserAcceptedProjects?.length) {
+  //   UserAcceptedProjectsCards = UserAcceptedProjects?.map((project, idx) => {
+  //     const projectCardDetails = {
+  //       projectImg: project.image_urls[0],
+  //       title: project.title,
+  //       tagline: project.tagline,
+  //       logo: project.logo_url,
+  //       categories: project.categories,
+  //       slug: project.slug,
+  //     };
+  //     return (
+  //       <Grid key={idx} item xs={12} sm={6} md={4}>
+  //         <ProjectCard details={projectCardDetails} />
+  //       </Grid>
+  //     );
+  //   });
+  // }
   return (
     <Grid container spacing={2} marginTop={4}>
-      {UserAcceptedProjectsCards}
+      {/* {UserAcceptedProjectsCards} */}
     </Grid>
   );
 }
