@@ -4,7 +4,6 @@ import { useState, useEffect, useContext } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import ProjectCard from "../cards/project-card/ProjectCard";
-import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
@@ -22,7 +21,7 @@ function UserAppliedProjects() {
   useEffect(() => {
     if (profileOwnerName === username) {
       axiosPrivate
-        .get(`/users/${username}/projects`)
+        .get(`/users/${username}/projects/applied`)
         .then((response) => {
           setUserAppliedProjects(response.data);
         })
