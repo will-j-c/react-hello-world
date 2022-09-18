@@ -12,30 +12,50 @@ function ProfileConnectionFollowingPanel() {
   const params = useParams();
   const username = params.username;
   const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
+  const authUserName = auth.username;
 
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
   const [userFollowings, setUserFollowings] = useState([]);
+  const [authUserFollowings, setAuthUserFollowings] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`/users/${username}/following`)
-      .then((response) => {
-        setUserFollowings(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
+    async function getData() {
+      try {
+        const authUserFollowingResponse = await axios.get(
+          `/users/${authUserName}/following`
+        );
+        setAuthUserFollowings(
+          authUserFollowingResponse.data.map(
+            (relation) => relation.followee.username
+          )
+        );
+        const userFollowingsResponse = await axios.get(
+          `/users/${authUserName}/following`
+        );
+        setUserFollowings(
+          userFollowingsResponse.data.map((relation) => relation.followee)
+        );
+      } catch (error) {}
+    }
+    getData();
   }, [params]);
+  const userFollowingName = userFollowings.map((item) => item.username);
+  console.log("username :", username);
+  console.log("authUserName:", authUserName);
+  console.log("userFollowings: ", userFollowingName);
+  console.log("authUserFollowing:", authUserFollowings);
   let userFollowingsCards = [];
   if (userFollowings.length) {
     userFollowingsCards = userFollowings.map((user, idx) => {
       return (
         <Grid key={idx} xs={6} md={4} item>
-          <UserCard user={user.followee} />
+          <UserCard
+            user={user}
+            followed={authUserFollowings.includes(user.username)}
+          />
         </Grid>
       );
     });
