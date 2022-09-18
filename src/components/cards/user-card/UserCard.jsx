@@ -13,6 +13,7 @@ import '../Card.scss';
 export default function UserCard(props) {
 
   const { name, username, tagline, skills, interests, profile_pic_url } = props.user;
+  const followed = props.followed;
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -69,7 +70,7 @@ export default function UserCard(props) {
           />
           <Button
             category={'action'}
-            title={'Follow'}
+            title={followed ? 'Unfollow' : 'Follow'}
             variant={"contained"}
           />
         </Box>
