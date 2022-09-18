@@ -16,7 +16,6 @@
   border: solid 1px var(--color3);
   background-color: var(--color2);
   padding: 2em;
-  margin-top: 2em;
 }
 
 .contributor-section-header {
@@ -41,4 +40,11 @@
 .contributor-description {
   background-color: var(--color1);
   padding: 1em;
+}
+
+.contributor-actions {
+  margin-left: auto;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
 }

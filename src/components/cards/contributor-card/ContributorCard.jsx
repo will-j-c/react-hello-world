@@ -149,7 +149,7 @@ export default function ContributorCard(props) {
             route={`/contributors/${_id}`}
           />
           <Button
-            category={'action'}
+            category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
             title={buttonTitle}
             variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
             onMouseOver={handleMouseOver}
