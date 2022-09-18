@@ -1,18 +1,46 @@
 import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import ProjectCard from "../cards/project-card/ProjectCard";
 import Button from "../buttons/Button";
+import Typography from "@mui/material/Typography";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
+import axios from "../../api/axios";
+import AuthContext from "../../context/AuthProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 function ProfileMyProjectsPanel(props) {
-  if (props.userProjects) {
-    const projectsToShow = props.userProjects;
+  const params = useParams();
+  const username = params.username;
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useContext(AuthContext);
+  const profileOwnerName = auth.username;
+  const [userProjects, setUserProjects] = useState([]);
+  useEffect(() => {
+    if (profileOwnerName === username)
+      axiosPrivate
+        .get(`/users/${username}/projects`)
+        .then((response) => {
+          setUserProjects(response.data);
+        })
+        .catch((err) => {
+          console.log(err.response);
+          // toast(err.response.data.message);
+        });
+  }, [params]);
+  let projectCardsToShow = [];
+
+  if (userProjects?.length) {
     const baseProjectImage =
       "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
     const baseProjectLogo =
       "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
-    const projectCardsToShow = projectsToShow?.map((project, idx) => {
+    projectCardsToShow = userProjects?.map((project, idx) => {
       const projectCardDetails = {
         projectImg: project.image_urls[0] || baseProjectImage,
         title: project.title,
@@ -47,7 +75,16 @@ function ProfileMyProjectsPanel(props) {
           />
         </Box>
         <Grid container spacing={2}>
-          {projectCardsToShow}
+          {profileOwnerName === username ? (
+            projectCardsToShow
+          ) : (
+            <Typography sx={{ color: "var(--color4)" }}>
+              "Hello world, this is my empty tagline"
+            </Typography>
+          )}
+          <Typography sx={{ color: "var(--color4)" }}>
+            "Hello world, this is my empty tagline"
+          </Typography>
         </Grid>
       </>
     );

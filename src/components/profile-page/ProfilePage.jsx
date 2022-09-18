@@ -35,7 +35,6 @@ function ProfilePage(props) {
   const [profile, setProfile] = useState(null);
   const [projectPublic, setProjectPublic] = useState(null);
   const [projectAccepted, setProjectAccepted] = useState(null);
-  const [userProjects, setUserProjects] = useState(null);
 
   useEffect(() => {
     axios
@@ -47,7 +46,7 @@ function ProfilePage(props) {
         console.log(err.response);
         // toast(err.response.data.message);
       });
-  }, []);
+  }, [params]);
   useEffect(() => {
     axios
       .get(`/users/${username}/projects/public`)
@@ -64,17 +63,6 @@ function ProfilePage(props) {
       .get(`/users/${username}/projects/accepted`)
       .then((response) => {
         setProjectAccepted(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
-  }, []);
-  useEffect(() => {
-    axiosPrivate
-      .get(`/users/${username}/projects`)
-      .then((response) => {
-        setUserProjects(response.data);
       })
       .catch((err) => {
         console.log(err.response);
@@ -112,13 +100,19 @@ function ProfilePage(props) {
         setPanel(<ProfileConnectionPanel />);
         break;
       case "3":
-        setPanel(<ProfileMyProjectsPanel userProjects={userProjects} />);
+        setPanel(<ProfileMyProjectsPanel />);
         break;
       case "4":
-        setPanel(<ProfileOtherProjectsPanel profile={profile} />);
+        setPanel(<ProfileOtherProjectsPanel />);
         break;
       default:
-        setPanel(<ProfileAboutPanel profile={profile} />);
+        setPanel(
+          <ProfileAboutPanel
+            profile={profile}
+            projectPublic={projectPublic}
+            projectAccepted={projectAccepted}
+          />
+        );
     }
   };
 
