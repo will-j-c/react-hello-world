@@ -49,8 +49,6 @@ export default function UserIndexGrid() {
     getData();
   }, [])
 
-  console.log(`followingUsers: ${JSON.stringify(followingUsers)}`);
-
   const userCards = users.map((user, idx) => {
     return (
       <Grid key={idx} xs={6} md={4} item>

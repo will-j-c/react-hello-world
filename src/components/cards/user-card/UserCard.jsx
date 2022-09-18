@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,7 @@ export default function UserCard(props) {
 
   const { name, username, tagline, skills, interests, profile_pic_url } = props.user;
   const followed = props.followed;
+  const [ buttonTitle, setButtonTitle ] = useState('Following');
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -32,6 +33,15 @@ export default function UserCard(props) {
       </Typography>
     )
   })
+
+  const handleMouseOver = function() {
+    setButtonTitle('Unfollow');
+  }
+
+  const handleMouseLeave = function() {
+    setButtonTitle('Following');
+  }
+
 
   return (
     <Card raised={true}>
@@ -70,8 +80,10 @@ export default function UserCard(props) {
           />
           <Button
             category={'action'}
-            title={followed ? 'Unfollow' : 'Follow'}
-            variant={"contained"}
+            title={followed ? `${buttonTitle}` : 'Follow'}
+            variant={followed ? 'outlined' : 'contained'}
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
           />
         </Box>
       </CardActions>
