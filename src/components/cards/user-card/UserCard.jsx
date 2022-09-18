@@ -1,18 +1,32 @@
-import React from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from '@mui/material/CardActions';
 import Box from "@mui/material/Box";
-import AvatarComponent from "../../avatar/Avatar";
 import { Link as RouterLink } from "react-router-dom";
-import Button from "../../buttons/Button";
 
+import AvatarComponent from "../../avatar/Avatar";
+import Button from "../../buttons/Button";
 import '../Card.scss';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
+import AuthContext from '../../../context/AuthProvider';
 
 export default function UserCard(props) {
 
   const { name, username, tagline, skills, interests, profile_pic_url } = props.user;
+  const [ buttonTitle, setButtonTitle ] = useState('Following');
+  const [ followStatus, setFollowStatus ] = useState(props.followed);
+  const { auth } = useContext(AuthContext);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    setFollowStatus(props.followed)
+  }, [props.followed]);
+
+  useEffect(() => {
+  }, [followStatus]);
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -31,6 +45,33 @@ export default function UserCard(props) {
       </Typography>
     )
   })
+
+  const handleMouseOver = function() {
+    setButtonTitle('Unfollow');
+  }
+
+  const handleMouseLeave = function() {
+    setButtonTitle('Following');
+  }
+
+  const handleFollowAction = async function() {
+    try {
+      if (!auth.username) {
+        props.triggerLogin();
+        return;
+      }
+      if (followStatus) {
+        await axiosPrivate.delete(`/users/${username}/unfollow`);
+        setFollowStatus(false);
+      } else {
+        await axiosPrivate.post(`/users/${username}/follow`);
+        setFollowStatus(true);
+      }
+      return
+
+    } catch (err) {
+    }
+  }
 
   return (
     <Card raised={true}>
@@ -69,8 +110,11 @@ export default function UserCard(props) {
           />
           <Button
             category={'action'}
-            title={'Follow'}
-            variant={"contained"}
+            title={followStatus ? `${buttonTitle}` : 'Follow'}
+            variant={followStatus ? 'outlined' : 'contained'}
+            onMouseOver={handleMouseOver}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleFollowAction}
           />
         </Box>
       </CardActions>

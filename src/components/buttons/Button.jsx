@@ -4,7 +4,17 @@ import { Link as RouterLink } from 'react-router-dom';
 import './Buttons.scss';
 
 function StyledButton(props) {
-  const { variant, title, category, route, onClick, isFullWidth, disabled=false } = props;
+  const { 
+    variant, 
+    title, 
+    category, 
+    route, 
+    onClick, 
+    isFullWidth, 
+    disabled=false, 
+    onMouseOver,
+    onMouseLeave, 
+  } = props;
   return (
     <Button
       className={`${category}`}
@@ -15,6 +25,8 @@ function StyledButton(props) {
       onClick={onClick}
       fullWidth={isFullWidth}
       disabled={disabled}
+      onMouseOver={onMouseOver}
+      onMouseLeave={onMouseLeave}
     >
       {title}
     </Button>
