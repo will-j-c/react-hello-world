@@ -20,7 +20,7 @@ function FormProjectPageOne(props) {
     checkBoxTrack,
     checkedState,
   } = props;
-
+  console.log(previewLogo)
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();

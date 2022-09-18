@@ -6,7 +6,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
 import LogOut from "./components/logout/LogOut";
-
 import App from "./App";
 import "./index.css";
 import LoginGrid from "./components/login-grid/LoginGrid";
@@ -15,6 +14,7 @@ import ContributorIndexGrid from "./components/contributor-index-grid/Contributo
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
 import ProfilePage from "./components/profile-page/ProfilePage";
+import MultiForm from "./components/project-form/MultiForm";
 
 const theme = createTheme({
   components: {
