@@ -31,6 +31,7 @@ function ProfilePage(props) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const profileOwnerName = auth.username;
+  const isAuth = profileOwnerName === username;
 
   const [profile, setProfile] = useState(null);
 
@@ -151,6 +152,7 @@ function ProfilePage(props) {
           <ProfileShowTabs
             tabValue={tabValue}
             handleTabChange={handleTabChange}
+            isAuth={isAuth}
           />
           {profile ? panel : ""}
         </Box>
