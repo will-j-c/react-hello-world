@@ -86,7 +86,7 @@ function SiteHeader() {
       sx={{ backgroundColor: "var(--color1)" }}
       className="site-header"
     >
-      <Toolbar sx={{ backgroundColor: "var(--color1)" }} marginBottom={3}>
+      <Toolbar sx={{ backgroundColor: "var(--color1)" }}>
         {isMatch ? (
           <>
             <Grid container sx={{ placeItems: "center" }}>
