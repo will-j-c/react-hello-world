@@ -53,7 +53,7 @@ function ProjectIndexGrid() {
       slug: project.slug
     };
     return (
-      <Grid key={idx} xs={true} md={true} item>
+      <Grid key={idx} xs={true} md={4} item>
         <ProjectCard 
           project={projectCardDetails}
           followed={followedProjects.includes(project.slug)}
