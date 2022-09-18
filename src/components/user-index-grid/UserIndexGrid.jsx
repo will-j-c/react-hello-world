@@ -7,6 +7,7 @@ import axios from '../../api/axios';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 import UserCard from '../cards/user-card/UserCard';
 import AuthContext from '../../context/AuthProvider';
+import LoginModal from '../modals/LoginModal';
 
 export default function UserIndexGrid() {
   const [users, setUsers] = useState([]);
@@ -15,6 +16,9 @@ export default function UserIndexGrid() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
+
+  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+
 
   useEffect(() => {
 
@@ -54,6 +58,7 @@ export default function UserIndexGrid() {
           <UserCard 
           user={user} 
           followed={followingUsers.includes(user.username)}
+          triggerLogin={() => setModalIsOpen(true)}
         />
         </Grid>
       )
@@ -61,14 +66,21 @@ export default function UserIndexGrid() {
   });
 
   return (
-    <Grid
-      container
-      spacing={2}
-      columns={{ xs: 1, md: 12 }}
-      justifyContent="center"
-      alignItems="stretch"
-    >
-      {userCards}
-    </Grid>
+    <>
+      <Grid
+        container
+        spacing={2}
+        columns={{ xs: 1, md: 12 }}
+        justifyContent="center"
+        alignItems="stretch"
+      >
+        {userCards}
+      </Grid>
+      <LoginModal 
+        isOpen={modalIsOpen} 
+        onClose={() => setModalIsOpen(false)}
+      />
+    </>
+    
   )
 }

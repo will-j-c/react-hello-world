@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from '@mui/material/CardActions';
 import Box from "@mui/material/Box";
-import AvatarComponent from "../../avatar/Avatar";
 import { Link as RouterLink } from "react-router-dom";
-import Button from "../../buttons/Button";
 
+import AvatarComponent from "../../avatar/Avatar";
+import Button from "../../buttons/Button";
 import '../Card.scss';
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
+import AuthContext from '../../../context/AuthProvider';
 
 export default function UserCard(props) {
 
   const { name, username, tagline, skills, interests, profile_pic_url } = props.user;
   const [ buttonTitle, setButtonTitle ] = useState('Following');
   const [ followStatus, setFollowStatus ] = useState(props.followed);
+  const { auth } = useContext(AuthContext);
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -54,6 +56,10 @@ export default function UserCard(props) {
 
   const handleFollowAction = async function() {
     try {
+      if (!auth.username) {
+        props.triggerLogin();
+        return;
+      }
       if (followStatus) {
         await axiosPrivate.delete(`/users/${username}/unfollow`);
         setFollowStatus(false);
