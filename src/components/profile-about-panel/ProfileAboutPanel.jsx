@@ -44,6 +44,7 @@ function ProfileAboutPanel(props) {
         // toast(err.response.data.message);
       });
   }, [params]);
+  console.log("projectsAccepted:", projectsAccepted);
 
   if (props.profile) {
     const { skills, interests } = props.profile;
