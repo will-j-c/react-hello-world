@@ -1,8 +1,12 @@
 import Box from "@mui/material/Box";
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import Typography from "@mui/material/Typography";
+import axios from "../../api/axios";
+import AuthContext from "../../context/AuthProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 import { ShowTabsOtherProjects } from "../profile-show-tabs/ProfileShowTabs";
+
 import UserAcceptedProjects from "./UserAcceptedProjects";
 import UserAppliedProjects from "./UserAppliedProjects";
 import UserFollowingProjects from "./UserFollowingProjects";
@@ -10,6 +14,10 @@ import UserFollowingProjects from "./UserFollowingProjects";
 function ProfileOtherProjectsPanel() {
   const params = useParams();
   const username = params.username;
+
+  const { auth } = useContext(AuthContext);
+  const profileOwnerName = auth.username;
+
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
   useEffect(() => {
@@ -35,13 +43,15 @@ function ProfileOtherProjectsPanel() {
   };
 
   return (
-    <Box marginY={4}>
-      <ShowTabsOtherProjects
-        tabValue={tabValue}
-        handleTabChange={handleTabChange}
-      />
-      {panel}
-    </Box>
+    profileOwnerName === username && (
+      <Box marginY={4}>
+        <ShowTabsOtherProjects
+          tabValue={tabValue}
+          handleTabChange={handleTabChange}
+        />
+        {panel}
+      </Box>
+    )
   );
 }
 

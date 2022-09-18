@@ -14,7 +14,6 @@ function UserAcceptedProjects() {
   const { auth } = useContext(AuthContext);
   const profileOwnerName = auth.username;
 
-  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
   const [UserAcceptedProjects, setUserAcceptedProjects] = useState([]);
