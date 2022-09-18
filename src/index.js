@@ -14,6 +14,8 @@ import UserIndexGrid from "./components/user-index-grid/UserIndexGrid";
 import ContributorIndexGrid from "./components/contributor-index-grid/ContributorIndexGrid";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
+import TitleHomepage from "./components/title-homepage/TitleHomepage";
+import ProjectIndexGrid from "./components/project-index-grid/ProjectIndexGrid";
 import ProfilePage from "./components/profile-page/ProfilePage";
 
 const theme = createTheme({
