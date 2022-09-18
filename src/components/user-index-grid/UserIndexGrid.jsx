@@ -9,8 +9,6 @@ import UserCard from '../cards/user-card/UserCard';
 import AuthContext from '../../context/AuthProvider';
 import LoginModal from '../modals/LoginModal';
 
-import Button from '../buttons/Button';
-
 export default function UserIndexGrid() {
   const [users, setUsers] = useState([]);
   const [followingUsers, setFollowingUsers] = useState([]);

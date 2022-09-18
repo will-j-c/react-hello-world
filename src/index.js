@@ -15,6 +15,7 @@ import ContributorIndexGrid from './components/contributor-index-grid/Contributo
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
 import TitleHomepage from "./components/title-homepage/TitleHomepage"
+import ProjectIndexGrid from "./components/project-index-grid/ProjectIndexGrid";
 
 const theme = createTheme({
   components: {
@@ -61,7 +62,7 @@ root.render(
                 <Route path="logout" element={<LogOut />} />
                 <Route path="users" element={<UserIndexGrid />} />
                 <Route path="contributors" element={<ContributorIndexGrid />} />
-                <Route path="projects" >
+                <Route path="projects">
                   <Route path=":slug" element={<ProjectShowGrid />}/>
                 </Route>
                 <Route path="" element={<HomeGrid />} />
