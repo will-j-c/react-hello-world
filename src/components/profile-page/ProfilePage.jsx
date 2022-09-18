@@ -115,7 +115,7 @@ function ProfilePage(props) {
         setPanel(<ProfileMyProjectsPanel userProjects={userProjects} />);
         break;
       case "4":
-        setPanel(<ProfileOtherProjectsPanel profile={profile} />);
+        setPanel(<ProfileOtherProjectsPanel />);
         break;
       default:
         setPanel(<ProfileAboutPanel profile={profile} />);

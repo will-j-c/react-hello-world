@@ -36,5 +36,14 @@ function ShowTabsConnection(props) {
     </Tabs>
   );
 }
+function ShowTabsOtherProjects(props) {
+  return (
+    <Tabs value={props.tabValue} onChange={props.handleTabChange}>
+      <Tab value="1" label="Working on" />
+      <Tab value="2" label="Applied projects" />
+      <Tab value="3" label="Following projects" />
+    </Tabs>
+  );
+}
 
-export { ProfileShowTabs, ShowTabsConnection };
+export { ProfileShowTabs, ShowTabsConnection, ShowTabsOtherProjects };
