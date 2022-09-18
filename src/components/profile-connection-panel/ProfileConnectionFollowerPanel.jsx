@@ -5,7 +5,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import "./ProfileConnectionFollowerPanel.css";
 import UserCard from "../cards/user-card/UserCard";
 import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
