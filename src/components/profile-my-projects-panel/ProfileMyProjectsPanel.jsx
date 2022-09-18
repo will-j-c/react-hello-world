@@ -12,6 +12,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+// TODO: handle the case to show button project Draft , Public , ...
 
 function ProfileMyProjectsPanel(props) {
   const params = useParams();

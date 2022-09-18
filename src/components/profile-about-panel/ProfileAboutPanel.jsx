@@ -1,10 +1,50 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
+import axios from "../../api/axios";
+import AuthContext from "../../context/AuthProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+
 import ProjectCard from "../cards/project-card/ProjectCard";
 
 function ProfileAboutPanel(props) {
+  const params = useParams();
+  const username = params.username;
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useContext(AuthContext);
+  const profileOwnerName = auth.username;
+
+  const [projectsPublic, setProjectsPublic] = useState([]);
+  const [projectsAccepted, setProjectsAccepted] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`/users/${username}/projects/public`)
+      .then((response) => {
+        setProjectsPublic(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
+  }, [params]);
+  useEffect(() => {
+    axios
+      .get(`/users/${username}/projects/accepted`)
+      .then((response) => {
+        setProjectsAccepted(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
+  }, [params]);
+
   if (props.profile) {
     const { skills, interests } = props.profile;
     const skillsToDisplay = skills.length ? (
