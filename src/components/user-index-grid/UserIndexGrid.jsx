@@ -13,11 +13,10 @@ export default function UserIndexGrid() {
   const [users, setUsers] = useState([]);
   const [followingUsers, setFollowingUsers] = useState([]);
   const [followers, setFollowers] = useState([]);
+  const [ modalIsOpen, setModalIsOpen ] = useState(false);
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
-
-  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -46,7 +45,7 @@ export default function UserIndexGrid() {
     }
 
     getData();
-  }, []);
+  }, [username])
 
   const userCards = users.map((user, idx) => {
     if (user.username !== username) {
