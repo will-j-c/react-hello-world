@@ -86,11 +86,11 @@ function ProfileAboutPanel(props) {
         Nothing here yet!
       </Typography>
     );
+
+    let projectsToShow = [...projectsPublic, ...projectsAccepted];
     let projectCardsToShow = null;
-    let projectPublic = props.projectPublic ? props.projectPublic : [];
-    let projectAccepted = props.projectAccepted ? props.projectAccepted : [];
-    if (projectPublic || projectAccepted) {
-      const projectsToShow = [...projectPublic, ...projectAccepted];
+
+    if (projectsToShow?.length) {
       const baseProjectImage =
         "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
       const baseProjectLogo =
@@ -156,7 +156,13 @@ function ProfileAboutPanel(props) {
           Projects:
         </Typography>
         <Grid container spacing={2}>
-          {projectCardsToShow}
+          {projectCardsToShow ? (
+            projectCardsToShow
+          ) : (
+            <Typography sx={{ color: "var(--color3)" }}>
+              My Project is comming soon
+            </Typography>
+          )}
         </Grid>
       </Box>
     );
