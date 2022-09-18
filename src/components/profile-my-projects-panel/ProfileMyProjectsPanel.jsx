@@ -6,10 +6,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import ProjectCard from "../cards/project-card/ProjectCard";
 import Button from "../buttons/Button";
-import Typography from "@mui/material/Typography";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 // TODO: handle the case to show button project Draft , Public , ...
@@ -23,16 +21,15 @@ function ProfileMyProjectsPanel(props) {
   const profileOwnerName = auth.username;
   const [userProjects, setUserProjects] = useState([]);
   useEffect(() => {
-    if (profileOwnerName === username)
-      axiosPrivate
-        .get(`/users/${username}/projects`)
-        .then((response) => {
-          setUserProjects(response.data);
-        })
-        .catch((err) => {
-          console.log(err.response);
-          // toast(err.response.data.message);
-        });
+    axiosPrivate
+      .get(`/users/${username}/projects`)
+      .then((response) => {
+        setUserProjects(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
   }, [params]);
   let projectCardsToShow = [];
 
@@ -73,17 +70,11 @@ function ProfileMyProjectsPanel(props) {
             category={"action"}
             title={"Add new project"}
             variant={"outlined"}
-            route={`/projects/create`} //BUG: whyyyyy the link on browser is : "http://localhost:3000/projects/creat?page=1"
+            route={`/projects/create`}
           />
         </Box>
         <Grid container spacing={2}>
-          {profileOwnerName === username ? (
-            projectCardsToShow
-          ) : (
-            <Typography sx={{ color: "var(--color4)" }}>
-              "You are not allow into this route"
-            </Typography>
-          )}
+          {projectCardsToShow}
         </Grid>
       </>
     );
