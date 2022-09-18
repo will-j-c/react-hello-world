@@ -24,7 +24,6 @@ function UserFollowingProjects() {
       axiosPrivate
         .get(`/users/${username}/projects`)
         .then((response) => {
-          console.log("hehe");
           setUserFollowingProjects(response.data);
         })
         .catch((err) => {
