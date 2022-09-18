@@ -6,16 +6,16 @@ import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
 import LogOut from "./components/logout/LogOut";
-
 import App from "./App";
 import "./index.css";
 import LoginGrid from "./components/login-grid/LoginGrid";
 import UserIndexGrid from "./components/user-index-grid/UserIndexGrid";
-import ContributorIndexGrid from './components/contributor-index-grid/ContributorIndexGrid';
+import ContributorIndexGrid from "./components/contributor-index-grid/ContributorIndexGrid";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
-import TitleHomepage from "./components/title-homepage/TitleHomepage"
-import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage";
+import ProfilePage from "./components/profile-page/ProfilePage";
+import MultiForm from "./components/project-form/MultiForm";
+import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx"
 
 const theme = createTheme({
   components: {
@@ -61,11 +61,14 @@ root.render(
                 <Route path="login" element={<LoginGrid formType="login" />} />
                 <Route path="logout" element={<LogOut />} />
                 <Route path="users" element={<UserIndexGrid />} />
+                <Route path="users/:username" element={<ProfilePage />} />
                 <Route path="contributors" element={<ContributorIndexGrid />} />
                 <Route path="projects" >
                   <Route path=":slug" element={<ProjectShowGrid />}/>
+                  <Route path="create" element={<MultiForm />}/>
                   <Route index element={<ProjectIndexPage />} />
                 </Route>
+
                 <Route path="" element={<HomeGrid />} />
                 <Route
                   path="*"

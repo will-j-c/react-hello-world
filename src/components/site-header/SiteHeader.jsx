@@ -14,6 +14,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 
+import "./SiteHeader.css";
 import DrawerComponent from "./DrawerComponent";
 import MenuBar from "./MenuBar";
 import SearchBar from "./SearchBar";
@@ -80,7 +81,11 @@ function SiteHeader() {
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "var(--color1)" }}>
+    <AppBar
+      position="relative"
+      sx={{ backgroundColor: "var(--color1)" }}
+      className="site-header"
+    >
       <Toolbar sx={{ backgroundColor: "var(--color1)" }}>
         {isMatch ? (
           <>
