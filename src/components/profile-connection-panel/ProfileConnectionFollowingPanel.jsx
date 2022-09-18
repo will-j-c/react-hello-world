@@ -29,7 +29,7 @@ function ProfileConnectionFollowingPanel() {
         console.log(err.response);
         // toast(err.response.data.message);
       });
-  }, []);
+  }, [params]);
   let userFollowingsCards = [];
   if (userFollowings.length) {
     userFollowingsCards = userFollowings.map((user, idx) => {

@@ -6,12 +6,14 @@ import ProfileConnectionFollowingPanel from "./ProfileConnectionFollowingPanel";
 import { ShowTabsConnection } from "../profile-show-tabs/ProfileShowTabs";
 
 function ProfileConnectionPanel(props) {
+  const params = useParams();
   // Logic for handling tabs
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
   useEffect(() => {
+    setTabValue("1");
     return setPanel(<ProfileConnectionFollowingPanel />);
-  }, []);
+  }, [params]);
 
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue);
