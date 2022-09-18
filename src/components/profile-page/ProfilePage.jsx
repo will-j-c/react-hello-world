@@ -48,6 +48,7 @@ function ProfilePage(props) {
   // Logic for handling tabs
   useEffect(() => {
     if (profile) {
+      setTabValue("1");
       return setPanel(<ProfileAboutPanel profile={profile} />);
     }
   }, [profile]);
