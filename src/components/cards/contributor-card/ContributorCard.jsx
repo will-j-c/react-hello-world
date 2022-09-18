@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import AvatarComponent from "../../avatar/Avatar";
 import { Link } from "react-router-dom";
 import Button from "../../buttons/Button";
+import AuthContext from '../../../context/AuthProvider';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 
 import '../Card.scss';
 
@@ -16,6 +18,58 @@ export default function ContributorCard(props) {
   const { logo_url, slug } = project_id;
   const projectTitle = project_id.title;
   const projectUrl = `/projects/${slug}`;
+  const { auth } = useContext(AuthContext);
+  const [ buttonTitle, setButtonTitle ] = useState('Following');
+  const [ status, setStatus ] = useState(props.status);
+
+  console.log(`contributor ${title}: ${props.status}`);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    let title = null;
+    switch (props.status) {
+      case 'not applied':
+        title = 'Apply';
+        break;
+      case 'applied':
+        title = 'Applied';
+        break;
+      case 'accepted':
+        title = 'Accepted';
+        break;
+      case 'rejected':
+        title = 'Rejected';
+        break;
+      default:
+        title = "Apply"
+    }
+    
+    setStatus(props.status)
+    setButtonTitle(title)
+
+  }, [props.status]);
+
+  useEffect(() => {
+    let title = null;
+    switch (status) {
+      case 'not applied':
+        title = 'Apply';
+        break;
+      case 'applied':
+        title = 'Applied';
+        break;
+      case 'accepted':
+        title = 'Accepted';
+        break;
+      case 'rejected':
+        title = 'Rejected';
+        break;
+      default:
+        title = "Apply"
+    }
+    setButtonTitle(title)
+  }, [status]);
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -67,8 +121,8 @@ export default function ContributorCard(props) {
           />
           <Button
             category={'action'}
-            title={'Apply'}
-            variant={"contained"}
+            title={buttonTitle}
+            variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
           />
         </Box>
       </CardActions>
