@@ -10,11 +10,11 @@ function ProfileShowTabs(props) {
       scrollButtons
       allowScrollButtonsMobile
       aria-label="scrollable force tabs example"
-      sx={{
-        [`& .${tabsClasses.scrollButtons}`]: {
-          "&.Mui-disabled": { opacity: 0.7, color: "white" },
-        },
-      }}
+      // sx={{
+      //   [`& .${tabsClasses.scrollButtons}`]: {
+      //     "&.Mui-disabled": { opacity: 0.7, color: "white" },
+      //   },
+      // }}
     >
       <Tab value="1" label="Profile" />
       <Tab value="2" label="Connection" />
@@ -30,7 +30,7 @@ function ShowTabsConnection(props) {
         value="1"
         label="Following"
         className="small-tab"
-        sx={{ backgroundColor: "white", color: "red" }}
+        // sx={{ backgroundColor: "white", color: "red" }}
       />
       <Tab value="2" label="Followers" className="small-tab" />
     </Tabs>

@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import ProjectCard from "../cards/project-card/ProjectCard";
 import Button from "../buttons/Button";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import "./ProfileMyProjectsPanel.css";
 
 function ProfileMyProjectsPanel(props) {
   if (props.userProjects) {

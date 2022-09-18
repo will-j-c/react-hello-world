@@ -1,6 +1,5 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import "./ProfileAboutPanel.css";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import ProjectCard from "../cards/project-card/ProjectCard";
