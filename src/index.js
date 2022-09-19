@@ -6,7 +6,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
 import LogOut from "./components/logout/LogOut";
-
 import App from "./App";
 import "./index.css";
 import LoginGrid from "./components/login-grid/LoginGrid";
