@@ -61,7 +61,6 @@ export default function UserCard(props) {
       }
       if (followStatus) {
         await axiosPrivate.delete(`/users/${username}/unfollow`);
-        console.log(auth.username, "unfollow");
         setFollowStatus(false);
       } else {
         await axiosPrivate.post(`/users/${username}/follow`);
