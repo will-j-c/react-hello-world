@@ -16,6 +16,25 @@ function ProjectIndexGrid(props) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
+  const filters = props.filters;
+  let filterParams = '?';
+  let apiUrl = '/projects';
+
+  if (filters) {
+    Object.keys(filters).forEach((key, idx) => {
+      const values = filters[key];
+      if (values.length > 0) {
+        filterParams += `${key}=${values.join(',').replaceAll(' ', '-')}`;
+        if (idx < Object.keys(filters).length - 1 ) {
+          filterParams += '&';
+        };
+      };
+    });
+  }
+
+  if (filterParams.length > 1) {
+    apiUrl += filterParams;
+  }
 
   const baseProjectImage =
     "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
@@ -25,7 +44,8 @@ function ProjectIndexGrid(props) {
 
     async function getData() {
       try {
-        const projectsResp = await axios.get('/projects');
+        const projectsResp = await axios
+          .get(apiUrl);
         setProjects(projectsResp.data);
         if (username) {
           const followedProjectsResp = await axiosPrivate
@@ -42,7 +62,7 @@ function ProjectIndexGrid(props) {
 
     getData();
     
-  }, []);
+  }, [props]);
 
   const triggerDeleteModal = ({slug, title}) => {
     setTargetProject({projectSlug: slug, projectTitle: title});
