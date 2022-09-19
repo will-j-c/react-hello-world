@@ -18,8 +18,8 @@ import ProjectIndexGrid from "./components/project-index-grid/ProjectIndexGrid";
 import ContributorShow from "./components/contributor-show/ContributorShow";
 import ProfilePage from "./components/profile-page/ProfilePage";
 import MultiForm from "./components/project-form/MultiForm";
-import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx"
-
+import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx";
+import ProfileEdit from "./components/profile-edit/ProfileEdit";
 
 const theme = createTheme({
   components: {
@@ -66,10 +66,11 @@ root.render(
                 <Route path="logout" element={<LogOut />} />
                 <Route path="users" element={<UserIndexGrid />} />
                 <Route path="users/:username" element={<ProfilePage />} />
+                <Route path="users/:username/edit" element={<ProfileEdit />} />
                 <Route path="contributors" element={<ContributorIndexGrid />} />
-                <Route path="projects" >
-                  <Route path=":slug" element={<ProjectShowGrid />}/>
-                  <Route path="create" element={<MultiForm />}/>
+                <Route path="projects">
+                  <Route path=":slug" element={<ProjectShowGrid />} />
+                  <Route path="create" element={<MultiForm />} />
                   <Route index element={<ProjectIndexPage />} />
                 </Route>
                 <Route path="contributors">
