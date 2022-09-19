@@ -13,6 +13,8 @@ import axios from "../../api/axios";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CommentPanel from "../comments/CommentPanel";
 import styles from "./ProjectShowGrid.module.scss";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
 const baseProjectLogo =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
@@ -28,7 +30,7 @@ function ProjectShowGrid(props) {
   const [creator, setCreator] = useState(null);
   const [comments, setComments] = useState(null);
   const [commentCount, setCommentCount] = useState(null);
-
+  console.log(creator, auth);
   useEffect(() => {
     axios.get(`/projects/${slug}`).then(
       (response) => {
@@ -95,7 +97,7 @@ function ProjectShowGrid(props) {
   const [page, setPage] = useState(1);
   const handlePageChange = (error, value) => {
     setPage(value);
-    
+
     axios.get(`/comments/${slug}?page=${page}`).then(
       (response) => {
         setComments(response.data.commentsToSend);
@@ -105,7 +107,7 @@ function ProjectShowGrid(props) {
   };
   useEffect(() => {
     navigate(`/projects/${slug}?page=${page}`);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
   return project ? (
     <>
@@ -128,6 +130,20 @@ function ProjectShowGrid(props) {
             {project.tagline}
           </Typography>
         </Box>
+        {creator.username === auth.username ? (
+          <Box display={"flex"} alignItems={"center"} marginLeft={35}>
+            <ModeEditOutlineOutlinedIcon
+              htmlColor={"var(--color3)"}
+              fontSize={"large"}
+            />
+            <DeleteForeverOutlinedIcon
+              htmlColor={"var(--color3)"}
+              fontSize={"large"}
+            />
+          </Box>
+        ) : (
+          ""
+        )}
       </Box>
       <Grid
         container
