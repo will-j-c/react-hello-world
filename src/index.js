@@ -6,7 +6,6 @@ import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { AuthProvider } from "./context/AuthProvider";
 import LogOut from "./components/logout/LogOut";
-
 import App from "./App";
 import "./index.css";
 import LoginGrid from "./components/login-grid/LoginGrid";
@@ -19,6 +18,8 @@ import ProjectIndexGrid from "./components/project-index-grid/ProjectIndexGrid";
 import ContributorShow from "./components/contributor-show/ContributorShow";
 import ProfilePage from "./components/profile-page/ProfilePage";
 import MultiForm from "./components/project-form/MultiForm";
+import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx"
+
 
 const theme = createTheme({
   components: {
@@ -66,9 +67,10 @@ root.render(
                 <Route path="users" element={<UserIndexGrid />} />
                 <Route path="users/:username" element={<ProfilePage />} />
                 <Route path="contributors" element={<ContributorIndexGrid />} />
-                <Route path="projects">
-                  <Route path=":slug" element={<ProjectShowGrid />} />
-                  <Route path="create" element={<MultiForm />} />
+                <Route path="projects" >
+                  <Route path=":slug" element={<ProjectShowGrid />}/>
+                  <Route path="create" element={<MultiForm />}/>
+                  <Route index element={<ProjectIndexPage />} />
                 </Route>
                 <Route path="contributors">
                   <Route path=":id" element={<ContributorShow />} />

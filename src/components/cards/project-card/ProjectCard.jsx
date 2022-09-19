@@ -14,7 +14,7 @@ import AuthContext from "../../../context/AuthProvider";
 import "../Card.scss";
 
 function ProjectCard(props) {
-  const { projectImg, title, tagline, logo, categories, slug } = props.project;
+  const { projectImg, title, tagline, logo, categories, slug, projectOwner, state } = props.project;
   const categoriesDisplay = categories.map((category, idx) => {
     return (
       <Button
@@ -30,6 +30,7 @@ function ProjectCard(props) {
   const [buttonTitle, setButtonTitle] = useState("Following");
   const [followStatus, setFollowStatus] = useState(props.followed);
   const { auth } = useContext(AuthContext);
+  const username = auth?.username;
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -49,11 +50,11 @@ function ProjectCard(props) {
 
   const handleFollowAction = async function () {
     try {
-      if (!auth.username) {
+      if (!username) {
         props.triggerLogin();
         return;
       }
-      const username = auth.username;
+
       if (followStatus) {
         await axiosPrivate.delete(`/projects/${slug}/unfollow/${username}`);
         setFollowStatus(false);
@@ -65,14 +66,28 @@ function ProjectCard(props) {
     } catch (err) {}
   };
 
+  const triggerDeleteModal = () => {
+    props.triggerDeleteModal({slug, title});
+  }
+
   return (
     <Card raised={true}>
-      <CardMedia
-        component="img"
-        height={150}
-        image={projectImg}
-        alt="green iguana"
-      />
+      <Box>
+        <CardMedia
+          component="img"
+          height={150}
+          image={projectImg}
+          alt={title}
+        />
+        { state !== 'published' && (
+          <Box sx={{bgcolor: 'var(--color2)', padding: '0.5em'}}>
+            <Typography variant='body2' color='var(--disable-color)' fontStyle='italic'>
+              {state}
+            </Typography>
+        </Box>
+        )}
+      </Box>
+      
       <CardContent>
         <Box display={"flex"} alignItems={"center"} marginY={2}>
           <AvatarComponent
@@ -95,22 +110,44 @@ function ProjectCard(props) {
           {categoriesDisplay}
         </Box>
       </CardContent>
+      
       <CardActions>
         <Button
           category={"action"}
-          title={"See More"}
+          title={"View"}
           variant={"outlined"}
           route={`/projects/${slug}`}
         />
-        <Button
-          category={"action"}
-          title={followStatus ? `${buttonTitle}` : "Follow"}
-          variant={followStatus ? "outlined" : "contained"}
-          onMouseOver={handleMouseOver}
-          onMouseLeave={handleMouseLeave}
-          onClick={handleFollowAction}
-        />
+        { username !== projectOwner && 
+          (
+            <Button
+              category={"action"}
+              title={followStatus ? `${buttonTitle}` : "Follow"}
+              variant={followStatus ? "outlined" : "contained"}
+              onMouseOver={handleMouseOver}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleFollowAction}
+            />
+          )
+        }
+        { username === projectOwner &&
+          (<>
+            <Button
+              category={"action"}
+              title={"Delete"}
+              variant={"outlined"}
+              onClick={triggerDeleteModal}
+            />
+            <Button
+              category={"action"}
+              title={"Edit"}
+              variant={"contained"}
+              route={`/projects/${slug}/edit`}
+            />
+          </>) 
+        }
       </CardActions>
+      
     </Card>
   );
 }

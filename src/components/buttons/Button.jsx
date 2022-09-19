@@ -41,7 +41,13 @@ function StyledButton(props) {
             onChange={onChange}
           />
         ) : (
-          ""
+          <input
+          hidden
+          multiple
+          accept=".png, .jpeg, .jpg*"
+          type="file"
+          onChange={onChange}
+        />
         )
       ) : (
         ""

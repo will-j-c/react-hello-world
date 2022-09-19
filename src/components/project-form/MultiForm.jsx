@@ -5,8 +5,7 @@ import AuthContext from "../../context/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Confirmation from "./Confirmation";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import initialCheckState from "./categories";
-import axios from "axios";
+
 
 function MultiForm() {
   const location = useLocation();
@@ -15,6 +14,7 @@ function MultiForm() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const [previewLogo, setPreviewLogo] = useState(null);
+  const [previewProjectImages, setPreviewProjectImages] = useState([]);
   const [checkedCategories, setCheckedCategories] = useState([]);
   const [checkedState, setCheckedState] = useState({});
   const [form, setForm] = useState({
@@ -106,6 +106,28 @@ function MultiForm() {
   };
   // Handle file input
   const handleFileInput = (input) => (event) => {
+    if (event.target.multiple) {
+      const files = event.target.files;
+      const arrFiles = [];
+      for (let i = 0, len = files.length; i < len; i++) {
+        arrFiles.push(URL.createObjectURL(files[i]))
+        const formData = new FormData();
+        formData.append(
+         `image_urls${i}`,
+          event.target.files[i],
+          event.target.files[i].name
+        );
+        setForm((prevState) => ({
+          ...prevState,
+          [input]: [...prevState[input], formData],
+        }));
+      }
+      setPreviewProjectImages((prevState) => ([
+        ...prevState,
+        ...arrFiles,
+      ]));
+      return;
+    }
     setPreviewLogo(URL.createObjectURL(event.target.files[0]));
     const formData = new FormData();
     formData.append(
@@ -148,6 +170,7 @@ function MultiForm() {
   // Handle publish
   const publish = (event) => {
     event.preventDefault();
+    console.log(form)
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -155,7 +178,7 @@ function MultiForm() {
     };
     axiosPrivate.post("/projects", {...form, state: "published"}).then(
       (response) => {
-        axiosPrivate.post(`/projects/upload?slug=${response.data.slug}`, form.logo_url, config).then(
+        axiosPrivate.post(`/projects/upload?slug=${response.data.slug}`, {logo_url: form["logo_url"], image_urls: form["image_urls"]}, config).then(
           (responseTwo) => {
             navigate(`/projects/${response.data.slug}`);
           },
@@ -193,6 +216,7 @@ function MultiForm() {
           prevStep={prevStep}
           handleChange={handleChange}
           handleFileInput={handleFileInput}
+          previewProjectImages={previewProjectImages}
           values={values}
         />
       );
