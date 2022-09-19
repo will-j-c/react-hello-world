@@ -119,12 +119,11 @@ function MultiForm() {
           event.target.files[i],
           event.target.files[i].name
         );
-        
       }
       setForm((prevState) => ({
-          ...prevState,
-          [input]: formData,
-        }));
+        ...prevState,
+        [input]: formData,
+      }));
       setPreviewProjectImages((prevState) => [...prevState, ...arrFiles]);
       return;
     }
@@ -157,26 +156,31 @@ function MultiForm() {
           form.logo_url,
           config
         );
-        const photoRequestTwo= axiosPrivate.post(
+        const photoRequestTwo = axiosPrivate.post(
           `/projects/upload?slug=${response.data.slug}`,
           form.image_urls,
           config
         );
-        axiosMain
-          .all([photoRequestOne, photoRequestTwo])
-          .then(
-            axiosMain.spread((...responses) => {
+        axiosMain.all([photoRequestOne, photoRequestTwo]).then(
+          axiosMain.spread((...responses) => {
+            setOpen(true);
+            setSeverity("success");
+            setMessage("Project successfully saved to draft");
+            setTimeout(() => {
               navigate(`/projects/${response.data.slug}`);
-            }),
-            axiosMain.spread((...errors) => {
-              console.log("Image Error: ", errors);
-            })
-          );
+            }, 2000);
+          }),
+          axiosMain.spread((...errors) => {
+            setOpen(true);
+            setSeverity("error");
+            setMessage("Ooops, something went wrong...");
+          })
+        );
       },
       (error) => {
-        // TODO error handling
-        // If error snack bar with details
-        console.log("Error: ", error);
+        setOpen(true);
+        setSeverity("error");
+        setMessage(error.response.data.error);
       }
     );
   };
@@ -186,38 +190,41 @@ function MultiForm() {
     console.log(form);
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/form-data boundary=???",
       },
     };
     axiosPrivate.post("/projects", { ...form, state: "published" }).then(
       (response) => {
-        axiosPrivate
-          .post(
-            `/projects/upload?slug=${response.data.slug}`,
-            { logo_url: form["logo_url"], image_urls: form["image_urls"] },
-            config
-          )
-          .then(
-            (responseTwo) => {
-              setOpen(true);
-              setSeverity("success");
-              setMessage("Project successfully created");
-              setTimeout(() => {
-                navigate(`/projects/${response.data.slug}`);
-              }, 2000);
-            },
-            (error) => {
-              setOpen(true);
-              setSeverity("error");
-              setMessage(error.response.data.error);
-            }
-          );
-        // Reroute to project you just published
+        const photoRequestOne = axiosPrivate.post(
+          `/projects/upload?slug=${response.data.slug}`,
+          form.logo_url,
+          config
+        );
+        const photoRequestTwo = axiosPrivate.post(
+          `/projects/upload?slug=${response.data.slug}`,
+          form.image_urls,
+          config
+        );
+        axiosMain.all([photoRequestOne, photoRequestTwo]).then(
+          axiosMain.spread((...responses) => {
+            setOpen(true);
+            setSeverity("success");
+            setMessage("Project successfully created");
+            setTimeout(() => {
+              navigate(`/projects/${response.data.slug}`);
+            }, 2000);
+          }),
+          axiosMain.spread((...errors) => {
+            setOpen(true);
+            setSeverity("error");
+            setMessage("Ooops, something went wrong...");
+          })
+        );
       },
       (error) => {
-        // TODO error handling
-        // If error snack bar with details
-        console.log("Error: ", error);
+        setOpen(true);
+        setSeverity("error");
+        setMessage(error.response.data.error);
       }
     );
   };
