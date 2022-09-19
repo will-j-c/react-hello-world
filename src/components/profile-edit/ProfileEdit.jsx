@@ -26,7 +26,6 @@ function ProfileEdit(props) {
 
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
-  const { auth } = useContext(AuthContext);
   const profileOwnerName = auth.username;
   const isAuth = profileOwnerName === username;
 
@@ -34,16 +33,17 @@ function ProfileEdit(props) {
   const [previewProjectImages, setPreviewProjectImages] = useState([]);
   const [checkedCategories, setCheckedCategories] = useState([]);
   const [checkedState, setCheckedState] = useState({});
+  //TODO: chnge input value box wider
   const {
-    values,
-    handleChange,
+    // values, //TODO: check defaut logo value
+    // handleChange,
     nextStep,
-    handleFileInput,
-    previewLogo,
+    // handleFileInput,
+    // previewLogo,
     checkBoxTrack,
-    checkedState,
+    // checkedState,
   } = props;
-  console.log(previewLogo);
+  // console.log(previewLogo);
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
@@ -52,6 +52,31 @@ function ProfileEdit(props) {
   const onCheck = (event) => {
     checkBoxTrack({ [event.target.value]: event.target.checked });
   };
+
+  const handleFileInput = (event) => {};
+  const handleChange = (input) => (event) => {};
+  // const values = {
+  //   username,
+  //   title,
+  //   tagline,
+  //   categories,
+  //   logo_url,
+  //   state,
+  //   description,
+  //   image_urls,
+  // };
+  // const {
+  //   step,
+  //   username,
+  //   title,
+  //   tagline,
+  //   categories,
+  //   logo_url,
+  //   state,
+  //   description,
+  //   image_urls,
+  // } = form;
+
   return (
     <Grid
       sx={{
@@ -80,7 +105,7 @@ function ProfileEdit(props) {
             category="action"
             upload={true}
             // defaultValue={values.logo_url}
-            onChange={handleFileInput("logo_url")}
+            onChange={handleFileInput}
           />
         </Box>
       </Grid>
@@ -97,35 +122,81 @@ function ProfileEdit(props) {
           marginTop={5}
         >
           <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
-            Project Title
+            Name
           </Typography>
           <TextField
             required
             hiddenLabel
             fullWidth
-            defaultValue={values.title}
+            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
             onChange={handleChange("title")}
             variant="filled"
             size="small"
             type="text"
             sx={{ marginBottom: 2 }}
             className={styles["input-text"]}
+            placeholder="Filling your display name on your profile"
+            autoFocus="true"
           />
           <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
-            Project Tagline
+            Headline
           </Typography>
           <TextField
             required
             hiddenLabel
             fullWidth
-            defaultValue={values.tagline}
+            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
             onChange={handleChange("tagline")}
             type="text"
             variant="filled"
             size="small"
             sx={{ marginBottom: 2 }}
             className={styles["input-text"]}
+            placeholder="A Short tagline describing yourself"
           />
+          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
+            About
+          </Typography>
+          <TextField
+            required
+            hiddenLabel
+            fullWidth
+            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
+            onChange={handleChange("tagline")}
+            type="text"
+            variant="filled"
+            size="small"
+            sx={{ marginBottom: 2 }}
+            className={styles["input-text"]}
+            placeholder="A Short tagline describing yourself"
+            multiline="true"
+          />
+          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
+            Interests
+          </Typography>
+          <TextField
+            required
+            hiddenLabel
+            fullWidth
+            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
+            onChange={handleChange("tagline")}
+            type="text"
+            variant="filled"
+            size="small"
+            sx={{ marginBottom: 2 }}
+            className={styles["input-text"]}
+            placeholder="Add filling your interest"
+          />
+          <Box
+            display="flex"
+            height={0.3}
+            marginBottom={10}
+            marginTop={1}
+            alignSelf="flex-start"
+          >
+            haha hhooa Interest sadada
+          </Box>
+
           <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
             {categories.map((category) => {
               return (
