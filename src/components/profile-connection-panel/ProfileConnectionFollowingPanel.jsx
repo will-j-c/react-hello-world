@@ -6,7 +6,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import UserCard from "../cards/user-card/UserCard";
 import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import LoginModal from "../modals/LoginModal";
 
 function ProfileConnectionFollowingPanel() {
