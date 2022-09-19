@@ -1,0 +1,21 @@
+.filters {
+  color: var(--color4);
+
+  .MuiCheckbox-root {
+    color: var(--color3);
+    padding: 0.2em;
+  }
+
+  .MuiFormControl-root {
+    margin: 0.5em;
+  }
+
+  .MuiFormControlLabel-label {
+    font-size: 0.8em;
+  }
+
+  .filters-label {
+    color: var(--color3);
+    font-weight: bold;
+  }
+}

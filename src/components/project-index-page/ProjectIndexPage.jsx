@@ -1,18 +1,33 @@
 import Grid from "@mui/material/Unstable_Grid2";
-import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+import { useEffect, useState } from "react";
+
 import ProjectIndexGrid from "../project-index-grid/ProjectIndexGrid";
-import Button from "../buttons/Button.jsx";
-import ProjectCard from "../cards/project-card/ProjectCard";
-import { useState, useEffect } from "react";
-import axios from "../../api/axios";
-import { Typography } from "@mui/material";
-import './ProjectIndexPage.scss';
+import Filters from "../filters/Filters";
+import axios from '../../api/axios';
 
 function ProjectIndexPage() {
-  const [categories, setCategories] = useState([]);
-  const getFilter = (categoryArr) => {
-    return setCategories(categoryArr);
+  const [ categories, setCategories] = useState([]);
+  const [ categoriesFilter, setCategoriesFilter ] = useState([]);
+
+  useEffect(() => {
+    async function getCategories() {
+      try {
+        const response = await axios.get('data/categories');
+        setCategories(response.data);
+      } catch (err) {
+      }
+    }
+
+    getCategories();
+
+  }, [])
+
+  const updateCategoriesFilter = (selections) => {
+    setCategoriesFilter(selections);
   }
+
   return (
     <>
       <Grid 
@@ -26,6 +41,8 @@ function ProjectIndexPage() {
           <Typography variant='h6' component='h2' color='white'>
             Filters
           </Typography>
+
+          <Filters options={categories} updateSelections={updateCategoriesFilter} />
         </Grid>
 
         <Grid md={10} sx={{ height: "100%" }} paddingTop={0} item border='1px solid green'>
@@ -38,7 +55,7 @@ function ProjectIndexPage() {
           >
             Projects
           </Typography>
-          <ProjectIndexGrid getFilter={getFilter}/>
+          <ProjectIndexGrid filters={{categories: categoriesFilter}} />
         </Grid>
       </Grid> 
     </>
