@@ -13,9 +13,13 @@ import UserIndexGrid from "./components/user-index-grid/UserIndexGrid";
 import ContributorIndexGrid from "./components/contributor-index-grid/ContributorIndexGrid";
 import HomeGrid from "./components/home-grid/HomeGrid";
 import ProjectShowGrid from "./components/project-show-grid/ProjectShowGrid";
+import TitleHomepage from "./components/title-homepage/TitleHomepage";
+import ProjectIndexGrid from "./components/project-index-grid/ProjectIndexGrid";
+import ContributorShow from "./components/contributor-show/ContributorShow";
 import ProfilePage from "./components/profile-page/ProfilePage";
 import MultiForm from "./components/project-form/MultiForm";
 import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx"
+
 
 const theme = createTheme({
   components: {
@@ -68,7 +72,9 @@ root.render(
                   <Route path="create" element={<MultiForm />}/>
                   <Route index element={<ProjectIndexPage />} />
                 </Route>
-
+                <Route path="contributors">
+                  <Route path=":id" element={<ContributorShow />} />
+                </Route>
                 <Route path="" element={<HomeGrid />} />
                 <Route
                   path="*"

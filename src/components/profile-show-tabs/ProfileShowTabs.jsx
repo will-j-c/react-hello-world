@@ -1,7 +1,13 @@
+import { useParams } from "react-router-dom";
 import Tabs, { tabsClasses } from "@mui/material/Tabs";
+import { useState, useEffect, useContext } from "react";
 import Tab from "@mui/material/Tab";
+import axios from "../../api/axios";
+import AuthContext from "../../context/AuthProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 function ProfileShowTabs(props) {
+  const isAuth = props.isAuth;
   return (
     <Tabs
       value={props.tabValue}
@@ -18,8 +24,8 @@ function ProfileShowTabs(props) {
     >
       <Tab value="1" label="Profile" />
       <Tab value="2" label="Connection" />
-      <Tab value="3" label="My projects" />
-      <Tab value="4" label="Other projects" />
+      {isAuth && <Tab value="3" label="My projects" />}
+      {isAuth && <Tab value="4" label="Other projects" />}
     </Tabs>
   );
 }
@@ -36,5 +42,14 @@ function ShowTabsConnection(props) {
     </Tabs>
   );
 }
+function ShowTabsOtherProjects(props) {
+  return (
+    <Tabs value={props.tabValue} onChange={props.handleTabChange}>
+      <Tab value="1" label="Working on" />
+      <Tab value="2" label="Applied projects" />
+      <Tab value="3" label="Following projects" />
+    </Tabs>
+  );
+}
 
-export { ProfileShowTabs, ShowTabsConnection };
+export { ProfileShowTabs, ShowTabsConnection, ShowTabsOtherProjects };
