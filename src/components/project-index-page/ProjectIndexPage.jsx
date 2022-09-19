@@ -7,6 +7,8 @@ import ProjectIndexGrid from "../project-index-grid/ProjectIndexGrid";
 import Filters from "../filters/Filters";
 import axios from '../../api/axios';
 
+import './ProjectIndexPage.scss';
+
 function ProjectIndexPage() {
   const [ categories, setCategories] = useState([]);
   const [ categoriesFilter, setCategoriesFilter ] = useState([]);
@@ -28,6 +30,10 @@ function ProjectIndexPage() {
     setCategoriesFilter(selections);
   }
 
+  const clearFilters = () => {
+    setCategoriesFilter([]);
+  }
+
   return (
     <>
       <Grid 
@@ -41,8 +47,16 @@ function ProjectIndexPage() {
           <Typography variant='h6' component='h2' color='white'>
             Filters
           </Typography>
+          <Typography
+            className='clear-filters-button'
+            variant='caption' 
+            
+            onClick={clearFilters}
+          >
+            Clear filters
+          </Typography>
 
-          <Filters options={categories} updateSelections={updateCategoriesFilter} />
+          <Filters options={categories} currentSelections={categoriesFilter} updateSelections={updateCategoriesFilter} />
         </Grid>
 
         <Grid md={10} sx={{ height: "100%" }} paddingTop={0}>

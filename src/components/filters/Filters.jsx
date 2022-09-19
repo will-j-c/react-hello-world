@@ -5,13 +5,17 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 
 import './Filters.scss';
 
 export default function Filters(props) {
-  const { options, updateSelections } = props;
+  const { options, updateSelections, currentSelections } = props;
   const [ selections, setSelections ] = useState([]);
+
+  useEffect(() => {
+    setSelections(currentSelections);
+  }, [props])
   
   const handleChange = (evnt) => {
     const option = evnt.target.name;
@@ -31,7 +35,7 @@ export default function Filters(props) {
       <FormControlLabel
         key={idx}
         control={
-          <Checkbox checked={selections[option]} onChange={handleChange} name={option} />
+          <Checkbox checked={selections.includes(option)} onChange={handleChange} name={option} />
         }
         label={option}
       />

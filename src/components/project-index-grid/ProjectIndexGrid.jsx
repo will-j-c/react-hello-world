@@ -20,15 +20,17 @@ function ProjectIndexGrid(props) {
   let filterParams = '?';
   let apiUrl = '/projects';
 
-  Object.keys(filters).forEach((key, idx) => {
-    const values = filters[key];
-    if (values.length > 0) {
-      filterParams += `${key}=${values.join(',').replaceAll(' ', '-')}`;
-      if (idx < Object.keys(filters).length - 1 ) {
-        filterParams += '&';
+  if (filters) {
+    Object.keys(filters).forEach((key, idx) => {
+      const values = filters[key];
+      if (values.length > 0) {
+        filterParams += `${key}=${values.join(',').replaceAll(' ', '-')}`;
+        if (idx < Object.keys(filters).length - 1 ) {
+          filterParams += '&';
+        };
       };
-    };
-  });
+    });
+  }
 
   if (filterParams.length > 1) {
     apiUrl += filterParams;
