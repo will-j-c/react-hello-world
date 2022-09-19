@@ -21,7 +21,8 @@ function ProfileMyProjectsPanel(props) {
   const { auth } = useContext(AuthContext);
   const profileOwnerName = auth.username;
   const [userProjects, setUserProjects] = useState([]);
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+  const [ deleteModalIsOpen, setDeleteModalIsOpen ] = useState(false);
+  const [ targetProject, setTargetProject ] = useState({});
 
   useEffect(() => {
     axiosPrivate
@@ -34,6 +35,16 @@ function ProfileMyProjectsPanel(props) {
         // toast(err.response.data.message);
       });
   }, [params]);
+
+  const triggerDeleteModal = ({slug, title}) => {
+    setTargetProject({projectSlug: slug, projectTitle: title});
+    setDeleteModalIsOpen(true);
+  }
+
+  const deleteSuccessful = (slug) => {
+    setUserProjects(prev => prev.filter(p => p.slug !== slug));
+  }
+
   let projectCardsToShow = [];
 
   if (userProjects?.length) {
@@ -57,7 +68,7 @@ function ProfileMyProjectsPanel(props) {
         <Grid key={idx} item xs={12} sm={6} md={4}>
           <ProjectCard 
             project={projectCardDetails}
-            triggerDeleteModal={() => setModalIsOpen(true)}
+            triggerDeleteModal={triggerDeleteModal} 
           />
         </Grid>
       );
@@ -85,8 +96,10 @@ function ProfileMyProjectsPanel(props) {
           {projectCardsToShow}
         </Grid>
         <DeleteModal 
-        isOpen={modalIsOpen} 
-        onClose={() => setModalIsOpen(false)}
+          isOpen={deleteModalIsOpen}
+          targetProject={targetProject}  
+          onClose={() => setDeleteModalIsOpen(false)}
+          deleteSuccessful={deleteSuccessful}
         />
       </>
     );

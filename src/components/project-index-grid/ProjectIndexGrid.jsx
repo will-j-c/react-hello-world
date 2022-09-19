@@ -96,7 +96,7 @@ function ProjectIndexGrid(props) {
         targetProject={targetProject} 
         onClose={() => setDeleteModalIsOpen(false)}
         deleteSuccessful={deleteSuccessful}
-        />
+      />
     </>
 
   );
