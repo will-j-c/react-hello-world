@@ -4,12 +4,15 @@ import { useState, useEffect, useContext } from "react";
 import axios from '../../api/axios';
 import AuthContext from '../../context/AuthProvider';
 import LoginModal from '../modals/LoginModal';
+import DeleteModal from "../modals/DeleteModal";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 function ProjectIndexGrid(props) {
-  const [projects, setProjects] = useState([]);
-  const [followedProjects, setFollowedProjects] = useState([]);
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+  const [ projects, setProjects ] = useState([]);
+  const [ followedProjects, setFollowedProjects ] = useState([]);
+  const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
+  const [ deleteModalIsOpen, setDeleteModalIsOpen ] = useState(false);
+  const [ targetProject, setTargetProject ] = useState({});
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
@@ -41,6 +44,15 @@ function ProjectIndexGrid(props) {
     
   }, []);
 
+  const triggerDeleteModal = ({slug, title}) => {
+    setTargetProject({projectSlug: slug, projectTitle: title});
+    setDeleteModalIsOpen(true);
+  }
+
+  const deleteSuccessful = (slug) => {
+    setProjects(prev => prev.filter(p => p.slug !== slug));
+  }
+
   const projectCardsToShow = projects.map((project, idx) => {
     const projectCardDetails = {
       projectImg: project.image_urls[0] || baseProjectImage,
@@ -57,7 +69,8 @@ function ProjectIndexGrid(props) {
         <ProjectCard 
           project={projectCardDetails}
           followed={followedProjects.includes(project.slug)}
-          triggerLogin={() => setModalIsOpen(true)} 
+          triggerLogin={() => setLoginModalIsOpen(true)}
+          triggerDeleteModal={triggerDeleteModal} 
         />
       </Grid>
     );
@@ -74,8 +87,14 @@ function ProjectIndexGrid(props) {
         {projectCardsToShow}
       </Grid>
       <LoginModal
-        isOpen={modalIsOpen} 
-        onClose={() => setModalIsOpen(false)}
+        isOpen={loginModalIsOpen} 
+        onClose={() => setLoginModalIsOpen(false)}
+      />
+      <DeleteModal 
+        isOpen={deleteModalIsOpen}
+        targetProject={targetProject} 
+        onClose={() => setDeleteModalIsOpen(false)}
+        deleteSuccessful={deleteSuccessful}
       />
     </>
 
