@@ -45,7 +45,7 @@ function ProjectIndexPage() {
           <Filters options={categories} updateSelections={updateCategoriesFilter} />
         </Grid>
 
-        <Grid md={10} sx={{ height: "100%" }} paddingTop={0} item border='1px solid green'>
+        <Grid md={10} sx={{ height: "100%" }} paddingTop={0}>
           <Typography
             variant="h4"
             component='h1'
