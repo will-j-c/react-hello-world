@@ -6,7 +6,7 @@ import AuthContext from '../../context/AuthProvider';
 import LoginModal from '../modals/LoginModal';
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
-function ProjectIndexGrid() {
+function ProjectIndexGrid(props) {
   const [projects, setProjects] = useState([]);
   const [followedProjects, setFollowedProjects] = useState([]);
   const [ modalIsOpen, setModalIsOpen ] = useState(false);
