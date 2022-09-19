@@ -12,9 +12,8 @@ function ProfileConnectionFollowingPanel() {
   const params = useParams();
   const username = params.username;
   const { auth } = useContext(AuthContext);
-  const authUserName = auth.username;
+  const authUserName = auth?.username;
 
-  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
   const [userFollowings, setUserFollowings] = useState([]);
@@ -33,7 +32,7 @@ function ProfileConnectionFollowingPanel() {
           )
         );
         const userFollowingsResponse = await axios.get(
-          `/users/${authUserName}/following`
+          `/users/${username}/following`
         );
         setUserFollowings(
           userFollowingsResponse.data.map((relation) => relation.followee)
