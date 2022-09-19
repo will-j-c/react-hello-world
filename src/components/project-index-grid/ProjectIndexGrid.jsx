@@ -27,7 +27,6 @@ function ProjectIndexGrid(props) {
       try {
         const projectsResp = await axios.get('/projects');
         setProjects(projectsResp.data);
-        
         if (username) {
           const followedProjectsResp = await axiosPrivate
             .get(`/users/${username}/projects/following`);
