@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import Grid from "@mui/material/Grid";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useRef, useState, useContext} from "react";
@@ -21,6 +21,7 @@ export default function LogInForm() {
   const [severity, setSeverity] = useState('success');
   const [cookies, setCookie] = useCookies(); 
   const { setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const formObj = {
     usernameRef: useRef(),
@@ -46,8 +47,10 @@ export default function LogInForm() {
       setAuth({ accessToken, username });
 
       setOpen(true);
-      setMessage('Login successful');
+      setMessage('Login successful. Redirecting to homepage...');
       setSeverity('success');
+
+      setTimeout(navigate, 1000, '/');
 
     } catch (err) {
       console.log(err);
