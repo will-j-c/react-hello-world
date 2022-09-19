@@ -35,7 +35,6 @@ function ProjectIndexGrid() {
           );
         }
       } catch (err) {
-        console.log(err);
       }
     }
 
@@ -50,7 +49,9 @@ function ProjectIndexGrid() {
       tagline: project.tagline,
       logo: project.logo_url,
       categories: project.categories || baseProjectLogo,
-      slug: project.slug
+      slug: project.slug,
+      projectOwner: project.user_id.username,
+      state: project.state,
     };
     return (
       <Grid key={idx} xs={true} md={4} item>
