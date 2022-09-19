@@ -5,24 +5,26 @@ import AuthContext from "../../context/AuthProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import Confirmation from "./Confirmation";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-
+import axiosMain from "axios";
 
 function MultiForm() {
   const location = useLocation();
   const navigate = useNavigate();
-
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const [previewLogo, setPreviewLogo] = useState(null);
   const [previewProjectImages, setPreviewProjectImages] = useState([]);
   const [checkedCategories, setCheckedCategories] = useState([]);
   const [checkedState, setCheckedState] = useState({});
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState(null);
+  const [message, setMessage] = useState(null);
   const [form, setForm] = useState({
     step: location.search ? parseInt(location.search.slice(-1)) : 1,
     username: auth.username,
     title: "",
     tagline: "",
-    categories: [],
+    categories: checkedCategories,
     logo_url: "",
     state: "",
     description: "",
@@ -109,23 +111,21 @@ function MultiForm() {
     if (event.target.multiple) {
       const files = event.target.files;
       const arrFiles = [];
+      const formData = new FormData();
       for (let i = 0, len = files.length; i < len; i++) {
-        arrFiles.push(URL.createObjectURL(files[i]))
-        const formData = new FormData();
+        arrFiles.push(URL.createObjectURL(files[i]));
         formData.append(
-         `image_urls${i}`,
+          `image_urls`,
           event.target.files[i],
           event.target.files[i].name
         );
-        setForm((prevState) => ({
-          ...prevState,
-          [input]: [...prevState[input], formData],
-        }));
+        
       }
-      setPreviewProjectImages((prevState) => ([
-        ...prevState,
-        ...arrFiles,
-      ]));
+      setForm((prevState) => ({
+          ...prevState,
+          [input]: formData,
+        }));
+      setPreviewProjectImages((prevState) => [...prevState, ...arrFiles]);
       return;
     }
     setPreviewLogo(URL.createObjectURL(event.target.files[0]));
@@ -143,22 +143,35 @@ function MultiForm() {
   // Handle save as draft
   const saveDraft = (event) => {
     event.preventDefault();
+
     const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "multipart/form-data boundary=???",
       },
     };
     // Send post request to projects
     axiosPrivate.post("/projects", { ...form, state: "draft" }).then(
       (response) => {
-        axiosPrivate.post(`/projects/upload?slug=${response.data.slug}`, form.logo_url, config).then(
-          (responseTwo) => {
-            navigate(`/projects/${response.data.slug}`);
-          },
-          (error) => {
-            console.log("Image Error: ", error);
-          }
+        const photoRequestOne = axiosPrivate.post(
+          `/projects/upload?slug=${response.data.slug}`,
+          form.logo_url,
+          config
         );
+        const photoRequestTwo= axiosPrivate.post(
+          `/projects/upload?slug=${response.data.slug}`,
+          form.image_urls,
+          config
+        );
+        axiosMain
+          .all([photoRequestOne, photoRequestTwo])
+          .then(
+            axiosMain.spread((...responses) => {
+              navigate(`/projects/${response.data.slug}`);
+            }),
+            axiosMain.spread((...errors) => {
+              console.log("Image Error: ", errors);
+            })
+          );
       },
       (error) => {
         // TODO error handling
@@ -170,22 +183,35 @@ function MultiForm() {
   // Handle publish
   const publish = (event) => {
     event.preventDefault();
-    console.log(form)
+    console.log(form);
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
-    axiosPrivate.post("/projects", {...form, state: "published"}).then(
+    axiosPrivate.post("/projects", { ...form, state: "published" }).then(
       (response) => {
-        axiosPrivate.post(`/projects/upload?slug=${response.data.slug}`, {logo_url: form["logo_url"], image_urls: form["image_urls"]}, config).then(
-          (responseTwo) => {
-            navigate(`/projects/${response.data.slug}`);
-          },
-          (error) => {
-            console.log("Image Error: ", error);
-          }
-        );
+        axiosPrivate
+          .post(
+            `/projects/upload?slug=${response.data.slug}`,
+            { logo_url: form["logo_url"], image_urls: form["image_urls"] },
+            config
+          )
+          .then(
+            (responseTwo) => {
+              setOpen(true);
+              setSeverity("success");
+              setMessage("Project successfully created");
+              setTimeout(() => {
+                navigate(`/projects/${response.data.slug}`);
+              }, 2000);
+            },
+            (error) => {
+              setOpen(true);
+              setSeverity("error");
+              setMessage(error.response.data.error);
+            }
+          );
         // Reroute to project you just published
       },
       (error) => {
@@ -227,6 +253,12 @@ function MultiForm() {
           publish={publish}
           prevStep={prevStep}
           values={values}
+          previewLogo={previewLogo}
+          previewProjectImages={previewProjectImages}
+          open={open}
+          severity={severity}
+          message={message}
+          setOpen={setOpen}
         />
       );
     default:
