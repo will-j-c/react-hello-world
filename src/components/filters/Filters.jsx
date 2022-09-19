@@ -46,7 +46,7 @@ export default function Filters(props) {
     <Box sx={{ display: 'flex' }} className='filters'>
       <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
         <FormLabel component="legend" className='filters-label'>Categories</FormLabel>
-        <FormGroup>
+        <FormGroup className='options-list'>
           {optionsDisplay}
         </FormGroup>
       </FormControl>      

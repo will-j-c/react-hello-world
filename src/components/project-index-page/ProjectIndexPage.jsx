@@ -43,7 +43,7 @@ function ProjectIndexPage() {
         justifyContent="space-between"
         marginTop={4}
       >
-        <Grid md={2} item className='filters'>
+        <Grid md={2} item>
           <Typography variant='h6' component='h2' color='white'>
             Filters
           </Typography>

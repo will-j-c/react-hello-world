@@ -1,6 +1,14 @@
 .filters {
   color: var(--color4);
 
+  .options-list {
+    display: flex;
+    flex-flow: column nowrap;
+    max-height: 600px;
+    overflow-y: scroll;
+    margin: 0;
+  }
+
   .MuiCheckbox-root {
     color: var(--color3);
     padding: 0.2em;
@@ -12,6 +20,10 @@
 
   .MuiFormControlLabel-label {
     font-size: 0.8em;
+  }
+
+  .MuiFormControlLabel-root {
+    margin-left: 0;
   }
 
   .filters-label {
