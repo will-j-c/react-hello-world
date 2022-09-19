@@ -15,8 +15,6 @@ function ProfileConnectionFollowingPanel() {
   const { auth } = useContext(AuthContext);
   const authUserName = auth?.username;
 
-  const axiosPrivate = useAxiosPrivate();
-
   const [userFollowings, setUserFollowings] = useState([]);
   const [authUserFollowings, setAuthUserFollowings] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -24,14 +22,16 @@ function ProfileConnectionFollowingPanel() {
   useEffect(() => {
     async function getData() {
       try {
-        const authUserFollowingResponse = await axios.get(
-          `/users/${authUserName}/following`
-        );
-        setAuthUserFollowings(
-          authUserFollowingResponse.data.map(
-            (relation) => relation.followee.username
-          )
-        );
+        if (authUserName) {
+          const authUserFollowingResponse = await axios.get(
+            `/users/${authUserName}/following`
+          );
+          setAuthUserFollowings(
+            authUserFollowingResponse.data.map(
+              (relation) => relation.followee.username
+            )
+          );
+        }
         const userFollowingsResponse = await axios.get(
           `/users/${username}/following`
         );
@@ -42,11 +42,7 @@ function ProfileConnectionFollowingPanel() {
     }
     getData();
   }, [params]);
-  const userFollowingName = userFollowings.map((item) => item.username);
-  // console.log("username :", username);
-  // console.log("authUserName:", authUserName);
-  // console.log("userFollowings: ", userFollowingName);
-  // console.log("authUserFollowing:", authUserFollowings);
+
   let userFollowingsCards = [];
   if (userFollowings.length) {
     userFollowingsCards = userFollowings.map((user, idx) => {
