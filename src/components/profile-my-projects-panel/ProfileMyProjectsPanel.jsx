@@ -10,6 +10,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import DeleteModal from "../modals/DeleteModal";
 // TODO: handle the case to show button project Draft , Public , ...
 
 function ProfileMyProjectsPanel(props) {
@@ -20,6 +21,8 @@ function ProfileMyProjectsPanel(props) {
   const { auth } = useContext(AuthContext);
   const profileOwnerName = auth.username;
   const [userProjects, setUserProjects] = useState([]);
+  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+
   useEffect(() => {
     axiosPrivate
       .get(`/users/${username}/projects`)
@@ -52,7 +55,10 @@ function ProfileMyProjectsPanel(props) {
       };
       return (
         <Grid key={idx} item xs={12} sm={6} md={4}>
-          <ProjectCard project={projectCardDetails} />
+          <ProjectCard 
+            project={projectCardDetails}
+            triggerDeleteModal={() => setModalIsOpen(true)}
+          />
         </Grid>
       );
     });
@@ -78,6 +84,10 @@ function ProfileMyProjectsPanel(props) {
         <Grid container spacing={2}>
           {projectCardsToShow}
         </Grid>
+        <DeleteModal 
+        isOpen={modalIsOpen} 
+        onClose={() => setModalIsOpen(false)}
+        />
       </>
     );
   }

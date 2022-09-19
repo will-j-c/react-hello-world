@@ -66,6 +66,10 @@ function ProjectCard(props) {
     } catch (err) {}
   };
 
+  const triggerDeleteModal = () => {
+    props.triggerDeleteModal({slug, title});
+  }
+
   return (
     <Card raised={true}>
       <Box>
@@ -132,6 +136,7 @@ function ProjectCard(props) {
               category={"action"}
               title={"Delete"}
               variant={"outlined"}
+              onClick={triggerDeleteModal}
             />
             <Button
               category={"action"}
