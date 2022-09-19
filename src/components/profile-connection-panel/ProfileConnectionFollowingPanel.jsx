@@ -7,6 +7,7 @@ import UserCard from "../cards/user-card/UserCard";
 import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import LoginModal from "../modals/LoginModal";
 
 function ProfileConnectionFollowingPanel() {
   const params = useParams();
@@ -42,10 +43,10 @@ function ProfileConnectionFollowingPanel() {
     getData();
   }, [params]);
   const userFollowingName = userFollowings.map((item) => item.username);
-  console.log("username :", username);
-  console.log("authUserName:", authUserName);
-  console.log("userFollowings: ", userFollowingName);
-  console.log("authUserFollowing:", authUserFollowings);
+  // console.log("username :", username);
+  // console.log("authUserName:", authUserName);
+  // console.log("userFollowings: ", userFollowingName);
+  // console.log("authUserFollowing:", authUserFollowings);
   let userFollowingsCards = [];
   if (userFollowings.length) {
     userFollowingsCards = userFollowings.map((user, idx) => {
@@ -54,15 +55,19 @@ function ProfileConnectionFollowingPanel() {
           <UserCard
             user={user}
             followed={authUserFollowings.includes(user.username)}
+            triggerLogin={() => setModalIsOpen(true)}
           />
         </Grid>
       );
     });
   }
   return (
-    <Grid container spacing={2} marginTop={4}>
-      {userFollowingsCards}
-    </Grid>
+    <>
+      <Grid container spacing={2} marginTop={4}>
+        {userFollowingsCards}
+      </Grid>
+      <LoginModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} />
+    </>
   );
 }
 
