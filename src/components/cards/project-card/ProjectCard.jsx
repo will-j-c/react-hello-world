@@ -15,17 +15,18 @@ import "../Card.scss";
 
 function ProjectCard(props) {
   const { projectImg, title, tagline, logo, categories, slug, projectOwner, state } = props.project;
-  const categoriesDisplay = categories.map((category, idx) => {
-    return (
-      <Button
-        category={"category"}
-        title={category}
-        variant={"contained"}
-        key={idx}
-        disabled={true}
-      />
-    );
-  });
+  const categoriesDisplay = categories
+    .map((category, idx) => {
+      return (
+        <Button
+          category={"category"}
+          title={category}
+          variant={"contained"}
+          key={idx}
+          disabled={true}
+        />
+      );
+    });
 
   const [buttonTitle, setButtonTitle] = useState("Following");
   const [followStatus, setFollowStatus] = useState(props.followed);
@@ -68,7 +69,7 @@ function ProjectCard(props) {
 
   return (
     <Card raised={true}>
-      <Box>
+      <Box sx={{ position: 'relative' }}>
         <CardMedia
           component="img"
           height={150}
@@ -76,11 +77,11 @@ function ProjectCard(props) {
           alt={title}
         />
         { state !== 'published' && (
-          <Box sx={{bgcolor: 'var(--color2)', padding: '0.5em'}}>
+          <Box className='image-overlay'>
             <Typography variant='body2' color='var(--disable-color)' fontStyle='italic'>
               {state}
             </Typography>
-        </Box>
+          </Box>
         )}
       </Box>
       
@@ -99,10 +100,10 @@ function ProjectCard(props) {
             {title}
           </Typography>
         </Box>
-        <Typography variant="body2" className="card-tagline">
-          {tagline}
+        <Typography variant="body2" className="card-tagline" sx={{height: '3em'}}>
+          {tagline?.length > 85 ? tagline.slice(0, 83) + '...' : tagline}
         </Typography>
-        <Box display="flex" height={0.3} marginBottom={10} marginTop={1}>
+        <Box className='card-categories' sx={{maxHeight: '5em'}}>
           {categoriesDisplay}
         </Box>
       </CardContent>
