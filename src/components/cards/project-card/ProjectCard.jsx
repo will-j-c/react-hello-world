@@ -114,7 +114,7 @@ function ProjectCard(props) {
       <CardActions>
         <Button
           category={"action"}
-          title={"See More"}
+          title={"View"}
           variant={"outlined"}
           route={`/projects/${slug}`}
         />
@@ -142,6 +142,7 @@ function ProjectCard(props) {
               category={"action"}
               title={"Edit"}
               variant={"contained"}
+              route={`/projects/${slug}/edit`}
             />
           </>) 
         }
