@@ -8,8 +8,8 @@ import DeleteModal from "../modals/DeleteModal";
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
 
 function ProjectIndexGrid(props) {
-  const [projects, setProjects] = useState([]);
-  const [followedProjects, setFollowedProjects] = useState([]);
+  const [ projects, setProjects ] = useState([]);
+  const [ followedProjects, setFollowedProjects ] = useState([]);
   const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
   const [ deleteModalIsOpen, setDeleteModalIsOpen ] = useState(false);
   const [ targetProject, setTargetProject ] = useState({});
@@ -48,6 +48,10 @@ function ProjectIndexGrid(props) {
   const triggerDeleteModal = ({slug, title}) => {
     setTargetProject({projectSlug: slug, projectTitle: title});
     setDeleteModalIsOpen(true);
+  }
+
+  const deleteSuccessful = (slug) => {
+    setProjects(prev => prev.filter(p => p.slug !== slug));
   }
 
   const projectCardsToShow = projects.map((project, idx) => {
@@ -91,6 +95,7 @@ function ProjectIndexGrid(props) {
         isOpen={deleteModalIsOpen}
         targetProject={targetProject} 
         onClose={() => setDeleteModalIsOpen(false)}
+        deleteSuccessful={deleteSuccessful}
         />
     </>
 

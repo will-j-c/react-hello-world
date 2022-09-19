@@ -27,8 +27,8 @@ export default function DeleteModal(props) {
     try {
       await axiosPrivate.delete(`/projects/${projectSlug}`)
       setMessage('Project successfully deleted');
-
-      setTimeout(onClose, 1000);
+      setTimeout(onClose, 500);
+      props.deleteSuccessful(projectSlug);
     } catch (err) {
       setMessage(err?.response?.data?.error);
     }
