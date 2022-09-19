@@ -47,6 +47,8 @@ function ProfileMyProjectsPanel(props) {
         logo: project.logo_url,
         categories: project.categories || baseProjectLogo,
         slug: project.slug,
+        projectOwner: profileOwnerName,
+        state: project.state,
       };
       return (
         <Grid key={idx} item xs={12} sm={6} md={4}>

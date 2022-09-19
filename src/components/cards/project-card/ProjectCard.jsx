@@ -73,10 +73,10 @@ function ProjectCard(props) {
           component="img"
           height={150}
           image={projectImg}
-          alt="green iguana"
+          alt={title}
         />
-        { state && (
-          <Box sx={{bgcolor: 'rgba(0, 0, 0, 0.7)', padding: '0.5em'}}>
+        { state !== 'published' && (
+          <Box sx={{bgcolor: 'var(--color2)', padding: '0.5em'}}>
             <Typography variant='body2' color='var(--disable-color)' fontStyle='italic'>
               {state}
             </Typography>
@@ -127,11 +127,18 @@ function ProjectCard(props) {
           )
         }
         { username === projectOwner &&
-          <Button
-            category={"action"}
-            title={"Edit"}
-            variant={"contained"}
-          />
+          (<>
+            <Button
+              category={"action"}
+              title={"Delete"}
+              variant={"outlined"}
+            />
+            <Button
+              category={"action"}
+              title={"Edit"}
+              variant={"contained"}
+            />
+          </>) 
         }
       </CardActions>
       
