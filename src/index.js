@@ -69,6 +69,7 @@ root.render(
                 <Route path="contributors" element={<ContributorIndexGrid />} />
                 <Route path="projects" >
                   <Route path=":slug" element={<ProjectShowGrid />}/>
+                  <Route path=":slug/edit" element={<MultiForm />}/>
                   <Route path="create" element={<MultiForm />}/>
                   <Route index element={<ProjectIndexPage />} />
                 </Route>
