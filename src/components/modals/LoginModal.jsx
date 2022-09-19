@@ -6,8 +6,6 @@ import Grid from "@mui/material/Grid";
 import { useState, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
  
 import './Modal.scss';
 
@@ -16,9 +14,7 @@ import Button from '../buttons/Button';
 import axios from '../../api/axios';
 
 export default function LoginModal(props) {
-  // const [open, setOpen] = useState(false);
   const [ errorMessage, setErrorMessage ] = useState('');
-  // const [ errorIsHidden, setErrorIsHidden] = useState(true);
   const { setAuth } = useContext(AuthContext);
   const formObj = {
     usernameRef: useRef(),
@@ -53,7 +49,6 @@ export default function LoginModal(props) {
 
     } catch (err) {
       setErrorMessage(err?.response?.data?.error);
-      console.log(err);
       return
     }
   }
@@ -153,7 +148,6 @@ export default function LoginModal(props) {
               Sign up
             </Link>
           </Typography>
-          
         </Box>
         
       </div>
