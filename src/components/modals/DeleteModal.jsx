@@ -26,7 +26,6 @@ export default function DeleteModal(props) {
   const deleteConfirm = async() => {
     try {
       await axiosPrivate.delete(`/projects/${projectSlug}`)
-      setMessage('Project successfully deleted');
       setTimeout(onClose, 500);
       props.deleteSuccessful(projectSlug);
     } catch (err) {
@@ -45,7 +44,7 @@ export default function DeleteModal(props) {
           </Typography>
 
           <Typography variant={'body2'} className={'modal-text'}>
-            Are you sure to delete project <span className='highlight-text'>${projectTitle}</span>?
+            Are you sure you would like to delete project <span className='highlight-text'>{projectTitle}</span>? This cannot be undone.
           </Typography>
 
           <Typography variant={'caption'} className={'modal-error'}>
