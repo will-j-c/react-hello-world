@@ -159,7 +159,22 @@ export default function ContributorCard(props) {
               onClick={handleAction}
             />
           )}
- 
+          { auth.username === projectOwner && (
+            <>
+              <Button
+              category='action'
+              title='Delete'
+              variant='outlined'
+              onClick={handleAction}
+            />
+              <Button
+                category='action'
+                title='Edit'
+                variant='contained'
+                route={`/contributors/${_id}/edit`}
+              />
+            </>
+          )}
         </Box>
       </CardActions>
       
