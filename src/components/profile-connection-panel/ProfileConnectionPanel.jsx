@@ -13,7 +13,7 @@ function ProfileConnectionPanel(props) {
   useEffect(() => {
     setTabValue("1");
     return setPanel(<ProfileConnectionFollowingPanel />);
-  }, [params]);
+  }, [params.username]);
 
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue);
