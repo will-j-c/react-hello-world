@@ -10,6 +10,7 @@ import axiosMain from "axios";
 function MultiForm() {
   const location = useLocation();
   const navigate = useNavigate();
+  console.log(location.state)
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const [previewLogo, setPreviewLogo] = useState(null);
@@ -19,7 +20,9 @@ function MultiForm() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
-  const [form, setForm] = useState({
+  const [isEdit, setIsEdit] = useState(location.state?.isEdit);
+  const [editProjectSlug, setEditProjectSlug] = useState(location.state?.project?.slug);
+  const createNewForm = {
     step: location.search ? parseInt(location.search.slice(-1)) : 1,
     username: auth.username,
     title: "",
@@ -29,7 +32,19 @@ function MultiForm() {
     state: "",
     description: "",
     image_urls: [],
-  });
+  };
+  const editForm = {
+    step: location.search ? parseInt(location.search.slice(-1)) : 1,
+    username: auth.username,
+    title: location.state?.project?.title,
+    tagline: location.state?.project?.tagline,
+    categories: location.state?.project?.categories,
+    logo_url: location.state?.project?.logo_url,
+    state: location.state?.project?.state,
+    description: location.state?.project?.description,
+    image_urls: location.state?.project?.image_urls,
+  }
+  const [form, setForm] = useState(isEdit ? editForm : createNewForm);
   const {
     step,
     username,
@@ -62,7 +77,11 @@ function MultiForm() {
   // Set the step to 1 if coming in via /projects/create
   useEffect(() => {
     if (!location.search) {
-      navigate(`/projects/create?step=${step}`);
+      if (isEdit) {
+        navigate(`/projects/${editProjectSlug}/edit?step=${step}`);
+      } else {
+        navigate(`/projects/create?step=${step}`);
+      } 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -71,13 +90,22 @@ function MultiForm() {
   const nextStep = () => {
     const { step } = form;
     setForm((prevState) => ({ ...prevState, step: step + 1 }));
-    navigate(`/projects/create?step=${step + 1}`);
+    if (isEdit) {
+      navigate(`/projects/${editProjectSlug}/edit?step=${step + 1}`);
+    } else {
+      console.log("create forward")
+      navigate(`/projects/create?step=${step + 1}`);
+    } 
   };
   // Go back to previous step
   const prevStep = () => {
     const { step } = form;
     setForm((prevState) => ({ ...prevState, step: step - 1 }));
-    navigate(`/projects/create?step=${step - 1}`);
+    if (isEdit) {
+      navigate(`/projects/${location.state.project.slug}/edit?step=${step - 1}`);
+    } else {
+      navigate(`/projects/create?step=${step - 1}`);
+    } 
   };
   // Handle field change
   const handleChange = (input) => (event) => {
