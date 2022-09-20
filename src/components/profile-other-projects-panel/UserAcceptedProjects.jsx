@@ -5,17 +5,10 @@ import Grid from "@mui/material/Unstable_Grid2";
 
 import ProjectCard from "../cards/project-card/ProjectCard";
 import axios from "../../api/axios";
-import AuthContext from "../../context/AuthProvider";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 function UserAcceptedProjects() {
   const params = useParams();
   const username = params.username;
-  const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
-
-  const axiosPrivate = useAxiosPrivate();
-
   const [UserAcceptedProjects, setUserAcceptedProjects] = useState([]);
 
   useEffect(() => {
