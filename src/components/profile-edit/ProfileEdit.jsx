@@ -1,42 +1,38 @@
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 
 import Button from "../buttons/Button";
 import styles from "./MultiForm.module.scss";
 import AvatarComponent from "../avatar/Avatar";
-// import { getValidSkills } from "./ValidSkills";
 
 import axios, { axiosPrivate } from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
-function ProfileEdit(props) {
+function ProfileEdit() {
   const params = useParams();
   const username = params.username;
 
-  const location = useLocation();
   const navigate = useNavigate();
 
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
-  const isAuth = profileOwnerName === username;
+  const authUsername = auth.username;
+  const isAuth = authUsername === username;
 
   const [skills, setSkills] = useState([]);
   const [previewLogo, setPreviewLogo] = useState(null);
   const [previewProjectImages, setPreviewProjectImages] = useState([]);
-  const [checkedSkills, setCheckedSkills] = useState([]);
-  const [checkedState, setCheckedState] = useState({});
+  const [message, setMessage] = useState("");
 
-  const [form, setForm] = useState({
+  const [userData, setUserData] = useState({});
+
+  const [formData, setFormData] = useState({
     name: "",
     tagline: "",
     interest: [],
@@ -47,71 +43,78 @@ function ProfileEdit(props) {
     facebook: "",
     profile_pic_url: "",
   });
+  const formObj = {
+    name: useRef(),
+    tagline: useRef(),
+    interest: useRef(),
+    skills: useRef(),
+    linkedin: useRef(),
+    github: useRef(),
+    twitter: useRef(),
+    facebook: useRef(),
+    profile_pic_url: useRef(),
+  };
+
   useEffect(() => {
-    async function getSkill() {
+    async function getData() {
       try {
         const validSkillList = await axios.get(`/data/skills`);
-        const data = validSkillList.data;
-        setSkills(data);
+        const userResponse = await axios.get(`/users/${username}`);
+        setSkills(validSkillList.data);
+        setUserData(userResponse.data);
+        setFormData(userResponse.data);
+        // console.log("formData is: ", formData);
+        // console.log("formData name is: ", formData.name);
+        console.log("userData name is: ", userData);
       } catch (error) {}
     }
-    getSkill();
-  }, []);
+    getData();
+  }, [params]);
 
-  //TODO: chnge input value box wider
-  const {
-    // values, //TODO: check defaut logo value
-    // handleChange,
-    nextStep,
-    // handleFileInput,
-    // previewLogo,
-    // checkBoxTrack,
-    // checkedState,
-  } = props;
-  // console.log(previewLogo);
-  const handleContinueClick = (event) => {
+  const handleFileInput = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+    console.log(formData);
+  };
+  const handleInputChange = (event) => {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+    console.log(formData);
+  };
+
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    nextStep();
-  };
-  const checkBoxTrack = (checkedBoxes) => {
-    setCheckedState((prevState) => ({
-      ...prevState,
-      ...checkedBoxes,
-    }));
-  };
+    // const title = formObj.titleRef.current.value;
+    // const city = formObj.cityRef?.current?.value || '';
+    // const description = formObj.descriptionRef.current.value;
+    // const remuneration = formObj.remunerationRef?.current?.value || '';
+    // const is_remote = isRemote;
+    // const commitment_level = commitment;
+    // const available_slots = availability;
+    // const skills = selectedSkills;
 
-  const onCheck = (event) => {
-    checkBoxTrack({ [event.target.value]: event.target.checked });
-  };
-
-  const handleFileInput = (event) => {};
-  const handleChange = (input) => (event) => {
-    if (input === "skills") {
-      // console.log("event.target.value :", event.target.value);
-      if (event.target.checked) {
-        setCheckedSkills((prevState) => [...prevState, event.target.value]);
-        setForm((prevState) => ({
-          ...prevState,
-          [input]: checkedSkills, //BUG: can not get the latest clicke into
-        }));
-        // console.log("checkedSkills :", checkedSkills);
-      } else {
-        // console.log("checkedSkills :", checkedSkills);
-        setCheckedSkills(
-          checkedSkills.filter((value) => {
-            return value !== event.target.value;
-          })
-        );
-        setForm((prevState) => ({
-          ...prevState,
-          [input]: checkedSkills,
-        }));
-      }
-    } else {
-      setForm((prevState) => ({
-        ...prevState,
-        [input]: event.target.value,
-      }));
+    try {
+      // const response = await axiosPrivate.post(
+      //     `/projects/${params.slug}/contributors`,
+      //     {
+      //       title,
+      //       is_remote,
+      //       commitment_level,
+      //       available_slots,
+      //       remuneration,
+      //       description,
+      //       city,
+      //       skills
+      //     }
+      //   )
+      //   setMessage(`Contributor successfully created. You will be redirected shortly...`);
+      //   setTimeout(navigate, 1500, `/contributors/${response.data._id}`);
+    } catch (error) {
+      // setMessage(error.response.data.error);
     }
   };
 
@@ -147,6 +150,7 @@ function ProfileEdit(props) {
           />
         </Box>
       </Grid>
+
       <Grid md={8} item>
         <Box
           sx={{
@@ -159,112 +163,118 @@ function ProfileEdit(props) {
           className={styles["form"]}
           marginTop={5}
         >
-          <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
-            {skills.map((skill) => {
-              return (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value={skill}
-                      onChange={handleChange("skills")}
-                      onClick={onCheck}
-                      checked={checkedState[skill] || false}
-                    />
-                  }
-                  key={skill}
-                  label={skill}
-                />
-              );
-            })}
-          </FormGroup>
-          {/* <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
-            Name
-          </Typography>
-          <TextField
-            required
-            hiddenLabel
-            fullWidth
-            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
-            onChange={handleChange("title")}
-            variant="filled"
-            size="small"
-            type="text"
-            sx={{ marginBottom: 2 }}
-            className={styles["input-text"]}
-            placeholder="Filling your display name on your profile"
-            // autoFocus="true"
-          />
-          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
-            Headline
-          </Typography>
-          <TextField
-            required
-            hiddenLabel
-            fullWidth
-            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
-            onChange={handleChange("tagline")}
-            type="text"
-            variant="filled"
-            size="small"
-            sx={{ marginBottom: 2 }}
-            className={styles["input-text"]}
-            placeholder="A Short tagline describing yourself"
-          />
-          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
-            About
-          </Typography>
-          <TextField
-            required
-            hiddenLabel
-            fullWidth
-            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
-            onChange={handleChange("tagline")}
-            type="text"
-            variant="filled"
-            size="small"
-            sx={{ marginBottom: 2 }}
-            className={styles["input-text"]}
-            placeholder="A Short tagline describing yourself"
-            multiline="true"
-          />
-          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
-            Interests
-          </Typography>
-          <TextField
-            required
-            hiddenLabel
-            fullWidth
-            // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
-            onChange={handleChange("tagline")}
-            type="text"
-            variant="filled"
-            size="small"
-            sx={{ marginBottom: 2 }}
-            className={styles["input-text"]}
-            placeholder="Add filling your interest"
-          />
-          <Box
-            display="flex"
-            height={0.3}
-            marginBottom={10}
-            marginTop={1}
-            alignSelf="flex-start"
-          >
-            haha hhooa Interest sadada
-          </Box>
-          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
-            Skills
-          </Typography> */}
-
-          <Box textAlign={"center"} alignSelf={"flex-end"}>
-            <Button
-              variant="outlined"
-              title="Submit →"
-              category="action"
-              isFullWidth={true}
-              onClick={handleContinueClick}
+          <form>
+            <Typography
+              variant="subtitle1"
+              alignSelf={"flex-start"}
+              gutterBottom
+            >
+              Name
+            </Typography>
+            <TextField
+              required
+              hiddenLabel
+              // fullWidth
+              defaultValue={formData.name} //TODO: UPDATE THIS ONE LATER
+              onChange={handleInputChange}
+              variant="filled"
+              size="small"
+              type="text"
+              sx={{ marginBottom: 2 }}
+              className={styles["input-text"]}
+              placeholder="Filling your display name on your profile"
+              autoFocus
             />
-          </Box>
+            <Typography
+              variant="subtitle1"
+              alignSelf={"flex-start"}
+              gutterBottom
+            >
+              Headline
+            </Typography>
+            <TextField
+              required
+              hiddenLabel
+              fullWidth
+              // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
+              // onChange={handleChange("tagline")}
+              type="text"
+              variant="filled"
+              size="small"
+              sx={{ marginBottom: 2 }}
+              className={styles["input-text"]}
+              placeholder="A Short tagline describing yourself"
+            />
+            <Typography
+              variant="subtitle1"
+              alignSelf={"flex-start"}
+              gutterBottom
+            >
+              About
+            </Typography>
+            <TextField
+              required
+              hiddenLabel
+              fullWidth
+              // defaultValue="hehe" //TODO: UPDATE THIS ONE LATER
+              // onChange={handleChange("tagline")}
+              type="text"
+              variant="filled"
+              size="small"
+              sx={{ marginBottom: 2 }}
+              className={styles["input-text"]}
+              placeholder="A Short tagline describing yourself"
+              multiline
+            />
+            <Typography
+              variant="subtitle1"
+              alignSelf={"flex-start"}
+              gutterBottom
+            >
+              Interests
+            </Typography>
+            <TextField
+              required
+              hiddenLabel
+              fullWidth
+              // defaultValue="hehe"
+              // onChange={handleChange("tagline")}
+              type="text"
+              variant="filled"
+              size="small"
+              sx={{ marginBottom: 2 }}
+              className={styles["input-text"]}
+              placeholder="Add filling your interest"
+            />
+            <Box
+              display="flex"
+              height={0.3}
+              marginBottom={10}
+              marginTop={1}
+              alignSelf="flex-start"
+            >
+              haha hhooa Interest sadada
+            </Box>
+            {/* <Typography
+              variant="subtitle1"
+              alignSelf={"flex-start"}
+              gutterBottom
+            >
+              Skills
+            </Typography> */}
+
+            {/* SUBMIT BUTTON  */}
+            <Box textAlign={"center"} alignSelf={"flex-end"}>
+              {/* <Button variant="outlined" category="action" title="Cancel" /> */}
+              <Button
+                variant="outlined"
+                title="Submit →"
+                category="action"
+                isFullWidth={true}
+                onClick={handleFormSubmit}
+              />
+            </Box>
+          </form>
         </Box>
       </Grid>
     </Grid>
