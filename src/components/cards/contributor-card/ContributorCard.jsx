@@ -17,6 +17,7 @@ export default function ContributorCard(props) {
   const { _id, title, project_id, skills } = props.contributor;
   const { logo_url, slug } = project_id;
   const projectTitle = project_id.title;
+  const projectOwner = project_id.user_id.username;
   const projectUrl = `/projects/${slug}`;
   const { auth } = useContext(AuthContext);
   const [ buttonTitle, setButtonTitle ] = useState('Following');
@@ -148,14 +149,17 @@ export default function ContributorCard(props) {
             variant={"outlined"}
             route={`/contributors/${_id}`}
           />
-          <Button
-            category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
-            title={buttonTitle}
-            variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
-            onMouseOver={handleMouseOver}
-            onMouseLeave={handleMouseLeave}
-            onClick={handleAction}
-          />
+          { auth.username !== projectOwner && (
+            <Button
+              category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
+              title={buttonTitle}
+              variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
+              onMouseOver={handleMouseOver}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleAction}
+            />
+          )}
+ 
         </Box>
       </CardActions>
       
