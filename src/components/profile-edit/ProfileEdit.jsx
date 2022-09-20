@@ -1,11 +1,10 @@
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect, useRef } from "react";
 
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -40,6 +39,7 @@ function ProfileEdit() {
   const [previewProjectImages, setPreviewProjectImages] = useState([]);
   const [message, setMessage] = useState("");
   const [userData, setUserData] = useState({});
+  const [profile, setProfile] = useState(null);
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -95,13 +95,25 @@ function ProfileEdit() {
     async function getData() {
       try {
         const validSkillList = await axios.get(`/data/skills`);
-        const userResponse = await axios.get(`/users/${username}`);
+        const userResponse = await axios.get(`/users/${authUsername}`);
         setSkills(validSkillList.data);
         setUserData(userResponse.data);
         // console.log("userData is: ", userData);
       } catch (error) {}
     }
     getData();
+  }, [params]);
+
+  useEffect(() => {
+    axios
+      .get(`/users/${authUsername}`)
+      .then((response) => {
+        setProfile(response.data);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        // toast(err.response.data.message);
+      });
   }, [params]);
 
   const handleFileInput = (event) => {};
@@ -136,7 +148,6 @@ function ProfileEdit() {
         skills,
       });
       console.log("success");
-      // navigate(`users/${authUsername}`);
       setMessage(
         `Your profile successfully updated. You will be redirected shortly...`
       );
@@ -147,7 +158,7 @@ function ProfileEdit() {
   };
 
   return (
-    <Box>
+    <Box paddingBottom={5}>
       <Box sx={{ textAlign: "center" }}>
         <Typography
           variant="h4"
@@ -229,7 +240,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                defaultValue={userData.name}
+                // defaultValue={profile.name}
                 onChange={handleInputChange}
                 variant="filled"
                 size="small"
@@ -253,7 +264,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                defaultValue={userData.tagline}
+                // defaultValue={profile.tagline}
                 onChange={handleInputChange}
                 type="text"
                 variant="filled"
@@ -274,7 +285,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                defaultValue={userData.about}
+                // defaultValue={profile.about}
                 onChange={handleInputChange}
                 type="text"
                 variant="filled"
@@ -296,7 +307,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                defaultValue={userData.interest}
+                // defaultValue={profile.interest}
                 onChange={handleInputChange}
                 type="text"
                 variant="filled"
@@ -306,15 +317,6 @@ function ProfileEdit() {
                 placeholder="Add filling your interest"
                 inputRef={formObj.interestRef}
               />
-              <Box
-                display="flex"
-                height={0.3}
-                marginBottom={10}
-                marginTop={1}
-                alignSelf="flex-start"
-              >
-                haha hhooa Interest sadada
-              </Box>
               <FormControl>
                 <InputLabel id="skills-multiple-chip-label">
                   Select skills
