@@ -1,51 +1,68 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import UserCard from "../cards/user-card/UserCard";
 import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import LoginModal from "../modals/LoginModal";
 
-function ProfileConnectionFollowerPanel(props) {
+function ProfileConnectionFollowerPanel() {
   const params = useParams();
   const username = params.username;
   const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
-
-  const navigate = useNavigate();
-  const axiosPrivate = useAxiosPrivate();
+  const authUserName = auth?.username;
 
   const [userFollowers, setUserFollowers] = useState([]);
+  const [authUserFollowings, setAuthUserFollowings] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`/users/${username}/followers`)
-      .then((response) => {
-        setUserFollowers(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
-  }, []);
+    async function getData() {
+      try {
+        if (authUserName) {
+          const authUserFollowingResponse = await axios.get(
+            `/users/${authUserName}/following`
+          );
+          setAuthUserFollowings(
+            authUserFollowingResponse.data.map(
+              (relation) => relation.followee.username
+            )
+          );
+        }
+        const userFollewersResponse = await axios.get(
+          `/users/${username}/followers`
+        );
+        setUserFollowers(
+          userFollewersResponse.data.map((relation) => relation.follower)
+        );
+      } catch (error) {}
+    }
+    getData();
+  }, [params]);
+
   let userFollowersCards = [];
   if (userFollowers.length) {
     userFollowersCards = userFollowers.map((user, idx) => {
       return (
         <Grid key={idx} xs={6} md={4} item>
-          <UserCard user={user.follower} />
+          <UserCard
+            user={user}
+            followed={authUserFollowings.includes(user.username)}
+            triggerLogin={() => setModalIsOpen(true)}
+          />
         </Grid>
       );
     });
   }
   return (
-    <Grid container spacing={2} marginTop={4}>
-      {userFollowersCards}
-    </Grid>
+    <>
+      <Grid container spacing={2} marginTop={4}>
+        {userFollowersCards}
+      </Grid>
+      <LoginModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} />
+    </>
   );
 }
 

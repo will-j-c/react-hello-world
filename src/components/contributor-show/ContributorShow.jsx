@@ -168,16 +168,19 @@ export default function ContributorShow() {
           </Box>
           <Box className='contributor-actions'>
             {auth?.username === project?.user_id.username && (
-              <EditIcon 
-                sx={{
-                  marginY: 1,
-                  color: "var(--disable-color)",
-                  "&:hover": {
-                    color: "var(--color3a)",
-                  },
-                }}
-                fontSize={"large"}
-              />
+              <Link to={`/contributors/${id}/edit`}>
+                <EditIcon 
+                  sx={{
+                    marginY: 1,
+                    color: "var(--disable-color)",
+                    "&:hover": {
+                      color: "var(--color3a)",
+                    },
+                  }}
+                  fontSize={"large"}
+                  route={`/contributors/${id}/edit`}
+                />
+              </Link>
             )}
 
             {auth?.username !== project?.user_id.username && (

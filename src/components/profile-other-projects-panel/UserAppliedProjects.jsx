@@ -1,19 +1,14 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 import Grid from "@mui/material/Unstable_Grid2";
 
 import ProjectCard from "../cards/project-card/ProjectCard";
-import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 function UserAppliedProjects() {
   const params = useParams();
   const username = params.username;
-  const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
-
-  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
   const [UserAppliedProjects, setUserAppliedProjects] = useState([]);
