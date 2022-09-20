@@ -14,14 +14,14 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
 import { useState, useContext, useRef, useEffect  } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Button from "../buttons/Button";
 import axios from '../../api/axios';
 import AuthContext from "../../context/AuthProvider";
+import LoginModal from "../modals/LoginModal";
 
 import './ContributorForm.scss'
-import { getNativeSelectUtilityClasses } from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -58,9 +58,9 @@ export default function ContributorForm() {
   const [ commitment, setCommitment ] = useState('low');
   const [ isPaid, setIsPaid ] = useState(false);
   const [ availability, setAvailability ] = useState(1);
+  const [ modalIsOpen, setModalIsOpen ] = useState(false);
   const params = useParams();
   const theme = useTheme();
-  const navigate = useNavigate();
 
   const formObj = {
     titleRef: useRef(),
@@ -108,6 +108,11 @@ export default function ContributorForm() {
 
     getData();
   }, [])
+
+  const displayModal = () => {
+    console.log(`trigger display`);
+    setModalIsOpen(true)
+  }
   
   if (!username) {
     return (
@@ -120,6 +125,7 @@ export default function ContributorForm() {
             title='Log in'
             variant='contained'
             category='action'
+            onClick={displayModal}
           />
           <Button 
             title='Back to home'
@@ -128,7 +134,10 @@ export default function ContributorForm() {
             route='/'
           />
         </Box>
-        
+        <LoginModal 
+          isOpen={modalIsOpen} 
+          onClose={() => setModalIsOpen(false)}
+        />
       </Box>
       
     )
@@ -305,7 +314,6 @@ export default function ContributorForm() {
 
         </form>
       </Box>
-      
     </Box>
   )
 }
