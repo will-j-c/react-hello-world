@@ -55,6 +55,8 @@ function ProfilePage(props) {
       return setPanel(<ProfileAboutPanel profile={profile} />);
     }
   }, [profile]);
+  // const { facebook, github, twitter, linkedin } = profile?.socmed;
+  // console.log(profile.socmed);
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
   const handleTabChange = (event, newTabValue) => {
@@ -103,30 +105,41 @@ function ProfilePage(props) {
               {profile.tagline || "Hello world, this is my empty tagline"}
             </Typography>
             <Box>
-              <Link to="/">
-                <GitHubIcon
-                  sx={{ marginY: 1, color: "var(--color4)" }}
-                  fontSize={"large"}
-                />
-              </Link>
-              <Link to="/">
-                <LinkedInIcon
-                  sx={{ marginY: 1, color: "var(--color4)" }}
-                  fontSize={"large"}
-                />
-              </Link>
-              <Link to="/">
-                <TwitterIcon
-                  sx={{ marginY: 1, color: "var(--color4)" }}
-                  fontSize={"large"}
-                />
-              </Link>
-              <Link to="/">
-                <FacebookIcon
-                  sx={{ marginY: 1, color: "var(--color4)" }}
-                  fontSize={"large"}
-                />
-              </Link>
+              {/* BUG: can not go to this link  */}
+              {profile?.socmed?.github && (
+                <Link href={profile?.socmed?.github}>
+                  <GitHubIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
+              {profile?.socmed?.linkedin && (
+                <Link href={profile?.socmed?.linkedin}>
+                  <LinkedInIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
+
+              {profile?.socmed?.twitter && (
+                <Link href={profile?.socmed?.twitter}>
+                  <TwitterIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
+
+              {profile?.socmed?.facebook && (
+                <Link href={profile?.socmed?.facebook}>
+                  <FacebookIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
             </Box>
           </Box>
           <Box

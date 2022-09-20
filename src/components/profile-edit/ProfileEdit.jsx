@@ -24,7 +24,7 @@ import AvatarComponent from "../avatar/Avatar";
 import axios, { axiosPrivate } from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { CurrencyBitcoin } from "@mui/icons-material";
+import LoginCheck from "../login-check/LoginCheck";
 
 function ProfileEdit() {
   const theme = useTheme();
@@ -135,32 +135,20 @@ function ProfileEdit() {
     getData();
   }, []);
   const handleFileInput = (event) => {};
-  const handleInputChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-  };
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
-    // const linkedin = formObj.linkedinRef.current.value;
-    // const github = formObj.githubRef.current.value;
-    // const twitter = formObj.twitterRef.current.value;
-    // const facebook = formObj.facebookRef.current.value;
-
     const skills = selectedSkills;
-
     try {
       const response = await axiosPrivate.put(`/users/${params.username}`, {
         name,
         tagline,
         interests,
         about,
-        // linkedin,
-        // github,
-        // twitter,
-        // facebook,
+        linkedin,
+        github,
+        twitter,
+        facebook,
         skills,
       });
       console.log("success");
@@ -172,6 +160,9 @@ function ProfileEdit() {
       setMessage(error.response.data.error);
     }
   };
+  if (!isAuth) {
+    return <LoginCheck />;
+  }
 
   return (
     <Box paddingBottom={5}>
