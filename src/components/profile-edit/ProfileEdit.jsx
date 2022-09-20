@@ -320,10 +320,14 @@ function ProfileEdit() {
                 className={styles["input-text"]}
                 placeholder="Add filling your interest"
               />
-              <FormControl>
-                <InputLabel id="skills-multiple-chip-label">
+              <FormControl fullWidth={true}>
+                <Typography
+                  variant="subtitle1"
+                  alignSelf={"flex-start"}
+                  gutterBottom
+                >
                   Select skills
-                </InputLabel>
+                </Typography>
                 <Select
                   labelId="skills-multiple-chip-label"
                   id="skills-multiple-chip"
@@ -357,6 +361,7 @@ function ProfileEdit() {
                 variant="subtitle1"
                 alignSelf={"flex-start"}
                 gutterBottom
+                marginTop={3}
               >
                 Your Social Media Links
               </Typography>
