@@ -115,11 +115,7 @@ export default function ContributorShow() {
     setTabValue(newTabValue);
     return newTabValue === "1"
       ? setPanel(<ContributorAboutPanel contributor={contributor} />)
-      : setPanel(
-        <ContributorApplicantsPanel
-          relations={relations}
-        />
-      );
+      : setPanel(<ContributorApplicantsPanel relations={relations}/>);
   }
 
   const handleMouseOver = function() {

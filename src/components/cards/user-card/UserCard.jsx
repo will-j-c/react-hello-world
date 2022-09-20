@@ -18,6 +18,7 @@ export default function UserCard(props) {
   const [ buttonTitle, setButtonTitle ] = useState('Following');
   const [ followStatus, setFollowStatus ] = useState(props.followed);
   const { auth } = useContext(AuthContext);
+  const { isContributorPage } = props;
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -108,14 +109,26 @@ export default function UserCard(props) {
             variant={"outlined"}
             route={`/users/${username}`}
           />
-          <Button
+          { !isContributorPage && (
+            <Button
+              category={'action'}
+              title={followStatus ? `${buttonTitle}` : 'Follow'}
+              variant={followStatus ? 'outlined' : 'contained'}
+              onMouseOver={handleMouseOver}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleFollowAction}
+            />
+          )}
+          { isContributorPage && (
+            <Button
             category={'action'}
-            title={followStatus ? `${buttonTitle}` : 'Follow'}
-            variant={followStatus ? 'outlined' : 'contained'}
+            title={'Accept'}
+            variant={'contained'}
             onMouseOver={handleMouseOver}
             onMouseLeave={handleMouseLeave}
             onClick={handleFollowAction}
-          />
+            />
+          )}
         </Box>
       </CardActions>
       
