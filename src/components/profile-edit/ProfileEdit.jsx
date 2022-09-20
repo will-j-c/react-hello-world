@@ -39,7 +39,7 @@ function ProfileEdit() {
   const isAuth = authUsername === username;
 
   const [currentUserData, setCurrentUserData] = useState(null);
-  const [previewLogo, setPreviewLogo] = useState(null);
+  const [previewAvatar, setPreviewAvatar] = useState(null);
   const [previewProjectImages, setPreviewProjectImages] = useState([]);
   const [message, setMessage] = useState("");
   const [skills, setSkills] = useState([]);
@@ -205,7 +205,7 @@ function ProfileEdit() {
           <Grid md={4} item>
             <Box display="flex" flexDirection={"column"} alignItems={"center"}>
               <AvatarComponent
-                imgUrl={previewLogo}
+                imgUrl={previewAvatar}
                 sx={{
                   width: 128,
                   height: 128,
@@ -218,7 +218,7 @@ function ProfileEdit() {
                 title="Upload"
                 category="action"
                 upload={true}
-                // defaultValue={values.logo_url}
+                // defaultValue={values.Avatar_url}
                 onChange={handleFileInput}
               />
             </Box>
