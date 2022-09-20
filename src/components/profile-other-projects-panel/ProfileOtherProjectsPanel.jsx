@@ -16,7 +16,7 @@ function ProfileOtherProjectsPanel() {
   const username = params.username;
 
   const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
+  const authUserName = auth.username;
 
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
@@ -43,7 +43,7 @@ function ProfileOtherProjectsPanel() {
   };
 
   return (
-    profileOwnerName === username && (
+    authUserName === username && (
       <Box marginY={4}>
         <ShowTabsOtherProjects
           tabValue={tabValue}
