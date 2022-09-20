@@ -33,13 +33,21 @@ function ProfileEdit() {
   const authUsername = auth.username;
   const isAuth = authUsername === username;
 
-  const [skills, setSkills] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [currentUserData, setCurrentUserData] = useState(null);
   const [previewLogo, setPreviewLogo] = useState(null);
   const [previewProjectImages, setPreviewProjectImages] = useState([]);
   const [message, setMessage] = useState("");
-  const [userData, setUserData] = useState({});
-  const [profile, setProfile] = useState(null);
+  const [skills, setSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [name, setName] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [about, setAbout] = useState("");
+  const [interests, setInterests] = useState([]);
+  const [linkedin, setlinkedin] = useState("");
+  const [github, setGithub] = useState("");
+  const [twitter, setTwitter] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [formData, setFormData] = useState({});
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -70,25 +78,29 @@ function ProfileEdit() {
     setSelectedSkills(typeof value === "string" ? value.split(",") : value);
   };
 
-  const [formData, setFormData] = useState({
-    name: "",
-    tagline: "",
-    interest: [],
-    skills: [],
-    linkedin: "",
-    github: "",
-    twitter: "",
-    facebook: "",
-    profile_pic_url: "",
-  });
-  const formObj = {
-    nameRef: useRef(),
-    taglineRef: useRef(),
-    interestRef: useRef(),
-    linkedinRef: useRef(),
-    githubRef: useRef(),
-    twitterRef: useRef(),
-    facebookRef: useRef(),
+  const interestsChange = (event) => {
+    setInterests(event.target.value.split(","));
+  };
+  const nameChange = (event) => {
+    setName(event.target.value);
+  };
+  const taglineChange = (event) => {
+    setTagline(event.target.value);
+  };
+  const aboutChange = (event) => {
+    setAbout(event.target.value);
+  };
+  const linkedinChange = (event) => {
+    setlinkedin(event.target.value);
+  };
+  const githubChange = (event) => {
+    setGithub(event.target.value);
+  };
+  const twitterChange = (event) => {
+    setTwitter(event.target.value);
+  };
+  const facebookChange = (event) => {
+    setFacebook(event.target.value);
   };
 
   useEffect(() => {
@@ -96,25 +108,40 @@ function ProfileEdit() {
       try {
         const validSkillList = await axios.get(`/data/skills`);
         const userResponse = await axios.get(`/users/${authUsername}`);
+
         setSkills(validSkillList.data);
-        setUserData(userResponse.data);
-        // console.log("userData is: ", userData);
+        setCurrentUserData(userResponse.data);
       } catch (error) {}
     }
     getData();
   }, [params]);
 
   useEffect(() => {
-    axios
-      .get(`/users/${authUsername}`)
-      .then((response) => {
-        setProfile(response.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
-      });
-  }, [params]);
+    async function getData() {
+      try {
+        const skillsData = await axios.get("/data/skills");
+        let userData = null;
+
+        const response = await axios.get(`/users/${authUsername}`);
+        userData = response.data;
+
+        setName(userData.name);
+        setTagline(userData.tagline);
+        setAbout(userData.about);
+        setlinkedin(userData.linkedin);
+        setGithub(userData.github);
+        setTwitter(userData.twitter);
+        setFacebook(userData.facebook);
+        setInterests(userData.interests);
+        setSelectedSkills(userData.skills);
+
+        setCurrentUserData(userData);
+        setSkills(skillsData.data);
+      } catch (err) {}
+    }
+
+    getData();
+  }, []);
 
   const handleFileInput = (event) => {};
   const handleInputChange = (event) => {
@@ -123,12 +150,9 @@ function ProfileEdit() {
       [event.target.name]: event.target.value,
     });
   };
-  // console.log("formObj.taglineRef is: ", formObj.interestRef);
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const name = formObj.nameRef.current.value;
-    const tagline = formObj.taglineRef.current.value;
-    const interest = formObj.interestRef.current.value;
+
     // const linkedin = formObj.linkedinRef.current.value;
     // const github = formObj.githubRef.current.value;
     // const twitter = formObj.twitterRef.current.value;
@@ -140,7 +164,8 @@ function ProfileEdit() {
       const response = await axiosPrivate.put(`/users/${params.username}`, {
         name,
         tagline,
-        interest,
+        interests,
+        about,
         // linkedin,
         // github,
         // twitter,
@@ -240,17 +265,16 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                // defaultValue={profile.name}
-                onChange={handleInputChange}
+                value={name}
+                onChange={nameChange}
                 variant="filled"
                 size="small"
                 type="text"
                 sx={{ marginBottom: 2 }}
-                className={styles["input-text"]}
-                // className="input-text"
+                // className={styles["input-text"]}
+                className="input-text"
                 placeholder="Filling your display name on your profile"
                 autoFocus
-                inputRef={formObj.nameRef}
               />
 
               <Typography
@@ -264,15 +288,14 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                // defaultValue={profile.tagline}
-                onChange={handleInputChange}
+                value={tagline}
+                onChange={taglineChange}
                 type="text"
                 variant="filled"
                 size="small"
                 sx={{ marginBottom: 2 }}
                 className={styles["input-text"]}
                 placeholder="A Short tagline describing yourself"
-                inputRef={formObj.taglineRef}
               />
               <Typography
                 variant="subtitle1"
@@ -285,16 +308,16 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                // defaultValue={profile.about}
-                onChange={handleInputChange}
+                value={about}
+                onChange={aboutChange}
                 type="text"
                 variant="filled"
                 size="small"
                 sx={{ marginBottom: 2 }}
                 className={styles["input-text"]}
                 placeholder="A Short tagline describing yourself"
-                multiline
-                inputRef={formObj.aboutRef}
+                inputProps={{ style: { color: "var(--disable-color)" } }}
+                multiline={true}
               />
               <Typography
                 variant="subtitle1"
@@ -307,15 +330,14 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                // defaultValue={profile.interest}
-                onChange={handleInputChange}
+                value={interests}
+                onChange={interestsChange}
                 type="text"
                 variant="filled"
                 size="small"
                 sx={{ marginBottom: 2 }}
                 className={styles["input-text"]}
                 placeholder="Add filling your interest"
-                inputRef={formObj.interestRef}
               />
               <FormControl>
                 <InputLabel id="skills-multiple-chip-label">
