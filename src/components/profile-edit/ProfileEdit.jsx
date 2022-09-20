@@ -12,8 +12,9 @@ import Checkbox from "@mui/material/Checkbox";
 import Button from "../buttons/Button";
 import styles from "./MultiForm.module.scss";
 import AvatarComponent from "../avatar/Avatar";
-import { categories } from "./categories";
+// import { getValidSkills } from "./ValidSkills";
 
+import axios, { axiosPrivate } from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
@@ -29,10 +30,34 @@ function ProfileEdit(props) {
   const profileOwnerName = auth.username;
   const isAuth = profileOwnerName === username;
 
+  const [skills, setSkills] = useState([]);
   const [previewLogo, setPreviewLogo] = useState(null);
   const [previewProjectImages, setPreviewProjectImages] = useState([]);
-  const [checkedCategories, setCheckedCategories] = useState([]);
+  const [checkedSkills, setCheckedSkills] = useState([]);
   const [checkedState, setCheckedState] = useState({});
+
+  const [form, setForm] = useState({
+    name: "",
+    tagline: "",
+    interest: [],
+    skills: [],
+    linkedin: "",
+    github: "",
+    twitter: "",
+    facebook: "",
+    profile_pic_url: "",
+  });
+  useEffect(() => {
+    async function getSkill() {
+      try {
+        const validSkillList = await axios.get(`/data/skills`);
+        const data = validSkillList.data;
+        setSkills(data);
+      } catch (error) {}
+    }
+    getSkill();
+  }, []);
+
   //TODO: chnge input value box wider
   const {
     // values, //TODO: check defaut logo value
@@ -40,7 +65,7 @@ function ProfileEdit(props) {
     nextStep,
     // handleFileInput,
     // previewLogo,
-    checkBoxTrack,
+    // checkBoxTrack,
     // checkedState,
   } = props;
   // console.log(previewLogo);
@@ -48,34 +73,47 @@ function ProfileEdit(props) {
     event.preventDefault();
     nextStep();
   };
+  const checkBoxTrack = (checkedBoxes) => {
+    setCheckedState((prevState) => ({
+      ...prevState,
+      ...checkedBoxes,
+    }));
+  };
 
   const onCheck = (event) => {
     checkBoxTrack({ [event.target.value]: event.target.checked });
   };
 
   const handleFileInput = (event) => {};
-  const handleChange = (input) => (event) => {};
-  // const values = {
-  //   username,
-  //   title,
-  //   tagline,
-  //   categories,
-  //   logo_url,
-  //   state,
-  //   description,
-  //   image_urls,
-  // };
-  // const {
-  //   step,
-  //   username,
-  //   title,
-  //   tagline,
-  //   categories,
-  //   logo_url,
-  //   state,
-  //   description,
-  //   image_urls,
-  // } = form;
+  const handleChange = (input) => (event) => {
+    if (input === "skills") {
+      // console.log("event.target.value :", event.target.value);
+      if (event.target.checked) {
+        setCheckedSkills((prevState) => [...prevState, event.target.value]);
+        setForm((prevState) => ({
+          ...prevState,
+          [input]: checkedSkills, //BUG: can not get the latest clicke into
+        }));
+        // console.log("checkedSkills :", checkedSkills);
+      } else {
+        // console.log("checkedSkills :", checkedSkills);
+        setCheckedSkills(
+          checkedSkills.filter((value) => {
+            return value !== event.target.value;
+          })
+        );
+        setForm((prevState) => ({
+          ...prevState,
+          [input]: checkedSkills,
+        }));
+      }
+    } else {
+      setForm((prevState) => ({
+        ...prevState,
+        [input]: event.target.value,
+      }));
+    }
+  };
 
   return (
     <Grid
@@ -121,7 +159,25 @@ function ProfileEdit(props) {
           className={styles["form"]}
           marginTop={5}
         >
-          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
+          <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
+            {skills.map((skill) => {
+              return (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value={skill}
+                      onChange={handleChange("skills")}
+                      onClick={onCheck}
+                      checked={checkedState[skill] || false}
+                    />
+                  }
+                  key={skill}
+                  label={skill}
+                />
+              );
+            })}
+          </FormGroup>
+          {/* <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
             Name
           </Typography>
           <TextField
@@ -136,7 +192,7 @@ function ProfileEdit(props) {
             sx={{ marginBottom: 2 }}
             className={styles["input-text"]}
             placeholder="Filling your display name on your profile"
-            autoFocus="true"
+            // autoFocus="true"
           />
           <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
             Headline
@@ -196,29 +252,14 @@ function ProfileEdit(props) {
           >
             haha hhooa Interest sadada
           </Box>
+          <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
+            Skills
+          </Typography> */}
 
-          <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
-            {categories.map((category) => {
-              return (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      value={category}
-                      onChange={handleChange("categories")}
-                      onClick={onCheck}
-                      checked={checkedState[category] || false}
-                    />
-                  }
-                  key={category}
-                  label={category}
-                />
-              );
-            })}
-          </FormGroup>
           <Box textAlign={"center"} alignSelf={"flex-end"}>
             <Button
               variant="outlined"
-              title="Next"
+              title="Submit →"
               category="action"
               isFullWidth={true}
               onClick={handleContinueClick}
