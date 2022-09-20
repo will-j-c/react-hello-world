@@ -5,8 +5,6 @@ import '../ContributorShow.scss';
 
 export default function ContributorAboutPanel(props) {
   const { contributor, noOfAcceptance } = props;
-  console.log(`available slots: ${contributor.available_slots}`);
-  console.log(`acceptance: ${noOfAcceptance}`);
 
   const availability = Math.max(contributor.available_slots - noOfAcceptance, 0);
 

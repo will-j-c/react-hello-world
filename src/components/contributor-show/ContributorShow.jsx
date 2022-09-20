@@ -64,7 +64,6 @@ export default function ContributorShow() {
       }
 
       const acceptances = relationsData.filter(r => r.state === 'accepted');
-      console.log(`acceptances length: ${JSON.stringify(acceptances.length)}`);
 
       setNoOfAcceptance(acceptances.length);
       setContributor(contributorData.data.contributor);
@@ -183,7 +182,7 @@ export default function ContributorShow() {
               </Link>
             )}
 
-            {auth?.username !== project?.user_id.username && (
+            {(auth?.username !== project?.user_id.username && (status === 'rejected' || status === 'accepted')) && (
               <Button
                 category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
                 title={buttonTitle}
@@ -191,6 +190,33 @@ export default function ContributorShow() {
                 onMouseOver={handleMouseOver}
                 onMouseLeave={handleMouseLeave}
                 onClick={handleAction}
+              />
+            )}
+
+            {(auth?.username !== project?.user_id.username 
+              && status !== 'rejected' 
+              && status !== 'accepted' 
+              && noOfAcceptance < contributor.available_slots) 
+              && (
+              <Button
+                category={'action'}
+                title={buttonTitle}
+                variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
+                onMouseOver={handleMouseOver}
+                onMouseLeave={handleMouseLeave}
+                onClick={handleAction}
+              />
+            )}
+
+            {(auth?.username !== project?.user_id.username 
+              && status !== 'rejected' 
+              && status !== 'accepted' 
+              && noOfAcceptance >= contributor.available_slots) 
+              && (
+              <Button
+                category={'status'}
+                title={'All available slots filled'}
+                variant={'outlined'}
               />
             )}
           </Box>
@@ -225,7 +251,7 @@ export default function ContributorShow() {
             
             {auth?.username !== project?.user_id.username && (
               <Box className='contributor-content'>
-                <ContributorAboutPanel contributor={contributor} />
+                <ContributorAboutPanel contributor={contributor} noOfAcceptance={noOfAcceptance}/>
               </Box>
               
             )}
