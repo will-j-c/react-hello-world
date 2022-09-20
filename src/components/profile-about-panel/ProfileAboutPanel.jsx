@@ -107,7 +107,7 @@ function ProfileAboutPanel(props) {
           logo: project.logo_url,
           categories: project.categories || baseProjectLogo,
           slug: project.slug,
-          projectOwner: profileOwnerName,
+          projectOwner: username,
           state: project.state,
         };
         return (
