@@ -6,19 +6,11 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import axios from "../../api/axios";
-import AuthContext from "../../context/AuthProvider";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-
 import ProjectCard from "../cards/project-card/ProjectCard";
 
 function ProfileAboutPanel(props) {
   const params = useParams();
   const username = params.username;
-  const navigate = useNavigate();
-  const axiosPrivate = useAxiosPrivate();
-  const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
-
   const [projectsPublic, setProjectsPublic] = useState([]);
   const [projectsAccepted, setProjectsAccepted] = useState([]);
 
