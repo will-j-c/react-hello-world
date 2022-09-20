@@ -79,6 +79,7 @@ root.render(
                 </Route>
                 <Route path="contributors">
                   <Route path=":id" element={<ContributorShow />} />
+                  <Route path=":id/edit" element={<ContributorForm />} />
                 </Route>
                 <Route path="" element={<HomeGrid />} />
                 <Route

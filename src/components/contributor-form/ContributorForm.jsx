@@ -13,7 +13,7 @@ import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
-import { useState, useContext, useRef, useEffect  } from 'react';
+import { useState, useContext, useEffect  } from 'react';
 import { useParams, useNavigate  } from 'react-router-dom';
 
 import Button from "../buttons/Button";
@@ -48,29 +48,28 @@ function getStyles(selection, selectionsList, theme) {
   };
 }
 
-export default function ContributorForm() {
+export default function ContributorForm(props) {
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
   
+  const [ currentContributorData, setCurrentContributorData ] = useState([]);
+  const [ title, setTitle ] = useState('');
+  const [ description, setDescription ] = useState('');
   const [ skills, setSkills ] = useState([]);
   const [ projectTitle, setProjectTitle ] = useState('');
   const [ isRemote, setIsRemote ] = useState(true);
+  const [ city, setCity ] = useState('');
   const [ selectedSkills, setSelectedSkills ] = useState([]);
-  const [ commitment, setCommitment ] = useState('low');
+  const [ commitment, setCommitment ] = useState('Low');
   const [ isPaid, setIsPaid ] = useState(false);
+  const [ remuneration, setRemuneration ] = useState('');
   const [ availability, setAvailability ] = useState(1);
   const [message, setMessage] = useState('');
   const params = useParams();
+
   const theme = useTheme();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
-
-  const formObj = {
-    titleRef: useRef(),
-    cityRef: useRef(),
-    descriptionRef: useRef(),
-    remunerationRef: useRef(),
-  }
 
   const skillsSelectChange = (event) => {
     const {
@@ -91,6 +90,9 @@ export default function ContributorForm() {
   }
 
   const payChange = (event) => {
+    if (!event.target.checked) {
+      setRemuneration('');
+    };
     setIsPaid(event.target.checked);
   }
 
@@ -98,33 +100,51 @@ export default function ContributorForm() {
     setAvailability(event.target.value);
   }
 
+  const titleChange = (event) => {
+    setTitle(event.target.value);
+  }
+
+  const descriptionChange = (event) => {
+    setDescription(event.target.value);
+  }
+
+  const cityChange = (event) => {
+    setCity(event.target.value);
+  }
+
+  const remunerationChange = (event) => {
+    setRemuneration(event.target.value);
+  }
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const title = formObj.titleRef.current.value;
-    const city = formObj.cityRef?.current?.value || '';
-    const description = formObj.descriptionRef.current.value;
-    const remuneration = formObj.remunerationRef?.current?.value || '';
     const is_remote = isRemote;
     const commitment_level = commitment;
     const available_slots = availability;
     const skills = selectedSkills;
+
+    const formData = {
+      title,
+      is_remote,
+      commitment_level,
+      available_slots,
+      remuneration,
+      description,
+      city,
+      skills,
+    }
     
     try {
-      const response = await axiosPrivate.post(
-          `/projects/${params.slug}/contributors`,
-          {
-            title,
-            is_remote,
-            commitment_level,
-            available_slots,
-            remuneration,
-            description,
-            city,
-            skills
-          }
-        )
+      if (currentContributorData) {
+        await axiosPrivate.put(`contributors/${params.id}`, formData);
+        setMessage(`Contributor successfully saved. You will be redirected shortly...`);
+        setTimeout(navigate, 1500, `/contributors/${params.id}`);
+      } else {
+        const response = await axiosPrivate.post(`/projects/${params.slug}/contributors`, formData)
         setMessage(`Contributor successfully created. You will be redirected shortly...`);
         setTimeout(navigate, 1500, `/contributors/${response.data._id}`);
+      }
+
     } catch (error) {
       setMessage(error.response.data.error);
     }
@@ -134,9 +154,32 @@ export default function ContributorForm() {
     async function getData() {
       try {
         const skillsData = await axios.get('/data/skills');
-        const projectData = await axios.get(`/projects/${params.slug}`);
+        let contributorData = null;
+        let projectTitleData = null;
+
+        if (params.id) {
+          const response = await axios.get(`/contributors/${params.id}`);
+          contributorData = response.data.contributor;
+          projectTitleData = contributorData.project_id.title;
+
+          setTitle(contributorData.title);
+          setDescription(contributorData.description);
+          setCity(contributorData.city);
+          setIsRemote(contributorData.is_remote);
+          setSelectedSkills(contributorData.skills);
+          setCommitment(contributorData.commitment_level);
+          setIsPaid(!!contributorData.remuneration);
+          setRemuneration(contributorData.remuneration);
+          setAvailability(contributorData.available_slots);
+
+        } else {
+          const response = await axios.get(`/projects/${params.slug}`);
+          projectTitleData = response.data.project.title
+        }
+
+        setCurrentContributorData(contributorData);
         setSkills(skillsData.data);
-        setProjectTitle(projectData.data.project.title);
+        setProjectTitle(projectTitleData);
       } catch (err) {}
     }
 
@@ -151,7 +194,8 @@ export default function ContributorForm() {
     <Box className='contributor-form-container'>
       <Box sx={{textAlign: 'center'}}>
         <Typography variant='h4' component='h1' className='contributor-form-title'>
-          Create a new contributor position
+          { !currentContributorData && 'Create a new contributor position'}
+          { currentContributorData && `Edit ${currentContributorData.title}`}
         </Typography>
         <Typography variant='body1' component='h2' className='contributor-form-subtitle'>
           for project&nbsp;
@@ -175,14 +219,15 @@ export default function ContributorForm() {
             required
             hiddenLabel
             fullWidth
-            defaultValue='Ex. Front-end Developer'
+            value={title}
+            placeholder='Ex. Front-end Developer'
             variant='filled'
             size='small'
             sx={{ marginBottom: 2 }}
             className='input-text'
-            inputRef={formObj.titleRef}
+            onChange={titleChange}
           />
-
+          
           <Typography variant="subtitle1" gutterBottom className='contributor-form-section-title'>
             Short description
           </Typography>
@@ -190,12 +235,13 @@ export default function ContributorForm() {
             required
             hiddenLabel
             fullWidth
-            defaultValue='Ex. Leading front-end development effort'
+            value={description}
+            placeholder='Ex. Leading front-end development effort'
             variant='filled'
             size='medium'
             sx={{ marginBottom: 2 }}
             className='input-text'
-            inputRef={formObj.descriptionRef}
+            onChange={descriptionChange}
           />
 
           <FormControl>
@@ -244,12 +290,13 @@ export default function ContributorForm() {
                 required
                 hiddenLabel
                 fullWidth
-                defaultValue='Ex. Singapore'
+                placeholder='Ex. Singapore'
+                value={city}
                 variant='filled'
                 size='small'
                 sx={{ marginBottom: 2 }}
                 className='input-text'
-                inputRef={formObj.cityRef}
+                onChange={cityChange}
               />
             )}
           </Box>
@@ -259,7 +306,7 @@ export default function ContributorForm() {
           </Typography>
           <RadioGroup
             aria-labelledby="demo-radio-buttons-group-label"
-            defaultValue="low"
+            defaultValue={'low'}
             name="radio-buttons-group"
             value={commitment}
             onChange={commitmentCheckChange}
@@ -291,7 +338,8 @@ export default function ContributorForm() {
                 size='small'
                 sx={{ marginBottom: 2 }}
                 className='input-text'
-                inputRef={formObj.remunerationRef}
+                value={remuneration}
+                onChange={remunerationChange}
               />
             )}
           </Box>
@@ -318,12 +366,23 @@ export default function ContributorForm() {
               category='action'
               title='Cancel'
             />
-            <Button 
-              variant='contained'
-              category='action'
-              title='Create'
-              onClick={handleFormSubmit}
-            />
+            { !currentContributorData && (
+              <Button 
+                variant='contained'
+                category='action'
+                title='Create'
+                onClick={handleFormSubmit}
+              />
+            )}
+            { currentContributorData && (
+              <Button 
+                variant='contained'
+                category='action'
+                title='Save'
+                onClick={handleFormSubmit}
+              />
+            )}
+            
           </Box>
 
         </form>
