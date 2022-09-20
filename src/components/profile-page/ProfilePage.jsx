@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 
 import Box from "@mui/material/Box";
@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 import AvatarComponent from "../avatar/Avatar";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook";
 import Container from "@mui/material/Container";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -50,6 +52,8 @@ function ProfilePage() {
       return setPanel(<ProfileAboutPanel profile={profile} />);
     }
   }, [profile]);
+  // const { facebook, github, twitter, linkedin } = profile?.socmed;
+  // console.log(profile.socmed);
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
   const handleTabChange = (event, newTabValue) => {
@@ -92,20 +96,47 @@ function ProfilePage() {
               component="h4"
               sx={{ color: "var(--color3)", textTransform: "capitalize" }}
             >
-              {profile.username}
+              {profile.name}
             </Typography>
             <Typography sx={{ color: "var(--color4)" }}>
               {profile.tagline || "Hello world, this is my empty tagline"}
             </Typography>
             <Box>
-              <GitHubIcon
-                sx={{ marginY: 1, color: "var(--color4)" }}
-                fontSize={"large"}
-              />
-              <LinkedInIcon
-                sx={{ marginY: 1, color: "var(--color4)" }}
-                fontSize={"large"}
-              />
+              {/* BUG: can not go to this link  */}
+              {profile?.socmed?.github && (
+                <Link href={profile?.socmed?.github}>
+                  <GitHubIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
+              {profile?.socmed?.linkedin && (
+                <Link href={profile?.socmed?.linkedin}>
+                  <LinkedInIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
+
+              {profile?.socmed?.twitter && (
+                <Link href={profile?.socmed?.twitter}>
+                  <TwitterIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
+
+              {profile?.socmed?.facebook && (
+                <Link href={profile?.socmed?.facebook}>
+                  <FacebookIcon
+                    sx={{ marginY: 1, color: "var(--color4)" }}
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
             </Box>
           </Box>
           <Box
@@ -116,16 +147,18 @@ function ProfilePage() {
             sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
           >
             {username === authUserName && (
-              <EditIcon
-                sx={{
-                  marginY: 1,
-                  color: "var(--disable-color)",
-                  "&:hover": {
-                    color: "var(--color3a)",
-                  },
-                }}
-                fontSize={"large"}
-              />
+              <Link to={`/users/${authUserName}/edit`}>
+                <EditIcon
+                  sx={{
+                    marginY: 1,
+                    color: "var(--disable-color)",
+                    "&:hover": {
+                      color: "var(--color3a)",
+                    },
+                  }}
+                  fontSize={"large"}
+                />
+              </Link>
             )}
             {username !== authUserName && (
               <Button
