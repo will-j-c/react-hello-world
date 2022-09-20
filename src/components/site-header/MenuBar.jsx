@@ -43,8 +43,8 @@ function MenuBar(props) {
         setSeverity("success");
         setMessage("Successfully deleted account");
         setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          navigate("/logout", { replace: true });
+        }, 1000);
       },
       (error) => {
         setSeverity("error");
