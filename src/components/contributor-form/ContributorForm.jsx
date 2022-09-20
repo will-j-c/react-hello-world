@@ -2,7 +2,6 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useTheme } from '@mui/material/styles';
-import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -14,13 +13,15 @@ import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
-import { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useContext, useRef, useEffect  } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import Button from "../buttons/Button";
 import axios from '../../api/axios';
+import AuthContext from "../../context/AuthProvider";
 
 import './ContributorForm.scss'
+import { getNativeSelectUtilityClasses } from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -47,6 +48,9 @@ function getStyles(selection, selectionsList, theme) {
 }
 
 export default function ContributorForm() {
+  const { auth } = useContext(AuthContext);
+  const username = auth?.username;
+  
   const [ skills, setSkills ] = useState([]);
   const [ projectTitle, setProjectTitle ] = useState('');
   const [ isRemote, setIsRemote ] = useState(true);
@@ -56,6 +60,7 @@ export default function ContributorForm() {
   const [ availability, setAvailability ] = useState(1);
   const params = useParams();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const formObj = {
     titleRef: useRef(),
@@ -103,8 +108,33 @@ export default function ContributorForm() {
 
     getData();
   }, [])
+  
+  if (!username) {
+    return (
+      <Box className='contributor-form-container'>
+        <Typography variant='h4' component='h1' className='contributor-form-title'>
+          Please log in to continue
+        </Typography>
+        <Box sx={{textAlign: 'center', marginTop: '2em'}}>
+          <Button 
+            title='Log in'
+            variant='contained'
+            category='action'
+          />
+          <Button 
+            title='Back to home'
+            variant='outlined'
+            category='action'
+            route='/'
+          />
+        </Box>
+        
+      </Box>
+      
+    )
+  }
 
-  return (
+  return  (
     <Box className='contributor-form-container'>
       <Typography variant='h4' component='h1' className='contributor-form-title'>
         Create a new contributor position
