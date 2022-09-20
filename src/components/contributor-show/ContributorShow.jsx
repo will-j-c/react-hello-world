@@ -163,7 +163,8 @@ export default function ContributorShow() {
           </Box>
           <Box className='contributor-actions'>
             {auth?.username === project?.user_id.username && (
-              <EditIcon 
+              <Link to={`/contributors/${id}/edit`}>
+                <EditIcon 
                 sx={{
                   marginY: 1,
                   color: "var(--disable-color)",
@@ -174,6 +175,7 @@ export default function ContributorShow() {
                 fontSize={"large"}
                 route={`/contributors/${id}/edit`}
               />
+              </Link>
             )}
 
             {auth?.username !== project?.user_id.username && (
