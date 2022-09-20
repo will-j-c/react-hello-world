@@ -52,7 +52,6 @@ function ProfileEdit() {
   const [github, setGithub] = useState("");
   const [twitter, setTwitter] = useState("");
   const [facebook, setFacebook] = useState("");
-  const [formData, setFormData] = useState({});
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -140,7 +139,7 @@ function ProfileEdit() {
     event.preventDefault();
     const skills = selectedSkills;
     try {
-      const response = await axiosPrivate.put(`/users/${params.username}`, {
+      await axiosPrivate.put(`/users/${params.username}`, {
         name,
         tagline,
         interests,
@@ -151,7 +150,6 @@ function ProfileEdit() {
         facebook,
         skills,
       });
-      console.log("success");
       setMessage(
         `Your profile successfully updated. You will be redirected shortly...`
       );
@@ -163,6 +161,7 @@ function ProfileEdit() {
   if (!isAuth) {
     return <LoginCheck />;
   }
+  console.log(currentUserData);
 
   return (
     <Box paddingBottom={5}>
@@ -179,7 +178,9 @@ function ProfileEdit() {
           component="h2"
           className="contributor-form-subtitle"
         >
-          We just need a few details, and you’ll be on your way.
+          {!currentUserData.name &&
+            "We just need a few details, and you’ll be on your way."}
+          {currentUserData.name && ""}
         </Typography>
         {message.length > 0 && (
           <Box sx={{ marginTop: "1em" }}>
