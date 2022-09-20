@@ -45,7 +45,7 @@ function ProfilePage(props) {
         console.log(err.response);
         // toast(err.response.data.message);
       });
-  }, [params]);
+  }, [params.username]);
   // Logic for handling tabs
   useEffect(() => {
     if (profile) {
