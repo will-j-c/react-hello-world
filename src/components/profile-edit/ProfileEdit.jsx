@@ -40,7 +40,7 @@ function ProfileEdit() {
 
   const [currentUserData, setCurrentUserData] = useState(null);
   const [previewAvatar, setPreviewAvatar] = useState(null);
-  const [previewProjectImages, setPreviewProjectImages] = useState([]);
+
   const [message, setMessage] = useState("");
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -106,6 +106,13 @@ function ProfileEdit() {
   const facebookChange = (event) => {
     setFacebook(event.target.value);
   };
+  const [file, setFile] = useState("");
+  const handleFileInput = (evnt) => {
+    console.log("evnt.target.files is:", evnt.target.files[0]);
+    setFile(evnt.target.files[0]);
+    setPreviewAvatar(URL.createObjectURL(evnt.target.files[0]));
+  };
+  // const handleFileInput = (event) => {};
 
   useEffect(() => {
     async function getData() {
@@ -115,7 +122,7 @@ function ProfileEdit() {
 
         const response = await axios.get(`/users/${authUsername}`);
         userData = response.data;
-
+        setPreviewAvatar(userData.profile_pic_url);
         setName(userData.name);
         setTagline(userData.tagline);
         setAbout(userData.about);
@@ -133,23 +140,32 @@ function ProfileEdit() {
 
     getData();
   }, []);
-  const handleFileInput = (event) => {};
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
     const skills = selectedSkills;
     try {
-      await axiosPrivate.put(`/users/${params.username}`, {
-        name,
-        tagline,
-        interests,
-        about,
-        linkedin,
-        github,
-        twitter,
-        facebook,
-        skills,
-      });
+      await axiosPrivate.put(
+        `/users/${params.username}`,
+        {
+          name,
+          tagline,
+          interests,
+          about,
+          linkedin,
+          github,
+          twitter,
+          facebook,
+          skills,
+          avatar: file,
+        },
+        config
+      );
       setMessage(
         `Your profile successfully updated. You will be redirected shortly...`
       );
@@ -212,12 +228,26 @@ function ProfileEdit() {
                   marginBottom: 2,
                 }}
               />
+              <TextField
+                id="outlined-full-width"
+                label="Image Upload"
+                style={{ margin: 8 }}
+                name="avatar"
+                type="file"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+                onChange={handleFileInput}
+              />
               <Button
                 variant="outlined"
                 title="Upload"
                 category="action"
                 upload={true}
-                // defaultValue={values.Avatar_url}
+                defaultValue={previewAvatar}
                 onChange={handleFileInput}
               />
             </Box>
