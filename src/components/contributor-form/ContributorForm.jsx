@@ -14,7 +14,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
 import { useState, useContext, useRef, useEffect  } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate  } from 'react-router-dom';
 
 import Button from "../buttons/Button";
 import axios from '../../api/axios';
@@ -64,6 +64,7 @@ export default function ContributorForm() {
   const params = useParams();
   const theme = useTheme();
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate();
 
   const formObj = {
     titleRef: useRef(),
@@ -124,6 +125,7 @@ export default function ContributorForm() {
           }
         )
         setMessage(`Contributor successfully created. You will be redirected shortly...`);
+        setTimeout(navigate, 1500, `/contributors/${response.data._id}`);
     } catch (error) {
       setMessage(error.response.data.error);
     }
