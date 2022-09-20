@@ -20,6 +20,7 @@ import ProfilePage from "./components/profile-page/ProfilePage";
 import MultiForm from "./components/project-form/MultiForm";
 import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx"
 import Activation from "./components/activation/Activation";
+import ContributorForm from "./components/contributor-form/ContributorForm";
 
 
 const theme = createTheme({
@@ -73,6 +74,7 @@ root.render(
                   <Route path=":slug" element={<ProjectShowGrid />}/>
                   <Route path=":slug/edit" element={<MultiForm />}/>
                   <Route path="create" element={<MultiForm />}/>
+                  <Route path=":slug/contributors/create" element={<ContributorForm/>}/>
                   <Route index element={<ProjectIndexPage />} />
                 </Route>
                 <Route path="contributors">
