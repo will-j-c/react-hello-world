@@ -19,6 +19,8 @@ import ContributorShow from "./components/contributor-show/ContributorShow";
 import ProfilePage from "./components/profile-page/ProfilePage";
 import MultiForm from "./components/project-form/MultiForm";
 import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx"
+import Activation from "./components/activation/Activation";
+import ContributorForm from "./components/contributor-form/ContributorForm";
 
 
 const theme = createTheme({
@@ -66,14 +68,18 @@ root.render(
                 <Route path="logout" element={<LogOut />} />
                 <Route path="users" element={<UserIndexGrid />} />
                 <Route path="users/:username" element={<ProfilePage />} />
+                <Route path="users/activate/:activateToken" element={<Activation />} />
                 <Route path="contributors" element={<ContributorIndexGrid />} />
                 <Route path="projects" >
                   <Route path=":slug" element={<ProjectShowGrid />}/>
+                  <Route path=":slug/edit" element={<MultiForm />}/>
                   <Route path="create" element={<MultiForm />}/>
+                  <Route path=":slug/contributors/create" element={<ContributorForm/>}/>
                   <Route index element={<ProjectIndexPage />} />
                 </Route>
                 <Route path="contributors">
                   <Route path=":id" element={<ContributorShow />} />
+                  <Route path=":id/edit" element={<ContributorForm />} />
                 </Route>
                 <Route path="" element={<HomeGrid />} />
                 <Route

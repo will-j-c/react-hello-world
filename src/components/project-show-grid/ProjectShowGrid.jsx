@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import AuthContext from "../../context/AuthProvider";
 import AvatarComponent from "../avatar/Avatar";
 import ProjectAboutPanel from "../project-about-panel/ProjectAboutPanel";
@@ -13,6 +14,11 @@ import axios from "../../api/axios";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import CommentPanel from "../comments/CommentPanel";
 import styles from "./ProjectShowGrid.module.scss";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import ConfirmModal from "../modals/ConfirmModal";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const baseProjectLogo =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
@@ -28,6 +34,10 @@ function ProjectShowGrid(props) {
   const [creator, setCreator] = useState(null);
   const [comments, setComments] = useState(null);
   const [commentCount, setCommentCount] = useState(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState(null);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     axios.get(`/projects/${slug}`).then(
@@ -95,32 +105,96 @@ function ProjectShowGrid(props) {
   const [page, setPage] = useState(1);
   const handlePageChange = (error, value) => {
     setPage(value);
-    
+
     axios.get(`/comments/${slug}?page=${page}`).then(
       (response) => {
         setComments(response.data.commentsToSend);
       },
-      (error) => {}
+      (error) => {
+        setSeverity("error");
+        setMessage("Failed to get comments");
+      }
     );
   };
   useEffect(() => {
     navigate(`/projects/${slug}?page=${page}`);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
+  // Logic for modal
+  const handleDeleteClick = () => {
+    setModalIsOpen(true);
+  };
+  const handleConfirm = () => {
+    setModalIsOpen(false);
+    axiosPrivate.delete(`projects/${project.slug}`).then(
+      (response) => {
+        setOpen(true);
+        setSeverity("success");
+        setMessage("Successfully deleted project");
+        setTimeout(() => {
+          navigate("/projects");
+        }, 2000);
+      },
+      (error) => {
+        setSeverity("error");
+        setMessage("Failed to delete project");
+      }
+    );
+  };
+  const handleClose = () => {
+    setModalIsOpen(false);
+  };
   return project ? (
     <>
       <Box display={"flex"} marginTop={4}>
-        <AvatarComponent
-          imgAlt={project.title}
-          imgUrl={project.logo_url || baseProjectLogo}
-          sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
-        />
+        <Box>
+          <AvatarComponent
+            imgAlt={project.title}
+            imgUrl={project.logo_url || baseProjectLogo}
+            sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
+          />
+          {creator.username === auth.username ? (
+            <Box display={"flex"} justifyContent={"center"} marginTop={2}>
+              <Link to={`/projects/${project.slug}/edit`} state={{ project, isEdit: true }}>
+                <ModeEditOutlineOutlinedIcon
+                  htmlColor={"var(--color3)"}
+                  fontSize={"large"}
+                  sx={{
+                    "&:hover": {
+                      cursor: "pointer",
+                    },
+                  }}
+                />
+              </Link>
+              <DeleteForeverOutlinedIcon
+                onClick={handleDeleteClick}
+                htmlColor={"var(--color3)"}
+                fontSize={"large"}
+                sx={{
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                }}
+              />
+            </Box>
+          ) : (
+            ""
+          )}
+        </Box>
         <Box
           display={"flex"}
           flexDirection={"column"}
           justifyContent={"center"}
           marginLeft={5}
+          flexWrap={"wrap"}
         >
+          {project.state === "draft" || "archived" ? (
+            <Typography sx={{ color: "var(--color7)" }} variant={"h6"}>
+              {project.state.toUpperCase()}
+            </Typography>
+          ) : (
+            ""
+          )}
           <Typography sx={{ color: "var(--color3)" }} variant={"h4"}>
             {project.title}
           </Typography>
@@ -159,7 +233,7 @@ function ProjectShowGrid(props) {
             {project ? panel : ""}
           </Box>
         </Grid>
-        <Grid md={4} sx={{ height: "100%" }} paddingTop={0} item>
+        <Grid md={4} sx={{ height: "100%", width: "100%" }} paddingTop={0} item>
           <CommentPanel comments={comments} postComment={postComment} />
           <Pagination
             count={
@@ -173,6 +247,24 @@ function ProjectShowGrid(props) {
           />
         </Grid>
       </Grid>
+      <ConfirmModal
+        isOpen={modalIsOpen}
+        onConfirm={handleConfirm}
+        onClose={handleClose}
+      />
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={(event, reason) => {
+          if (reason === "timeout") {
+            setOpen(false);
+          }
+        }}
+      >
+        <Alert variant="filled" severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </>
   ) : (
     ""

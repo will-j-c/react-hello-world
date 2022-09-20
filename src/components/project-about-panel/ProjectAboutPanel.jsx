@@ -1,19 +1,23 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import "./ProjectAboutPanel.css";
-import Button from "../buttons/Button"
+import Button from "../buttons/Button";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
 function ProjectAboutPanel(props) {
   if (props.project) {
     const { description, image_urls, categories } = props.project;
     const images = image_urls.length ? (
-      image_urls.map((image, idx, array) => {
-        return (
-          <Box width={1 / 4} height={1 / 4} key={idx} marginRight={2}>
-            <img src={image} alt="Project snaps" className="project-img-show" />
-          </Box>
-        );
-      })
+      <ImageList
+        cols={image_urls.length < 3 ? image_urls.length : 3}
+      >
+        {image_urls.map((item, idx) => (
+          <ImageListItem key={idx} sx={{ marginTop: 2 }}>
+            <img src={item} alt={item} loading="lazy" />
+          </ImageListItem>
+        ))}
+      </ImageList>
     ) : (
       <Typography sx={{ color: "var(--color3)" }} variant={"body2"} marginY={2}>
         Nothing here yet!
@@ -68,7 +72,7 @@ function ProjectAboutPanel(props) {
         >
           Images:
         </Typography>
-        <Box display="flex">{images}</Box>
+        <Box display="flex" justifyContent={"center"}>{images}</Box>
       </Box>
     );
   }
