@@ -9,10 +9,32 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import AvatarComponent from "../avatar/Avatar";
 import Button from "../buttons/Button"
 
+import { useParams } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from "../../context/AuthProvider";
+
 function ProjectContributorsPanel(props) {
   const contributors = props.contributors;
+  const params = useParams();
+  const { auth } = useContext(AuthContext);
   return (
     <Box>
+      { auth.username === props.creator.username && (
+        <Box
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          marginY={3}
+        >
+          <Button
+            category={"action"}
+            title={"Add new contributor"}
+            variant={"outlined"}
+            route={`/projects/${params.slug}/contributors/create`}
+          />
+        </Box>
+      )}
+      
       <TableContainer>
         <Table aria-label="simple table">
           <TableHead>
