@@ -10,22 +10,52 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import Avatar from "@mui/material/Avatar";
 
+import ConfirmModal from "../modals/ConfirmModal";
+import AuthContext from "../../context/AuthProvider";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+
 function DrawerComponent(props) {
-  const {
-    projects,
-    community,
-    contributors,
-    login,
-    signup,
-    profile,
-    logout,
-    deleteAccount,
-  } = props.pageLinks;
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useContext(AuthContext);
+
+  const { projects, community, contributors, login, signup, profile, logout } =
+    props.pageLinks;
   const pages = props.isAuth
-    ? [projects, community, contributors, logout, deleteAccount]
+    ? [projects, community, contributors, logout]
     : [login, signup, projects, community, contributors];
 
   const [open, setOpen] = useState(false);
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [severity, setSeverity] = useState("success");
+  const [message, setMessage] = useState(null);
+  const handleDeleteClick = () => {
+    setOpen(false);
+    setModalIsOpen(true);
+  };
+  const handleConfirm = () => {
+    setModalIsOpen(false);
+    axiosPrivate.delete(`/users/${auth?.username}`).then(
+      (response) => {
+        setSnackOpen(true);
+        setSeverity("success");
+        setMessage("Successfully deleted account");
+        setTimeout(() => {
+          navigate("/logout", { replace: true });
+        }, 1000);
+      },
+      (error) => {
+        setSeverity("error");
+        setMessage("Failed to delete account");
+      }
+    );
+  };
+  const handleClose = () => {
+    setModalIsOpen(false);
+  };
   return (
     <>
       <Drawer
@@ -66,6 +96,13 @@ function DrawerComponent(props) {
               </ListItemIcon>
             </ListItemButton>
           ))}
+          <ListItemButton divider onClick={handleDeleteClick}>
+            <ListItemIcon>
+              <ListItemText sx={{ color: "white" }}>
+                Delete Account
+              </ListItemText>
+            </ListItemIcon>
+          </ListItemButton>
         </List>
       </Drawer>
       <IconButton
@@ -74,6 +111,24 @@ function DrawerComponent(props) {
       >
         <MenuOutlinedIcon />
       </IconButton>
+      <ConfirmModal
+        isOpen={modalIsOpen}
+        onConfirm={handleConfirm}
+        onClose={handleClose}
+      />
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={(event, reason) => {
+          if (reason === "timeout") {
+            setSnackOpen(false);
+          }
+        }}
+      >
+        <Alert severity={severity}>
+          This is an error alert — check it out!
+        </Alert>
+      </Snackbar>
     </>
   );
 }

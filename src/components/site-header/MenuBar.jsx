@@ -29,6 +29,7 @@ function MenuBar(props) {
     setAnchorElUser(null);
   };
   const [open, setOpen] = useState(false);
+
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
   const handleDeleteClick = () => {
