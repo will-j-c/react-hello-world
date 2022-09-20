@@ -11,6 +11,10 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import FacebookIcon from "@mui/icons-material/Facebook";
 import { useTheme } from "@mui/material/styles";
 
 import Button from "../buttons/Button";
@@ -20,6 +24,7 @@ import AvatarComponent from "../avatar/Avatar";
 import axios, { axiosPrivate } from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { CurrencyBitcoin } from "@mui/icons-material";
 
 function ProfileEdit() {
   const theme = useTheme();
@@ -43,7 +48,7 @@ function ProfileEdit() {
   const [tagline, setTagline] = useState("");
   const [about, setAbout] = useState("");
   const [interests, setInterests] = useState([]);
-  const [linkedin, setlinkedin] = useState("");
+  const [linkedin, setLinkedin] = useState("");
   const [github, setGithub] = useState("");
   const [twitter, setTwitter] = useState("");
   const [facebook, setFacebook] = useState("");
@@ -91,7 +96,7 @@ function ProfileEdit() {
     setAbout(event.target.value);
   };
   const linkedinChange = (event) => {
-    setlinkedin(event.target.value);
+    setLinkedin(event.target.value);
   };
   const githubChange = (event) => {
     setGithub(event.target.value);
@@ -106,19 +111,6 @@ function ProfileEdit() {
   useEffect(() => {
     async function getData() {
       try {
-        const validSkillList = await axios.get(`/data/skills`);
-        const userResponse = await axios.get(`/users/${authUsername}`);
-
-        setSkills(validSkillList.data);
-        setCurrentUserData(userResponse.data);
-      } catch (error) {}
-    }
-    getData();
-  }, [params]);
-
-  useEffect(() => {
-    async function getData() {
-      try {
         const skillsData = await axios.get("/data/skills");
         let userData = null;
 
@@ -128,10 +120,10 @@ function ProfileEdit() {
         setName(userData.name);
         setTagline(userData.tagline);
         setAbout(userData.about);
-        setlinkedin(userData.linkedin);
-        setGithub(userData.github);
-        setTwitter(userData.twitter);
-        setFacebook(userData.facebook);
+        setLinkedin(userData.socmed.linkedin);
+        setGithub(userData.socmed.github);
+        setTwitter(userData.socmed.twitter);
+        setFacebook(userData.socmed.facebook);
         setInterests(userData.interests);
         setSelectedSkills(userData.skills);
 
@@ -142,7 +134,6 @@ function ProfileEdit() {
 
     getData();
   }, []);
-
   const handleFileInput = (event) => {};
   const handleInputChange = (event) => {
     setFormData({
@@ -372,6 +363,113 @@ function ProfileEdit() {
                   ))}
                 </Select>
               </FormControl>
+              <Typography
+                variant="subtitle1"
+                alignSelf={"flex-start"}
+                gutterBottom
+              >
+                Your Social Media Links
+              </Typography>
+              <TextField
+                required
+                hiddenLabel
+                fullWidth
+                value={linkedin || ""}
+                onChange={linkedinChange}
+                type="text"
+                variant="filled"
+                size="small"
+                sx={{ marginBottom: 2 }}
+                className={styles["input-text"]}
+                placeholder="Your LinkedIn link"
+                InputProps={{
+                  startAdornment: (
+                    <LinkedInIcon
+                      sx={{
+                        marginY: 1,
+                        color: "var(--color4)",
+                        marginRight: 1,
+                      }}
+                      fontSize={"small"}
+                    />
+                  ),
+                }}
+              />
+              <TextField
+                required
+                hiddenLabel
+                fullWidth
+                value={github || ""}
+                onChange={githubChange}
+                type="text"
+                variant="filled"
+                size="small"
+                sx={{ marginBottom: 2 }}
+                className={styles["input-text"]}
+                placeholder="Your Github link"
+                InputProps={{
+                  startAdornment: (
+                    <GitHubIcon
+                      sx={{
+                        marginY: 1,
+                        color: "var(--color4)",
+                        marginRight: 1,
+                      }}
+                      fontSize={"small"}
+                    />
+                  ),
+                }}
+              />
+              <TextField
+                required
+                hiddenLabel
+                fullWidth
+                value={facebook || ""}
+                onChange={facebookChange}
+                type="text"
+                variant="filled"
+                size="small"
+                sx={{ marginBottom: 2 }}
+                className={styles["input-text"]}
+                placeholder="Your Facebook link"
+                InputProps={{
+                  startAdornment: (
+                    <FacebookIcon
+                      sx={{
+                        marginY: 1,
+                        color: "var(--color4)",
+                        marginRight: 1,
+                      }}
+                      fontSize={"small"}
+                    />
+                  ),
+                }}
+              />
+              <TextField
+                required
+                hiddenLabel
+                fullWidth
+                value={twitter || ""}
+                onChange={twitterChange}
+                type="text"
+                variant="filled"
+                size="small"
+                sx={{ marginBottom: 2 }}
+                className={styles["input-text"]}
+                placeholder="Your Twitter link"
+                InputProps={{
+                  startAdornment: (
+                    <TwitterIcon
+                      sx={{
+                        marginY: 1,
+                        color: "var(--color4)",
+                        marginRight: 1,
+                      }}
+                      fontSize={"small"}
+                    />
+                  ),
+                }}
+              />
 
               {/* SUBMIT BUTTON  */}
               <Box textAlign={"center"} alignSelf={"flex-end"}>
