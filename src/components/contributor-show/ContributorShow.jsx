@@ -27,6 +27,7 @@ export default function ContributorShow() {
   const [ modalIsOpen, setModalIsOpen ] = useState(false);
   const [ tabValue, setTabValue ] = useState("1");
   const [ panel, setPanel ] = useState(null);
+  const [ noOfAcceptance, setNoOfAcceptance ] = useState(0);
 
   const { auth } = useContext(AuthContext);
   const username = auth.username;
@@ -62,10 +63,14 @@ export default function ContributorShow() {
         setStatus(relation[0].state);
       }
 
+      const acceptances = relationsData.filter(r => r.state === 'accepted');
+      console.log(`acceptances length: ${JSON.stringify(acceptances.length)}`);
+
+      setNoOfAcceptance(acceptances.length);
       setContributor(contributorData.data.contributor);
       setRelations(contributorData.data.relations);
       setProject(contributorData.data.contributor.project_id);
-      setPanel(<ContributorAboutPanel contributor={contributorData.data.contributor} />);
+      setPanel(<ContributorAboutPanel contributor={contributorData.data.contributor} noOfAcceptance={acceptances.length}/>);
     }
 
     getData()
@@ -114,8 +119,10 @@ export default function ContributorShow() {
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue);
     return newTabValue === "1"
-      ? setPanel(<ContributorAboutPanel contributor={contributor} />)
-      : setPanel(<ContributorApplicantsPanel relations={relations}/>);
+      ? setPanel(<ContributorAboutPanel contributor={contributor} noOfAcceptance={noOfAcceptance}/>)
+      : setPanel(
+        <ContributorApplicantsPanel relations={relations} noOfAcceptance={noOfAcceptance} updateAcceptance={updateAcceptance}/>
+      );
   }
 
   const handleMouseOver = function() {
@@ -130,6 +137,9 @@ export default function ContributorShow() {
     }
   }
 
+  const updateAcceptance = function(number) {
+    setNoOfAcceptance(number);
+  }
 
   return contributor ? (
     <>

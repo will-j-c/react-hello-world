@@ -4,7 +4,11 @@ import Box from "@mui/material/Box";
 import '../ContributorShow.scss';
 
 export default function ContributorAboutPanel(props) {
-  const contributor = props.contributor;
+  const { contributor, noOfAcceptance } = props;
+  console.log(`available slots: ${contributor.available_slots}`);
+  console.log(`acceptance: ${noOfAcceptance}`);
+
+  const availability = Math.max(contributor.available_slots - noOfAcceptance, 0);
 
   const skillsDisplay = contributor?.skills?.length ? (
     contributor?.skills.map((skill, idx) => {
@@ -69,7 +73,11 @@ export default function ContributorAboutPanel(props) {
           Number of positions available:
         </Typography>
         <Typography variant='subtitle1' className='contributor-section-text'>
-          {contributor?.available_slots || 'not applicable'}
+          {contributor?.available_slots && (
+            <>
+              {availability} ({noOfAcceptance} out of {contributor.available_slots} filled)
+            </>
+          )}
         </Typography>
       </Box>
     </>
