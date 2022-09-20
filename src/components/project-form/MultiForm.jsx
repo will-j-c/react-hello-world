@@ -46,12 +46,16 @@ function MultiForm() {
   const [previewProjectImages, setPreviewProjectImages] = useState(
     isEdit ? form.image_urls : []
   );
+  const locationCheckedState = {};
+  if (isEdit) {
+    form.categories.forEach(category => {
+      locationCheckedState[category] = true;
+    });
+  }
   const [checkedCategories, setCheckedCategories] = useState(isEdit ? form.categories : []);
   const [checkedState, setCheckedState] = useState(
     isEdit
-      ? form.categories.map((category) => {
-          return { [category]: true };
-        })
+      ? locationCheckedState
       : {}
   );
   const {
@@ -220,7 +224,7 @@ function MultiForm() {
   // Handle publish
   const publish = (event) => {
     event.preventDefault();
-    const request = isEdit ? {method: "put", url: `/projects/${editProjectSlug}`, data: { ...form, state: "draft" }} : {method: "post", url: "/projects", data: { ...form, state: "draft" }};
+    const request = isEdit ? {method: "put", url: `/projects/${editProjectSlug}`, data: { ...form, state: "published" }} : {method: "post", url: "/projects", data: { ...form, state: "draft" }};
     const config = {
       headers: {
         "Content-Type": "multipart/form-data boundary=???",
@@ -234,7 +238,6 @@ function MultiForm() {
         const photoRequestTwo = axiosPrivate(routeTwo);
         axiosMain.all([photoRequestOne, photoRequestTwo]).then(
           axiosMain.spread((...responses) => {
-            console.log(responses)
             setOpen(true);
             setSeverity("success");
             setMessage("Project successfully created");
@@ -243,7 +246,6 @@ function MultiForm() {
             }, 2000);
           }),
           axiosMain.spread((...errors) => {
-            console.log(errors)
             setOpen(true);
             setSeverity("error");
             setMessage("Ooops, something went wrong...");
@@ -251,7 +253,6 @@ function MultiForm() {
         );
       },
       (error) => {
-        console.log(error)
         setOpen(true);
         setSeverity("error");
         setMessage(error?.response.data.error);
