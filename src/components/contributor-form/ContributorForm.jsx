@@ -13,7 +13,7 @@ import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 
-import { useState, useContext, useRef, useEffect  } from 'react';
+import { useState, useContext, useEffect  } from 'react';
 import { useParams, useNavigate  } from 'react-router-dom';
 
 import Button from "../buttons/Button";
@@ -70,13 +70,6 @@ export default function ContributorForm(props) {
   const theme = useTheme();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
-
-  // const formObj = {
-  //   // titleRef: useRef(),
-  //   // cityRef: useRef(),
-  //   // descriptionRef: useRef(),
-  //   remunerationRef: useRef(),
-  // }
 
   const skillsSelectChange = (event) => {
     const {
