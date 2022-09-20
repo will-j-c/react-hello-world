@@ -17,7 +17,6 @@ function FormProjectPageTwo(props) {
     handleFileInput,
     previewProjectImages,
   } = props;
-  console.log(previewProjectImages);
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
@@ -82,7 +81,7 @@ function FormProjectPageTwo(props) {
               category="action"
               upload={true}
               defaultValue={values.image_urls}
-              onChange={handleFileInput("image_urls")}
+              onChange={handleFileInput("image_urls_files")}
               single={false}
             />
             <ImageList

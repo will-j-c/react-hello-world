@@ -21,7 +21,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 const baseProjectLogo =
-  "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
+  "'https://i.pinimg.com/564x/a9/d6/7e/a9d67e7c7c1f738141b3d728c31b2dd8.jpg'";
 
 function ProjectShowGrid(props) {
   const location = useLocation();

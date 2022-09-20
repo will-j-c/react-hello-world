@@ -20,7 +20,6 @@ function FormProjectPageOne(props) {
     checkBoxTrack,
     checkedState,
   } = props;
-  console.log(previewLogo);
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
@@ -65,7 +64,7 @@ function FormProjectPageOne(props) {
             category="action"
             upload={true}
             defaultValue={values.logo_url}
-            onChange={handleFileInput("logo_url")}
+            onChange={handleFileInput("logo_url_files")}
           />
         </Box>
       </Grid>
