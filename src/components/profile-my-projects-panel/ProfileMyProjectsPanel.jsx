@@ -36,8 +36,8 @@ function ProfileMyProjectsPanel(props) {
       });
   }, [params]);
 
-  const triggerDeleteModal = ({ slug, title }) => {
-    setTargetProject({ projectSlug: slug, projectTitle: title });
+  const triggerDeleteModal = ({slug, title}) => {
+    setTargetProject({slug, title});
     setDeleteModalIsOpen(true);
   };
 
@@ -97,7 +97,7 @@ function ProfileMyProjectsPanel(props) {
         </Grid>
         <DeleteModal
           isOpen={deleteModalIsOpen}
-          targetProject={targetProject}
+          target={{project: targetProject}}
           onClose={() => setDeleteModalIsOpen(false)}
           deleteSuccessful={deleteSuccessful}
         />

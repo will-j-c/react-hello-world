@@ -1,9 +1,6 @@
 import Typography from "@mui/material/Typography";
 import Box from '@mui/material/Box';
-import Grid from "@mui/material/Grid";
-import { useState, useContext, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
+import { useState, useContext, useEffect } from 'react';
 
 import './Modal.scss';
 
@@ -13,29 +10,55 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 export default function DeleteModal(props) {
   const [ message, setMessage ] = useState('');
+  const [ targetType, setTargetType ] = useState('');
+  const [ identifier, setIdentifier ] = useState('');
+  const [ targetTitle, setTargetTitle ] = useState('');
   const { auth } = useContext(AuthContext);
   const axiosPrivate = useAxiosPrivate();
   
-  if (!props.isOpen) return null;
   const { onClose } = props;
-
-  const { projectSlug, projectTitle } = props.targetProject;
 
   const title = 'Delete confirmation';
 
   const deleteConfirm = async() => {
     try {
-      await axiosPrivate.delete(`/projects/${projectSlug}`)
+      if (targetType === 'project') {
+        await axiosPrivate.delete(`/projects/${identifier}`)
+      };
+      if (targetType === 'contributor') {
+        await axiosPrivate.delete(`/contributors/${identifier}`)
+      };
+      props.deleteSuccessful(identifier);
       setTimeout(onClose, 500);
-      props.deleteSuccessful(projectSlug);
+      
     } catch (err) {
       setMessage(err?.response?.data?.error);
     }
   }
 
+  const closeModal = () => {
+    setMessage('');
+    onClose();
+  };
+
+  useEffect(() => {
+    if (props.target.project) {
+      setTargetType('project');
+      setIdentifier(props.target.project.slug);
+      setTargetTitle(props.target.project.title);
+    };
+    if (props.target.contributor) {
+      setTargetType('contributor');
+      setIdentifier(props.target.contributor._id);
+      setTargetTitle(props.target.contributor.title);
+    };
+  }, [props])
+
+  if (!props.isOpen) return null;
+
   return (
     <>
-      <div className={'overlay'} onClick={onClose}>
+      <div className={'overlay'} onClick={closeModal}>
       </div>
       <div className={'modal'}>
         <Box className={'modal-content'}>
@@ -44,7 +67,7 @@ export default function DeleteModal(props) {
           </Typography>
 
           <Typography variant={'body2'} className={'modal-text'}>
-            Are you sure you would like to delete project <span className='highlight-text'>{projectTitle}</span>? This cannot be undone.
+            Are you sure you would like to delete {targetType} <span className='highlight-text'>{targetTitle}</span>? This cannot be undone.
           </Typography>
 
           <Typography variant={'caption'} className={'modal-error'}>
@@ -60,7 +83,7 @@ export default function DeleteModal(props) {
             category="action"
           />
           <Button 
-            onClick={onClose}
+            onClick={closeModal}
             title='Cancel'
             variant='outlined'
             category="action"
