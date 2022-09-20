@@ -161,7 +161,6 @@ function ProfileEdit() {
   if (!isAuth) {
     return <LoginCheck />;
   }
-  console.log(currentUserData);
 
   return (
     <Box paddingBottom={5}>
