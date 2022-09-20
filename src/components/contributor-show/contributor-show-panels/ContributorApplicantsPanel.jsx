@@ -1,14 +1,17 @@
 import Grid from "@mui/material/Unstable_Grid2";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import { useState, useEffect } from 'react';
 
 import UserCard from "../../cards/user-card/UserCard";
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import axios from '../../../api/axios';
 
 export default function ContributorApplicantsPanel(props) {
-  const applicants = props.relations;
+  const { applicants, noOfAcceptance, availableSlots } = props;
+  
   const [ users, setUsers ] = useState([]);
+  const [ availability, setAvailability ] = useState(0);
 
   useEffect(() => {
     async function getUsersData() {
@@ -20,12 +23,17 @@ export default function ContributorApplicantsPanel(props) {
           usersData.push(response.data);
         }
         setUsers(usersData);
+        setAvailability(Math.max(availableSlots - noOfAcceptance, 0));
       } catch (error) {}
     }
 
     getUsersData();
   }, [])
 
+  const updateAcceptance = () => {
+    setAvailability(prev => prev - 1);
+    props.updateAcceptance();
+  }
   const userCards = users.map((user, idx) => {
     const username = user.username;
     const application = applicants.filter(a => a.user_id.username === username);
@@ -39,6 +47,8 @@ export default function ContributorApplicantsPanel(props) {
           triggerLogin={null}
           isContributorPage={true}
           applicationStatus={status}
+          availability={availability}
+          updateAcceptance={updateAcceptance}
         />
       </Grid>
     );
@@ -46,6 +56,18 @@ export default function ContributorApplicantsPanel(props) {
 
   return (
     <>
+      <Box
+        sx={{
+          color:'var(--color3)',
+          padding: '0.5em',
+          marginTop: '0.8em',
+          textAlign: 'center'
+        }}
+      >
+        <Typography variant='body2'>
+        {availability} slots available ({noOfAcceptance} out of {availableSlots} filled)
+        </Typography>
+      </Box>
       <Grid
         container
         spacing={2}

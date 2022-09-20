@@ -120,7 +120,12 @@ export default function ContributorShow() {
     return newTabValue === "1"
       ? setPanel(<ContributorAboutPanel contributor={contributor} noOfAcceptance={noOfAcceptance}/>)
       : setPanel(
-        <ContributorApplicantsPanel relations={relations} noOfAcceptance={noOfAcceptance} updateAcceptance={updateAcceptance}/>
+        <ContributorApplicantsPanel 
+          applicants={relations} 
+          noOfAcceptance={noOfAcceptance} 
+          updateAcceptance={updateAcceptance}
+          availableSlots={contributor.available_slots}
+        />
       );
   }
 
@@ -136,8 +141,8 @@ export default function ContributorShow() {
     }
   }
 
-  const updateAcceptance = function(number) {
-    setNoOfAcceptance(number);
+  const updateAcceptance = function() {
+    setNoOfAcceptance(prev => prev + 1);
   }
 
   return contributor ? (

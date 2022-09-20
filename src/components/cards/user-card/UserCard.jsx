@@ -18,7 +18,7 @@ export default function UserCard(props) {
   const [buttonTitle, setButtonTitle] = useState("Following");
   const [followStatus, setFollowStatus] = useState(props.followed);
   const { auth } = useContext(AuthContext);
-  const { isContributorPage } = props;
+  const { isContributorPage, availability, updateAcceptance } = props;
   const [ appStatus, setAppStatus ] = useState(props.applicationStatus);
 
   const params = useParams();
@@ -80,6 +80,7 @@ export default function UserCard(props) {
     try {
       await axiosPrivate.put(`/contributors/${params.id}/accept/${username}`);
       setAppStatus('accepted');
+      updateAcceptance();
     } catch (err) {}
   }
 
@@ -138,12 +139,14 @@ export default function UserCard(props) {
                 variant={'outlined'}
                 onClick={handleRejection}
               />
-              <Button
-                category={'action'}
-                title={'Accept'}
-                variant={'contained'}
-                onClick={handleAcceptance}
-              />
+              { availability > 0 && (
+                <Button
+                  category={'action'}
+                  title={'Accept'}
+                  variant={'contained'}
+                  onClick={handleAcceptance}
+                />
+              )}
             </>
           )}
 
