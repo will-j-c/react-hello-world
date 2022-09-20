@@ -8,9 +8,13 @@ import AvatarComponent from "../avatar/Avatar";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { categories } from "./categories";
+
+import { useEffect, useState } from 'react';
+
+import axios from '../../api/axios';
 
 function FormProjectPageOne(props) {
+  const [ categories, setCategories ] = useState([]);
   const {
     values,
     handleChange,
@@ -20,6 +24,7 @@ function FormProjectPageOne(props) {
     checkBoxTrack,
     checkedState,
   } = props;
+
   console.log(previewLogo);
   const handleContinueClick = (event) => {
     event.preventDefault();
@@ -29,6 +34,16 @@ function FormProjectPageOne(props) {
   const onCheck = (event) => {
     checkBoxTrack({ [event.target.value]: event.target.checked });
   };
+
+  useEffect(() => {
+    async function getCategories() {
+      const response = await axios.get('/data/categories');
+      setCategories(response.data);
+    }
+
+    getCategories();
+  }, [])
+
   return (
     <Grid
       sx={{
