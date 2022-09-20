@@ -27,6 +27,10 @@ export default function ContributorApplicantsPanel(props) {
   }, [])
 
   const userCards = users.map((user, idx) => {
+    const username = user.username;
+    const application = applicants.filter(a => a.user_id.username === username);
+    let status = 'not applied';
+    if (application) { status = application[0].state };
     return (
       <Grid key={idx} xs={12} md={6} item>
         <UserCard
@@ -34,6 +38,7 @@ export default function ContributorApplicantsPanel(props) {
           followed={null}
           triggerLogin={null}
           isContributorPage={true}
+          applicationStatus={status}
         />
       </Grid>
     );
