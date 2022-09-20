@@ -138,7 +138,7 @@ function ProfileEdit() {
       console.log("success");
       // navigate(`users/${authUsername}`);
       setMessage(
-        `Contributor successfully created. You will be redirected shortly...`
+        `Your profile successfully updated. You will be redirected shortly...`
       );
       setTimeout(navigate, 1500, `/users/${authUsername}`);
     } catch (error) {
@@ -163,7 +163,7 @@ function ProfileEdit() {
         >
           We just need a few details, and you’ll be on your way.
         </Typography>
-        {/* {message.length > 0 && (
+        {message.length > 0 && (
           <Box sx={{ marginTop: "1em" }}>
             <Typography
               variant={"caption"}
@@ -172,7 +172,7 @@ function ProfileEdit() {
               {message}
             </Typography>
           </Box>
-        )} */}
+        )}
       </Box>
       <form onSubmit={handleFormSubmit}>
         <Grid

@@ -6,10 +6,18 @@ import Button from "../buttons/Button";
 import Grid from "@mui/material/Unstable_Grid2";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 
 function FormProjectPageTwo(props) {
-  const { values, handleChange, nextStep, prevStep, handleFileInput, previewProjectImages } = props;
-  console.log(previewProjectImages)
+  const {
+    values,
+    handleChange,
+    nextStep,
+    prevStep,
+    handleFileInput,
+    previewProjectImages,
+  } = props;
+  console.log(previewProjectImages);
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
@@ -60,12 +68,10 @@ function FormProjectPageTwo(props) {
             </Box>
           </Grid>
           <Grid md={3} textAlign={"center"} item>
-           
-
-            
             <Typography
               variant="subtitle1"
               alignSelf={"flex-start"}
+              marginBottom={2}
               gutterBottom
             >
               Upload project images
@@ -79,20 +85,21 @@ function FormProjectPageTwo(props) {
               onChange={handleFileInput("image_urls")}
               single={false}
             />
-            <ImageList cols={3} >
-            {previewProjectImages.map((item, idx) => (
-              <ImageListItem key={idx} sx={{width: 75, height: 75}}>
-                <img
-                  src={item}
-                  alt={item}
-                  loading="lazy"
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
+            <ImageList
+              cols={
+                previewProjectImages.length < 3
+                  ? previewProjectImages.length
+                  : 3
+              }
+            >
+              {previewProjectImages.map((item, idx) => (
+                <ImageListItem key={idx} sx={{ marginTop: 3 }}>
+                  <img src={item} alt={item} loading="lazy" />
+                  {/* <HighlightOffOutlinedIcon sx={{marginTop: 1}} htmlColor={"var(--color3)"}/> */}
+                </ImageListItem>
+              ))}
+            </ImageList>
           </Grid>
-          
-          
         </Grid>
 
         <Box textAlign={"right"}>

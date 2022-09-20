@@ -97,7 +97,7 @@ function ProfilePage(props) {
               component="h4"
               sx={{ color: "var(--color3)", textTransform: "capitalize" }}
             >
-              {profile.username}
+              {profile.name}
             </Typography>
             <Typography sx={{ color: "var(--color4)" }}>
               {profile.tagline || "Hello world, this is my empty tagline"}
