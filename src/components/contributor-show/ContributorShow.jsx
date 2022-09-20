@@ -172,6 +172,7 @@ export default function ContributorShow() {
                   },
                 }}
                 fontSize={"large"}
+                route={`/contributors/${id}/edit`}
               />
             )}
 

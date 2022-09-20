@@ -48,7 +48,7 @@ function getStyles(selection, selectionsList, theme) {
   };
 }
 
-export default function ContributorForm() {
+export default function ContributorForm(props) {
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
   
@@ -61,6 +61,11 @@ export default function ContributorForm() {
   const [ availability, setAvailability ] = useState(1);
   const [message, setMessage] = useState('');
   const params = useParams();
+
+  if (params.id) {
+    
+  }
+
   const theme = useTheme();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
