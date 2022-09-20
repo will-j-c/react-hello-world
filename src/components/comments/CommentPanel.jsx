@@ -17,6 +17,7 @@ function CommentPanel(props) {
       sx={{
         border: "solid 1px var(--color3)",
         height: "100%",
+        width: "100%",
         backgroundColor: "var(--color2)",
       }}
       display={"flex"}

@@ -7,19 +7,19 @@ import TableHead from "@mui/material/TableHead";
 import TableContainer from "@mui/material/TableContainer";
 import AvatarGroup from "@mui/material/AvatarGroup";
 import AvatarComponent from "../avatar/Avatar";
-import Button from "../buttons/Button"
+import Button from "../buttons/Button";
 
 import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from "../../context/AuthProvider";
 
 function ProjectContributorsPanel(props) {
-  const contributors = props.contributors;
   const params = useParams();
   const { auth } = useContext(AuthContext);
+  const {contributors, creator} = props;
   return (
     <Box>
-      { auth.username === props.creator.username && (
+      { auth.username === creator.username && (
         <Box
           display={"flex"}
           justifyContent={"center"}
@@ -52,6 +52,45 @@ function ProjectContributorsPanel(props) {
             </TableRow>
           </TableHead>
           <TableBody>
+            <TableRow
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+            >
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{ color: "var(--color4)" }}
+              >
+                <Button
+                  variant={"contained"}
+                  category={"category"}
+                  title={"Creator"}
+                />
+              </TableCell>
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{ color: "var(--color4)" }}
+                align="center"
+              >
+                1
+              </TableCell>
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{ color: "var(--color4)" }}
+              >
+                <AvatarGroup
+                  max={4}
+                  spacing={"small"}
+                  sx={{ flexDirection: "row" }}
+                >
+                  <AvatarComponent
+                    imgAlt={creator.username}
+                    imgUrl={creator.profile_pic_url}
+                  />
+                </AvatarGroup>
+              </TableCell>
+            </TableRow>
             {contributors.map((contributor) => (
               <TableRow
                 key={contributor.title}
@@ -62,16 +101,25 @@ function ProjectContributorsPanel(props) {
                   scope="row"
                   sx={{ color: "var(--color4)" }}
                 >
-                  <Button variant={"contained"} category={"category"} title={contributor.title} />
+                  <Button
+                    variant={"contained"}
+                    category={"category"}
+                    title={contributor.title}
+                  />
                 </TableCell>
                 <TableCell align="center" sx={{ color: "var(--color4)" }}>
                   {contributor.available_slots}
                 </TableCell>
-                <TableCell align="left" >
+                <TableCell align="left">
                   {contributor.contributors.map((user, idx) => {
                     if (user.state === "accepted") {
                       return (
-                        <AvatarGroup max={4} spacing={"small"} key={idx} sx={{flexDirection: "row"}}>
+                        <AvatarGroup
+                          max={4}
+                          spacing={"small"}
+                          key={idx}
+                          sx={{ flexDirection: "row" }}
+                        >
                           <AvatarComponent
                             imgAlt={user.user.username}
                             imgUrl={user.user.profile_pic_url}
@@ -89,7 +137,7 @@ function ProjectContributorsPanel(props) {
                       title={"View"} 
                       route={`/contributors/${contributor.id}`}
                     />
-                    { auth.username !== props.creator.username && 
+                    { auth.username !== creator.username && 
                       <Button variant={"contained"} category={"action"} title={"Apply"} /> 
                     }
                   </Box>
