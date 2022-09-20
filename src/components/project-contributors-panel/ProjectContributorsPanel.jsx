@@ -14,10 +14,12 @@ import { useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 
 function ProjectContributorsPanel(props) {
+  const params = useParams();
+  const { auth } = useContext(AuthContext);
   const { contributors, creator } = props;
   return (
     <Box>
-      {auth.username === props.creator.username && (
+      {auth.username === creator.username && (
         <Box
           display={"flex"}
           justifyContent={"center"}
@@ -132,13 +134,16 @@ function ProjectContributorsPanel(props) {
                     <Button
                       variant={"outlined"}
                       category={"action"}
-                      title={"See more"}
+                      title={"View"}
+                      route={`/contributors/${contributor.id}`}
                     />
-                    <Button
-                      variant={"contained"}
-                      category={"action"}
-                      title={"Apply"}
-                    />
+                    {auth.username !== creator.username && (
+                      <Button
+                        variant={"contained"}
+                        category={"action"}
+                        title={"Apply"}
+                      />
+                    )}
                   </Box>
                 </TableCell>
               </TableRow>
