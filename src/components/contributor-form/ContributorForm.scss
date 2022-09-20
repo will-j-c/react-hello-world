@@ -77,3 +77,11 @@
   flex-flow: row nowrap;
   justify-content: flex-end;
 }
+
+.contributor-form-message {
+  background-color: var(--color7);
+  color: var(--color2);
+  padding: 0.5em;
+  text-align: center;
+  margin-top: 1em;
+}

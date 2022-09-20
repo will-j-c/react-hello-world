@@ -18,6 +18,7 @@ import { useParams } from 'react-router-dom';
 
 import Button from "../buttons/Button";
 import axios from '../../api/axios';
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import AuthContext from "../../context/AuthProvider";
 import LoginModal from "../modals/LoginModal";
 
@@ -59,15 +60,16 @@ export default function ContributorForm() {
   const [ isPaid, setIsPaid ] = useState(false);
   const [ availability, setAvailability ] = useState(1);
   const [ modalIsOpen, setModalIsOpen ] = useState(false);
+  const [message, setMessage] = useState('');
   const params = useParams();
   const theme = useTheme();
+  const axiosPrivate = useAxiosPrivate();
 
   const formObj = {
     titleRef: useRef(),
     cityRef: useRef(),
     descriptionRef: useRef(),
     remunerationRef: useRef(),
-    availabilityRef: useRef(),
   }
 
   const skillsSelectChange = (event) => {
@@ -94,6 +96,37 @@ export default function ContributorForm() {
 
   const availabilityChange = (event) => {
     setAvailability(event.target.value);
+  }
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    const title = formObj.titleRef.current.value;
+    const city = formObj.cityRef?.current?.value || '';
+    const description = formObj.descriptionRef.current.value;
+    const remuneration = formObj.remunerationRef?.current?.value || '';
+    const is_remote = isRemote;
+    const commitment_level = commitment;
+    const available_slots = availability;
+    const skills = selectedSkills;
+    
+    try {
+      const response = await axiosPrivate.post(
+          `/projects/${params.slug}/contributors`,
+          {
+            title,
+            is_remote,
+            commitment_level,
+            available_slots,
+            remuneration,
+            description,
+            city,
+            skills
+          }
+        )
+        setMessage(`Contributor successfully created. You will be redirected shortly...`);
+    } catch (error) {
+      setMessage(error.response.data.error);
+    }
   }
 
   useEffect(() => {
@@ -145,13 +178,22 @@ export default function ContributorForm() {
 
   return  (
     <Box className='contributor-form-container'>
-      <Typography variant='h4' component='h1' className='contributor-form-title'>
-        Create a new contributor position
-      </Typography>
-      <Typography variant='body1' component='h2' className='contributor-form-subtitle'>
-        for project&nbsp;
-        <span className='highlight-text'>{projectTitle}</span>
-      </Typography>
+      <Box sx={{textAlign: 'center'}}>
+        <Typography variant='h4' component='h1' className='contributor-form-title'>
+          Create a new contributor position
+        </Typography>
+        <Typography variant='body1' component='h2' className='contributor-form-subtitle'>
+          for project&nbsp;
+          <span className='highlight-text'>{projectTitle}</span>
+        </Typography>
+        {message.length > 0 && (
+          <Box sx={{marginTop: '1em'}}>
+            <Typography variant={'caption'} className={'contributor-form-message'}>
+              {message}
+            </Typography>
+          </Box> 
+        )}
+      </Box>
 
       <Box className='contributor-form'>
         <form>
@@ -309,6 +351,7 @@ export default function ContributorForm() {
               variant='contained'
               category='action'
               title='Create'
+              onClick={handleFormSubmit}
             />
           </Box>
 
