@@ -4,14 +4,16 @@ import AvatarComponent from "../avatar/Avatar";
 import Container from '@mui/material/Container';
 import Grid from "@mui/material/Unstable_Grid2";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState, useContext, useEffect } from "react";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import axios from '../../api/axios';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import AuthContext from "../../context/AuthProvider";
 import Button from '../buttons/Button';
 import LoginModal from "../modals/LoginModal";
+import DeleteModal from '../modals/DeleteModal';
 import ContributorAboutPanel from "./contributor-show-panels/ContributorAboutPanel";
 import ContributorApplicantsPanel from "./contributor-show-panels/ContributorApplicantsPanel";
 import ContributorShowTabs from "./contributor-show-tabs/ContributorShowTabs";
@@ -24,19 +26,25 @@ export default function ContributorShow() {
   const [ project, setProject ] = useState(null);
   const [ status, setStatus ] = useState('not applied');
   const [ buttonTitle, setButtonTitle ] = useState('Apply');
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
   const [ tabValue, setTabValue ] = useState("1");
   const [ panel, setPanel ] = useState(null);
   const [ noOfAcceptance, setNoOfAcceptance ] = useState(0);
 
+  const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
+  const [ deleteModalIsOpen, setDeleteModalIsOpen ] = useState(false);
   const { auth } = useContext(AuthContext);
   const username = auth.username;
   const params = useParams();
   const id = params.id;
   const axiosPrivate = useAxiosPrivate();
+  const navigate = useNavigate()
 
   const baseProjectAvatar =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
+
+  const deleteSuccessful = () => {
+    navigate(`/projects/${project?.slug}`);
+  }
 
   useEffect(() => {
     async function getData() {
@@ -99,7 +107,7 @@ export default function ContributorShow() {
   const handleAction = async function() {
     try {
       if (!auth.username) {
-        setModalIsOpen(true);
+        setLoginModalIsOpen(true);
         return;
       }
       if (status === 'not applied') {
@@ -172,8 +180,21 @@ export default function ContributorShow() {
           </Box>
           <Box className='contributor-actions'>
             {auth?.username === project?.user_id.username && (
-              <Link to={`/contributors/${id}/edit`}>
-                <EditIcon 
+              <>
+                <Link to={`/contributors/${id}/edit`}>
+                  <EditIcon 
+                    sx={{
+                      marginY: 1,
+                      color: "var(--disable-color)",
+                      "&:hover": {
+                        color: "var(--color3a)",
+                      },
+                    }}
+                    fontSize={"large"}
+                    route={`/contributors/${id}/edit`}
+                  />
+                </Link>
+                <DeleteForeverIcon 
                   sx={{
                     marginY: 1,
                     color: "var(--disable-color)",
@@ -182,9 +203,9 @@ export default function ContributorShow() {
                     },
                   }}
                   fontSize={"large"}
-                  route={`/contributors/${id}/edit`}
+                  onClick={() => setDeleteModalIsOpen(true)}
                 />
-              </Link>
+              </>
             )}
 
             {(auth?.username !== project?.user_id.username && (status === 'rejected' || status === 'accepted')) && (
@@ -285,8 +306,14 @@ export default function ContributorShow() {
         
       </Container>
       <LoginModal 
-        isOpen={modalIsOpen} 
-        onClose={() => setModalIsOpen(false)}
+        isOpen={loginModalIsOpen} 
+        onClose={() => setLoginModalIsOpen(false)}
+      />
+      <DeleteModal 
+        isOpen={deleteModalIsOpen}
+        target={{contributor: contributor}} 
+        onClose={() => setDeleteModalIsOpen(false)}
+        deleteSuccessful={deleteSuccessful}
       />
     </>
   ) : (
