@@ -1,0 +1,87 @@
+.contributor-form-container {
+  padding: 2em;
+  background-color: var(--color1);
+  color: var(--color4);
+}
+
+.contributor-form-title {
+  color: var(--color3);
+  font-weight: 600;
+  text-align: center;
+}
+
+.contributor-form-subtitle {
+  color: var(--color3);
+  font-weight: 400;
+  text-align: center;
+}
+
+.contributor-form {
+  max-width: 600px;
+  margin: 2em auto;
+}
+
+.MuiMenu-paper {
+  background-color: var(--color2);
+}
+
+.MuiChip-label {
+  background-color: var(--color7);
+  border-radius: 4px;
+}
+
+.MuiInputBase-root {
+  min-width: 150px;
+
+  &.availability-select {
+    min-width: 50px;
+  }
+}
+
+.MuiSelect-select.MuiInputBase-input.MuiOutlinedInput-input {
+  background-color: var(--color2);
+  color: white;
+}
+
+.MuiFormLabel-root.MuiInputLabel-root {
+  color: var(--disable-color);
+}
+
+.MuiMenuItem-root {
+  color: var(--color4);
+}
+
+.contributor-form-remote-section {
+  padding: 1em 0;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.contributor-form-section-title {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.contributor-form-inline-section {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.contributor-form-action-buttons {
+  margin-top: 1em;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+.contributor-form-message {
+  background-color: var(--color7);
+  color: var(--color2);
+  padding: 0.5em;
+  text-align: center;
+  margin-top: 1em;
+}

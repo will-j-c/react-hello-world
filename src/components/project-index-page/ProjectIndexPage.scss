@@ -1,0 +1,10 @@
+.clear-filters-button {
+  padding: 0.2em 0.4em;
+  border-radius: 5px;
+  border: 1px solid var(--color3);
+  background-color: transparent;
+  color: var(--color3);
+  &:hover {
+    cursor: pointer;
+  }
+}

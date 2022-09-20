@@ -25,6 +25,7 @@ function FormProjectPageOne(props) {
     checkedState,
   } = props;
 
+  console.log(previewLogo);
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
@@ -54,15 +55,23 @@ function FormProjectPageOne(props) {
       columns={{ xs: 1, md: 12 }}
       container
     >
-      <Grid md={4} item>
-        <Box display="flex" flexDirection={"column"} alignItems={"center"}>
+      <Grid md={4} justifyContent={"center"} item>
+        <Box
+          sx={{
+            padding: 3,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <AvatarComponent
             imgUrl={previewLogo}
             sx={{
-              width: 128,
-              height: 128,
+              width: 256,
+              height: 256,
               border: "solid 1px var(--color3)",
-              marginBottom: 2,
+              marginBottom: 4,
             }}
           />
           <Button
@@ -85,7 +94,6 @@ function FormProjectPageOne(props) {
             justifyContent: "center",
           }}
           className={styles["form"]}
-          marginTop={5}
         >
           <Typography variant="subtitle1" alignSelf={"flex-start"} gutterBottom>
             Project Title
