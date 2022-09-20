@@ -177,9 +177,8 @@ function ProfileEdit() {
           component="h2"
           className="contributor-form-subtitle"
         >
-          {!currentUserData.name &&
-            "We just need a few details, and you’ll be on your way."}
-          {currentUserData.name && ""}
+          {!name && "We just need a few details, and you’ll be on your way."}
+          {name && ""}
         </Typography>
         {message.length > 0 && (
           <Box sx={{ marginTop: "1em" }}>
