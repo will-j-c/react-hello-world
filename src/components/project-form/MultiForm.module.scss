@@ -17,7 +17,7 @@
   .input-text {
     background-color: var(--color2);
     input[type="text"],
-    input[type="password"] {
+    input[type="password"], textarea {
       color: var(--disable-color);
     }
   }
