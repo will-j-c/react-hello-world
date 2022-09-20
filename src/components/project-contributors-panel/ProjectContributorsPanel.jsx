@@ -83,8 +83,15 @@ function ProjectContributorsPanel(props) {
                 </TableCell>
                 <TableCell>
                   <Box display={"flex"} justifyContent={"space-between"}>
-                    <Button variant={"outlined"} category={"action"} title={"See more"} />
-                    <Button variant={"contained"} category={"action"} title={"Apply"} />
+                    <Button 
+                      variant={"outlined"} 
+                      category={"action"} 
+                      title={"View"} 
+                      route={`/contributors/${contributor.id}`}
+                    />
+                    { auth.username !== props.creator.username && 
+                      <Button variant={"contained"} category={"action"} title={"Apply"} /> 
+                    }
                   </Box>
                 </TableCell>
               </TableRow>
