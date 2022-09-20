@@ -20,7 +20,7 @@ import Button from "../buttons/Button";
 import axios from '../../api/axios';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import AuthContext from "../../context/AuthProvider";
-import LoginModal from "../modals/LoginModal";
+import LoginCheck from "../login-check/LoginCheck";
 
 import './ContributorForm.scss'
 
@@ -59,7 +59,6 @@ export default function ContributorForm() {
   const [ commitment, setCommitment ] = useState('low');
   const [ isPaid, setIsPaid ] = useState(false);
   const [ availability, setAvailability ] = useState(1);
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
   const [message, setMessage] = useState('');
   const params = useParams();
   const theme = useTheme();
@@ -144,38 +143,8 @@ export default function ContributorForm() {
     getData();
   }, [])
 
-  const displayModal = () => {
-    console.log(`trigger display`);
-    setModalIsOpen(true)
-  }
-  
   if (!username) {
-    return (
-      <Box className='contributor-form-container'>
-        <Typography variant='h4' component='h1' className='contributor-form-title'>
-          Please log in to continue
-        </Typography>
-        <Box sx={{textAlign: 'center', marginTop: '2em'}}>
-          <Button 
-            title='Log in'
-            variant='contained'
-            category='action'
-            onClick={displayModal}
-          />
-          <Button 
-            title='Back to home'
-            variant='outlined'
-            category='action'
-            route='/'
-          />
-        </Box>
-        <LoginModal 
-          isOpen={modalIsOpen} 
-          onClose={() => setModalIsOpen(false)}
-        />
-      </Box>
-      
-    )
+    return <LoginCheck />
   }
 
   return  (
