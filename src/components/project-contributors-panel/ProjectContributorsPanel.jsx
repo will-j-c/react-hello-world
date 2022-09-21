@@ -10,13 +10,38 @@ import AvatarComponent from "../avatar/Avatar";
 import Button from "../buttons/Button";
 
 import { useParams } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
+import LoginModal from '../modals/LoginModal';
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 function ProjectContributorsPanel(props) {
   const params = useParams();
   const { auth } = useContext(AuthContext);
+  const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
   const { contributors, creator } = props;
+  console.log(`contributors: ${JSON.stringify(contributors)}`);
+  const axiosPrivate = useAxiosPrivate();
+
+  const handleAction = async function() {
+    try {
+      if (!auth.username) {
+        setLoginModalIsOpen(true);
+        return;
+      }
+      // if (status === 'not applied') {
+      //   await axiosPrivate.post(`/contributors/${contributor?._id}/apply`);
+      //   setStatus('applied');
+      // } else if (status === 'applied') {
+      //   await axiosPrivate.delete(`/contributors/${contributor?._id}/withdraw`);
+      //   setStatus('not applied');
+      // }
+      return
+
+    } catch (err) {
+    }
+  }
+
   return (
     <Box>
       {auth.username === creator.username && (
@@ -97,67 +122,98 @@ function ProjectContributorsPanel(props) {
               >
               </TableCell>
             </TableRow>
-            {contributors.map((contributor) => (
-              <TableRow
-                key={contributor.title}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell
-                  component="th"
-                  scope="row"
-                  sx={{ color: "var(--color4)" }}
+            {contributors.map((contributor) => {
+              const applicants = contributor.contributors;
+              const isApplied = applicants.filter(a => a.user.username === auth?.username);
+              const status = isApplied.length > 0 ? isApplied[0].state : 'not applied';
+              console.log(`status: ${status}`);
+              return (
+                <TableRow
+                  key={contributor.title}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <Button
-                    variant={"contained"}
-                    category={"category"}
-                    title={contributor.title}
-                  />
-                </TableCell>
-                <TableCell align="center" sx={{ color: "var(--color4)" }}>
-                  {contributor.available_slots}
-                </TableCell>
-                <TableCell align="left">
-                  {contributor.contributors.map((user, idx) => {
-                    if (user.state === "accepted") {
-                      return (
-                        <AvatarGroup
-                          max={4}
-                          spacing={"small"}
-                          key={idx}
-                          sx={{ flexDirection: "row" }}
-                        >
-                          <AvatarComponent
-                            imgAlt={user.user.username}
-                            imgUrl={user.user.profile_pic_url}
-                          />
-                        </AvatarGroup>
-                      );
-                    }
-                  })}
-                </TableCell>
-                
-                <TableCell>
-                  <Box display={"flex"} justifyContent={"space-between"}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    sx={{ color: "var(--color4)" }}
+                  >
                     <Button
-                      variant={"outlined"}
-                      category={"action"}
-                      title={"View"}
-                      route={`/contributors/${contributor.id}`}
+                      variant={"contained"}
+                      category={"category"}
+                      title={contributor.title}
                     />
-                    {auth.username !== creator.username && (
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "var(--color4)" }}>
+                    {contributor.available_slots}
+                  </TableCell>
+                  <TableCell align="left">
+                    {contributor.contributors.map((user, idx) => {
+                      if (user.state === "accepted") {
+                        return (
+                          <AvatarGroup
+                            max={4}
+                            spacing={"small"}
+                            key={idx}
+                            sx={{ flexDirection: "row" }}
+                          >
+                            <AvatarComponent
+                              imgAlt={user.user.username}
+                              imgUrl={user.user.profile_pic_url}
+                            />
+                          </AvatarGroup>
+                        );
+                      }
+                    })}
+                  </TableCell>
+                  
+                  <TableCell>
+                    <Box display={"flex"} justifyContent={"flex-end"}>
                       <Button
-                        variant={"contained"}
+                        variant={"outlined"}
                         category={"action"}
-                        title={"Apply"}
+                        title={"View"}
+                        route={`/contributors/${contributor.id}`}
                       />
-                    )}
-                  </Box>
-                </TableCell>
-              </TableRow>
-            ))}
+                      {(auth.username !== creator.username 
+                        && status === 'not applied'
+                      ) && (
+                        <Button
+                          variant={"contained"}
+                          category={"action"}
+                          title={"Apply"}
+                          onClick={handleAction}
+                        />
+                      )}
+                      {(auth.username !== creator.username 
+                        && ( status === 'accepted' || status === 'rejected' )
+                      ) && (
+                        <Button
+                          variant={"outlined"}
+                          category={"status"}
+                          title={status.charAt(0).toUpperCase() + status.slice(1)}
+                        />
+                      )}
+                      {(auth.username !== creator.username 
+                        && ( status === 'applied' )
+                      ) && (
+                        <Button
+                          variant={"outlined"}
+                          category={"action"}
+                          title={status.charAt(0).toUpperCase() + status.slice(1)}
+                        />
+                      )}
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </TableContainer>
+      <LoginModal 
+        isOpen={loginModalIsOpen} 
+        onClose={() => setLoginModalIsOpen(false)}
+      />
     </Box>
   );
 }
