@@ -35,9 +35,9 @@ function CommentAddField(props) {
       />
       <ArrowForwardOutlinedIcon
         onClick={handleClick}
+        htmlColor={"var(--color3)"}
         sx={{
           "&:hover": {
-            backgroundColor: "transparent",
             cursor: "pointer",
           },
         }}

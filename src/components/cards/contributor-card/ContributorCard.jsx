@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState, useContext } from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import AvatarComponent from "../../avatar/Avatar";
 import { Link } from "react-router-dom";
 import Button from "../../buttons/Button";
+import AuthContext from '../../../context/AuthProvider';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 
 import '../Card.scss';
 
@@ -15,7 +17,93 @@ export default function ContributorCard(props) {
   const { _id, title, project_id, skills } = props.contributor;
   const { logo_url, slug } = project_id;
   const projectTitle = project_id.title;
+  const projectOwner = project_id.user_id.username;
   const projectUrl = `/projects/${slug}`;
+  const { auth } = useContext(AuthContext);
+  const [ buttonTitle, setButtonTitle ] = useState('Following');
+  const [ status, setStatus ] = useState(props.status);
+
+  const axiosPrivate = useAxiosPrivate();
+
+  useEffect(() => {
+    let title = null;
+    switch (props.status) {
+      case 'not applied':
+        title = 'Apply';
+        break;
+      case 'applied':
+        title = 'Applied';
+        break;
+      case 'accepted':
+        title = 'Accepted';
+        break;
+      case 'rejected':
+        title = 'Rejected';
+        break;
+      default:
+        title = "Apply"
+    }
+    
+    setStatus(props.status)
+    setButtonTitle(title)
+
+  }, [props.status]);
+
+  useEffect(() => {
+    let title = null;
+    switch (status) {
+      case 'not applied':
+        title = 'Apply';
+        break;
+      case 'applied':
+        title = 'Applied';
+        break;
+      case 'accepted':
+        title = 'Accepted';
+        break;
+      case 'rejected':
+        title = 'Rejected';
+        break;
+      default:
+        title = "Apply"
+    }
+    setButtonTitle(title)
+  }, [status]);
+
+  const handleAction = async function() {
+    try {
+      if (!auth.username) {
+        props.triggerLogin();
+        return;
+      }
+      if (status === 'not applied') {
+        await axiosPrivate.post(`/contributors/${_id}/apply`);
+        setStatus('applied');
+      } else if (status === 'applied') {
+        await axiosPrivate.delete(`/contributors/${_id}/withdraw`);
+        setStatus('not applied');
+      }
+      return
+
+    } catch (err) {
+    }
+  }
+
+  const handleMouseOver = function() {
+    if (buttonTitle === 'Applied') {
+      setButtonTitle('Withdraw');
+    }
+  }
+
+  const handleMouseLeave = function() {
+    if (buttonTitle === 'Withdraw') {
+      setButtonTitle('Applied');
+    }
+  }
+
+  const triggerDeleteModal = function() {
+    props.triggerDeleteModal({contributor: props.contributor});
+  }
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -63,13 +151,34 @@ export default function ContributorCard(props) {
             category={'action'}
             title={'View'}
             variant={"outlined"}
-            route={`/contributor/${_id}`}
+            route={`/contributors/${_id}`}
           />
-          <Button
-            category={'action'}
-            title={'Apply'}
-            variant={"contained"}
-          />
+          { auth.username !== projectOwner && (
+            <Button
+              category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
+              title={buttonTitle}
+              variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
+              onMouseOver={handleMouseOver}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleAction}
+            />
+          )}
+          { auth.username === projectOwner && (
+            <>
+              <Button
+              category='action'
+              title='Delete'
+              variant='outlined'
+              onClick={triggerDeleteModal}
+            />
+              <Button
+                category='action'
+                title='Edit'
+                variant='contained'
+                route={`/contributors/${_id}/edit`}
+              />
+            </>
+          )}
         </Box>
       </CardActions>
       
