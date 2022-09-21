@@ -13,7 +13,10 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import AuthContext from "../../context/AuthProvider";
 import Button from '../buttons/Button';
 import LoginModal from "../modals/LoginModal";
-import DeleteModal from "../modals/DeleteModal";
+import DeleteModal from '../modals/DeleteModal';
+import ContributorAboutPanel from "./contributor-show-panels/ContributorAboutPanel";
+import ContributorApplicantsPanel from "./contributor-show-panels/ContributorApplicantsPanel";
+import ContributorShowTabs from "./contributor-show-tabs/ContributorShowTabs";
 
 import './ContributorShow.scss';
 
@@ -23,6 +26,10 @@ export default function ContributorShow() {
   const [ project, setProject ] = useState(null);
   const [ status, setStatus ] = useState('not applied');
   const [ buttonTitle, setButtonTitle ] = useState('Apply');
+  const [ tabValue, setTabValue ] = useState("1");
+  const [ panel, setPanel ] = useState(null);
+  const [ noOfAcceptance, setNoOfAcceptance ] = useState(0);
+
   const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
   const [ deleteModalIsOpen, setDeleteModalIsOpen ] = useState(false);
   const { auth } = useContext(AuthContext);
@@ -64,9 +71,13 @@ export default function ContributorShow() {
         setStatus(relation[0].state);
       }
 
+      const acceptances = relationsData.filter(r => r.state === 'accepted');
+
+      setNoOfAcceptance(acceptances.length);
       setContributor(contributorData.data.contributor);
       setRelations(contributorData.data.relations);
       setProject(contributorData.data.contributor.project_id);
+      setPanel(<ContributorAboutPanel contributor={contributorData.data.contributor} noOfAcceptance={acceptances.length}/>);
     }
 
     getData()
@@ -112,6 +123,20 @@ export default function ContributorShow() {
     }
   }
 
+  const handleTabChange = (event, newTabValue) => {
+    setTabValue(newTabValue);
+    return newTabValue === "1"
+      ? setPanel(<ContributorAboutPanel contributor={contributor} noOfAcceptance={noOfAcceptance}/>)
+      : setPanel(
+        <ContributorApplicantsPanel 
+          applicants={relations} 
+          noOfAcceptance={noOfAcceptance} 
+          updateAcceptance={updateAcceptance}
+          availableSlots={contributor.available_slots}
+        />
+      );
+  }
+
   const handleMouseOver = function() {
     if (buttonTitle === 'Applied') {
       setButtonTitle('Withdraw');
@@ -124,25 +149,9 @@ export default function ContributorShow() {
     }
   }
 
-  const skillsDisplay = contributor?.skills?.length ? (
-    contributor?.skills.map((skill, idx) => {
-      return (
-        <Box
-          key={idx}
-          sx={{ backgroundColor: "var(--color7a)" }}
-          padding={1}
-          marginRight={1}
-          borderRadius={1}
-        >
-          <Typography variant='body2'>{skill}</Typography>
-        </Box>
-      );
-    })
-  ) : (
-    <Typography sx={{ color: "var(--color3)" }} variant={"body2"} marginY={2}>
-      Nothing here yet!
-    </Typography>
-  );
+  const updateAcceptance = function() {
+    setNoOfAcceptance(prev => prev + 1);
+  }
 
   return contributor ? (
     <>
@@ -199,7 +208,7 @@ export default function ContributorShow() {
               </>
             )}
 
-            {auth?.username !== project?.user_id.username && (
+            {(auth?.username !== project?.user_id.username && (status === 'rejected' || status === 'accepted')) && (
               <Button
                 category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
                 title={buttonTitle}
@@ -207,6 +216,33 @@ export default function ContributorShow() {
                 onMouseOver={handleMouseOver}
                 onMouseLeave={handleMouseLeave}
                 onClick={handleAction}
+              />
+            )}
+
+            {(auth?.username !== project?.user_id.username 
+              && status !== 'rejected' 
+              && status !== 'accepted' 
+              && noOfAcceptance < contributor.available_slots) 
+              && (
+              <Button
+                category={'action'}
+                title={buttonTitle}
+                variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
+                onMouseOver={handleMouseOver}
+                onMouseLeave={handleMouseLeave}
+                onClick={handleAction}
+              />
+            )}
+
+            {(auth?.username !== project?.user_id.username 
+              && status !== 'rejected' 
+              && status !== 'accepted' 
+              && noOfAcceptance >= contributor.available_slots) 
+              && (
+              <Button
+                category={'status'}
+                title={'All available slots filled'}
+                variant={'outlined'}
               />
             )}
           </Box>
@@ -219,52 +255,32 @@ export default function ContributorShow() {
           marginTop={4}
         >
           <Grid item md={8}>
-            <Box className='contributor-content'>
-              <Typography variant='subtitle1' className='contributor-section-header'>
-                Description:
-              </Typography>
-              <Box className='contributor-description'>
-                <Typography sx={{ color: "var(--color4)" }} variant='subtitle1'>
-                  {contributor.description || "Nothing here yet!"}
-                </Typography>
+            {auth?.username === project?.user_id.username && (
+              <Box
+                sx={{
+                  border: "solid 1px var(--color3)",
+                  backgroundColor: "var(--color2)",
+                  height: "100%",
+                }}
+                paddingX={4}
+                paddingBottom={4}
+                id="panel-box"
+                height={1}
+              >
+                <ContributorShowTabs 
+                  tabValue={tabValue} 
+                  handleTabChange={handleTabChange} 
+                />
+                { panel }
               </Box>
-              <Typography variant='subtitle1' className='contributor-section-header'>
-                Required skills:
-              </Typography>
-              <Box display={"flex"}>{skillsDisplay}</Box>
-              <Box className='contributor-section-content'>
-                <Typography variant='subtitle1' className='contributor-section-header'>
-                  Location:
-                </Typography>
-                <Typography variant='subtitle1' className='contributor-section-text'>
-                  {contributor?.is_remote ? 'Remote' : (contributor?.city || 'not applicable')}
-                </Typography>
+            )}
+            
+            {auth?.username !== project?.user_id.username && (
+              <Box className='contributor-content'>
+                <ContributorAboutPanel contributor={contributor} noOfAcceptance={noOfAcceptance}/>
               </Box>
-              <Box className='contributor-section-content'>
-                <Typography variant='subtitle1' className='contributor-section-header'>
-                  Commitment level:
-                </Typography>
-                <Typography variant='subtitle1' className='contributor-section-text'>
-                  {contributor?.commitment_level}
-                </Typography>
-              </Box>
-              <Box className='contributor-section-content'>
-                <Typography variant='subtitle1' className='contributor-section-header'>
-                  Remuneration:
-                </Typography>
-                <Typography variant='subtitle1' className='contributor-section-text'>
-                  {contributor?.remuneration || 'not applicable'}
-                </Typography>
-              </Box>
-              <Box className='contributor-section-content'>
-                <Typography variant='subtitle1' className='contributor-section-header'>
-                  Number of positions available:
-                </Typography>
-                <Typography variant='subtitle1' className='contributor-section-text'>
-                  {contributor?.available_slots || 'not applicable'}
-                </Typography>
-              </Box>
-            </Box>
+              
+            )}
             
           </Grid>
           <Grid item md={4} >
