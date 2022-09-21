@@ -14,7 +14,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import BatchPredictionOutlinedIcon from '@mui/icons-material/BatchPredictionOutlined';
+import BatchPredictionOutlinedIcon from "@mui/icons-material/BatchPredictionOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 
@@ -123,7 +123,7 @@ function SiteHeader() {
                 sx={{
                   marginLeft: "auto",
                   display: "inline-flex",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <SearchBar />
@@ -199,19 +199,29 @@ function SiteHeader() {
             </Grid>
 
             {isAuth && (
-              <Box sx={{ flexGrow: 1, marginLeft: 1, display: "flex" }}>
-                <Tooltip title="Add new project">
-                  <IconButton onClick={handleOpenAddProject} sx={{ p: 0 }}>
-                  <Link to={`/projects/create`}>
-                    <BatchPredictionOutlinedIcon
-                      sx={{ marginY: 1, color: "var(--color4)" }}
-                      fontSize={"large"}
-                      className="icon socmed"
-                    />
-                  </Link>
-                  </IconButton>
-                </Tooltip>
-                
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  marginLeft: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <ListItemIcon>
+                  <ListItemText
+                    sx={{
+                      color: "var(--color7)",
+                      cursor: "pointer",
+                      "&:hover": {
+                        color: "var(--color3)",
+                      },
+                    }}
+                  >
+                    Add new project
+                  </ListItemText>
+                </ListItemIcon>
+
                 <MenuBar
                   pageLinks={pageLinks}
                   profileAvatarUrl={profileAvatarUrl}
