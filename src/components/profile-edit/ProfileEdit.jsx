@@ -47,7 +47,7 @@ function ProfileEdit() {
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
   const [about, setAbout] = useState("");
-  const [interests, setInterests] = useState([]);
+  const [interestsInput, setInterestsInput] = useState([]);
   const [linkedin, setLinkedin] = useState("");
   const [github, setGithub] = useState("");
   const [twitter, setTwitter] = useState("");
@@ -82,8 +82,8 @@ function ProfileEdit() {
     setSelectedSkills(typeof value === "string" ? value.split(",") : value);
   };
 
-  const interestsChange = (event) => {
-    setInterests(event.target.value.split(","));
+  const interestsInputChange = (event) => {
+    setInterestsInput(event.target.value.split(","));
   };
   const nameChange = (event) => {
     setName(event.target.value);
@@ -130,7 +130,7 @@ function ProfileEdit() {
         setGithub(userData.socmed.github);
         setTwitter(userData.socmed.twitter);
         setFacebook(userData.socmed.facebook);
-        setInterests(userData.interests);
+        setInterestsInput(userData.interests);
         setSelectedSkills(userData.skills);
 
         setCurrentUserData(userData);
@@ -148,7 +148,8 @@ function ProfileEdit() {
         "Content-Type": "multipart/form-data",
       },
     };
-    const skills = selectedSkills;
+    const skills = JSON.stringify(selectedSkills);
+    const interests = JSON.stringify(interestsInput);
     try {
       await axiosPrivate.put(
         `/users/${params.username}`,
@@ -341,8 +342,8 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                value={interests || ""}
-                onChange={interestsChange}
+                value={interestsInput || ""}
+                onChange={interestsInputChange}
                 type="text"
                 variant="filled"
                 size="small"
