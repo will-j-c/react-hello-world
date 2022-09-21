@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export default function SearchContributorsResults(props) {
-  const { query  } = props;
+  const { query, limit } = props;
   useEffect(() => {
   }, [query]);
   return (
@@ -23,7 +23,7 @@ export default function SearchContributorsResults(props) {
             Contributors
           </Typography>
         </Box>
-      <ContributorIndexGrid filters={{q: query}} limit={3}/>
+      <ContributorIndexGrid filters={{q: query}} limit={limit}/>
     </Box>  
   )
 }
