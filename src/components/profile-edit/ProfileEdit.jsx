@@ -228,7 +228,7 @@ function ProfileEdit() {
                   marginBottom: 2,
                 }}
               />
-              <TextField
+              {/* <TextField
                 id="outlined-full-width"
                 label="Image Upload"
                 style={{ margin: 8 }}
@@ -241,7 +241,7 @@ function ProfileEdit() {
                 }}
                 variant="outlined"
                 onChange={handleFileInput}
-              />
+              /> */}
               <Button
                 variant="outlined"
                 title="Upload"
