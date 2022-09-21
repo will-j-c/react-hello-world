@@ -20,7 +20,7 @@ import Button from "../buttons/Button";
 import styles from "./MultiForm.module.scss";
 import AvatarComponent from "../avatar/Avatar";
 
-import axios, { axiosPrivate } from "../../api/axios";
+import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import LoginCheck from "../login-check/LoginCheck";
@@ -106,20 +106,17 @@ function ProfileEdit() {
   };
   const [file, setFile] = useState("");
   const handleFileInput = (evnt) => {
-    // console.log("evnt.target.files is:", evnt.target.files[0]);
     setFile(evnt.target.files[0]);
     setPreviewAvatar(URL.createObjectURL(evnt.target.files[0]));
   };
-  // const handleFileInput = (event) => {};
 
   useEffect(() => {
     async function getData() {
       try {
-        const skillsData = await axios.get("/data/skills");
         let userData = null;
-
         const response = await axios.get(`/users/${authUsername}`);
         userData = response.data;
+
         setPreviewAvatar(userData.profile_pic_url);
         setName(userData.name);
         setTagline(userData.tagline);
@@ -130,13 +127,21 @@ function ProfileEdit() {
         setFacebook(userData.socmed.facebook);
         setInterestsInput(userData.interests);
         setSelectedSkills(userData.skills);
-
-        setSkills(skillsData.data);
       } catch (err) {}
     }
 
     getData();
   }, []);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const skillsData = await axios.get("/data/skills");
+        setSkills(skillsData.data);
+      } catch (err) {}
+    }
+
+    getData();
+  }, [params]);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
