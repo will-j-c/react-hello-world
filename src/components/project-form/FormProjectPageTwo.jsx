@@ -110,7 +110,7 @@ function FormProjectPageTwo(props) {
                     }}
                     htmlColor={"var(--color3)"}
                     onClick={handleDeleteImageFromUpload}
-                    titleAccess={item}
+                    id={item}
                   />
                 </ImageListItem>
               ))}

@@ -16,11 +16,10 @@ function MultiForm() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
-  const [isEdit, setIsEdit] = useState(location.state?.isEdit);
+  const [isEdit] = useState(location.state?.isEdit);
   const [imageFilesToConvert, setImageFilesToConvert] = useState([]);
-  const [editProjectSlug, setEditProjectSlug] = useState(
-    location.state?.project?.slug
-  );
+  const [editProjectSlug] = useState(location.state?.project?.slug);
+  const [imagesToBeDeleted, setImagesToBeDeleted] = useState([]);
 
   const createNewForm = {
     step: location.search ? parseInt(location.search.slice(-1)) : 1,
@@ -46,6 +45,11 @@ function MultiForm() {
   };
 
   const [form, setForm] = useState(isEdit ? editForm : createNewForm);
+  
+  // Update the form when images to be deleted have been chosen
+  useEffect(() => {
+    setForm((prevState) => ({ ...prevState, deleted_images: imagesToBeDeleted }));
+  }, [imagesToBeDeleted])
 
   const [previewLogo, setPreviewLogo] = useState(isEdit ? form.logo_url : null);
   const [previewProjectImages, setPreviewProjectImages] = useState(
@@ -88,6 +92,7 @@ function MultiForm() {
     description,
     image_urls,
   };
+
   // Keep track of the checked boxes
   const checkboxTrack = (checkedBoxes) => {
     setCheckedState((prevState) => ({
@@ -95,12 +100,14 @@ function MultiForm() {
       ...checkedBoxes,
     }));
   };
-  // Set snackbar allerts
+
+  // Set snackbar alerts
   const snackbarAlert = (open, severity, message) => {
     setOpen(open);
     setSeverity(severity);
     setMessage(message);
   };
+
   // Set the step to 1 if coming in via /projects/create
   useEffect(() => {
     if (!location.search) {
@@ -166,25 +173,14 @@ function MultiForm() {
   }, [checkedCategories]);
 
   // Handle file input
-  const [draftImageFiles, setDraftImageFiles] = useState(null);
-  const [publishImageFiles, setPublistImageFiles] = useState(null);
-  const convertFilesToFormData = (action) => {
+  const convertFilesToFormData = () => {
     return new Promise((resolve) => {
       const files = imageFilesToConvert;
       const formData = new FormData();
       for (let i = 0, len = files.length; i < len; i++) {
         formData.append(`image_urls`, files[i].file, files[i].name);
       }
-      for (const value of formData) {
-        console.log(value);
-      }
-      if (action === "publish") {
-        setPublistImageFiles(formData);
-        resolve();
-      } else {
-        setDraftImageFiles(formData);
-        resolve();
-      }
+      return resolve(formData);
     });
   };
 
@@ -231,31 +227,25 @@ function MultiForm() {
   //Handle image delete
   const handleDeleteImageFromUpload = (event) => {
     event.preventDefault();
-    // Delete fom the preview images
-    const newImages = previewProjectImages.filter((image) => {
-      console.log(image);
-      console.log(event.target?.nextSibling?.textContent);
-      return image !== event.target?.nextSibling?.textContent;
-    });
+    const selected = event.target.id;
+    if (isEdit) {
+      setImagesToBeDeleted((prevState) => ([...prevState, selected]));
+    }
+    // // Delete fom the preview images
     setPreviewProjectImages(
-      previewProjectImages.filter(
-        (image) => image !== event.target?.nextSibling?.textContent
-      )
+      previewProjectImages.filter((image) => {
+        return image !== selected;
+      })
     );
-    console.log(imageFilesToConvert);
-    console.log(previewProjectImages);
+    setImageFilesToConvert(imageFilesToConvert.filter((image) => {
+      return image.name !== selected;
+    }));
   };
-
-  useEffect(() => {
-    publish();
-  }, [publishImageFiles]);
-  useEffect(() => {
-    saveDraft();
-  }, [draftImageFiles]);
 
   // Handle save as draft
   const saveDraft = async (event) => {
     event.preventDefault();
+    const convertedFiles = await convertFilesToFormData();
     const request = isEdit
       ? {
           method: "put",
@@ -276,7 +266,7 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: draftImageFiles,
+              data: form.logo_url_files,
               headers: config,
             }
           : {
@@ -289,13 +279,13 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             }
           : {
               method: "post",
               url: `/projects/upload?slug=${response.data.slug}`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             };
         const photoRequestOne = axiosPrivate(routeOne);
@@ -329,6 +319,7 @@ function MultiForm() {
   // Handle publish
   const publish = async (event) => {
     event.preventDefault();
+    const convertedFiles = await convertFilesToFormData();
     const request = isEdit
       ? {
           method: "put",
@@ -347,7 +338,7 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: publishImageFiles,
+              data: form.logo_url_files,
               headers: config,
             }
           : {
@@ -360,13 +351,13 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             }
           : {
               method: "post",
               url: `/projects/upload?slug=${response.data.slug}`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             };
         const photoRequestOne = axiosPrivate(routeOne);
@@ -428,8 +419,8 @@ function MultiForm() {
     case 3:
       return (
         <Confirmation
-          saveDraft={convertFilesToFormData}
-          publish={convertFilesToFormData}
+          saveDraft={saveDraft}
+          publish={publish}
           prevStep={prevStep}
           values={values}
           previewLogo={previewLogo}
