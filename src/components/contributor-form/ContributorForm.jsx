@@ -391,7 +391,6 @@ export default function ContributorForm(props) {
                 required
                 hiddenLabel
                 fullWidth
-                defaultValue="$100/week"
                 variant="filled"
                 size="small"
                 sx={{ marginBottom: 2 }}
@@ -423,7 +422,12 @@ export default function ContributorForm(props) {
           </Box>
 
           <Box className="contributor-form-action-buttons">
-            <Button variant="outlined" category="action" title="Cancel" />
+            <Button 
+              variant="outlined" 
+              category="action" 
+              title="Cancel" 
+              onClick={() => {navigate(-1)}}
+            />
             {!currentContributorData && (
               <Button
                 variant="contained"
