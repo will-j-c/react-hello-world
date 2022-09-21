@@ -3,14 +3,13 @@ import UserIndexGrid from "../user-index-grid/UserIndexGrid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-export default function SearchProjectsResults(props) {
-  const { query  } = props;
+export default function SearchUsersResults(props) {
+  const { query, limit } = props;
   useEffect(() => {
   }, [query]);
   return (
     <Box sx={{
       backgroundColor: 'var(--color2)', 
-
       padding: '1em',
     }}>
         <Box>
@@ -24,7 +23,7 @@ export default function SearchProjectsResults(props) {
             Users
           </Typography>
         </Box>
-      <UserIndexGrid filters={{q: query}} limit={3}/>
+      <UserIndexGrid filters={{q: query}} limit={limit}/>
     </Box>  
   )
 }
