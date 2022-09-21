@@ -25,8 +25,6 @@ import SearchBar from "./SearchBar";
 import TitleHomepage from "../title-homepage/TitleHomepage";
 import axios from "../../api/axios";
 
-
-import Button from "../buttons/Button";
 import AuthContext from "../../context/AuthProvider";
 
 function SiteHeader() {
@@ -77,6 +75,10 @@ function SiteHeader() {
       pageName: "Delete Account",
       pageLink: "/delete",
     },
+    addNewProject: {
+      pageName: "Add new project",
+      pageLink: "/projects/create",
+    },
   };
   const { projects, community, contributors, login, signup } = pageLinks;
   const pages = isAuth
@@ -125,17 +127,6 @@ function SiteHeader() {
                 }}
               >
                 <SearchBar />
-                <Tooltip title="Add new project">
-                  <IconButton onClick={handleOpenAddProject} sx={{ p: 0 }}>
-                  <Link to={`/projects/create`}>
-                    <BatchPredictionOutlinedIcon
-                      sx={{ marginY: 1, color: "var(--color4)" }}
-                      fontSize={"large"}
-                      className="icon socmed"
-                    />
-                  </Link>
-                  </IconButton>
-                </Tooltip>
                 <DrawerComponent
                   isAuth={isAuth}
                   pageLinks={pageLinks}
