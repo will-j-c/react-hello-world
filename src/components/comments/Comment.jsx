@@ -4,9 +4,12 @@ import Box from "@mui/material/Box";
 import AvatarComponent from "../avatar/Avatar";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import { useRef } from "react";
 
 function Comment(props) {
   const { comment, auth, handleDelete, handleEdit } = props;
+  const editComment = useRef();
+  const deleteComment = useRef();
   return (
     <Box
       display={"flex"}
@@ -30,10 +33,11 @@ function Comment(props) {
           {comment.content}
         </Typography>
         {comment.username === auth.username ? (
-          <Box display={"flex"} justifyContent={"dlex-start"} marginTop={2}>
+          <Box display={"flex"} justifyContent={"flex-start"} marginTop={2}>
             <ModeEditOutlineOutlinedIcon
-              onClick={handleEdit}
+              onClick={handleEdit(editComment, comment.content)}
               htmlColor={"var(--color3)"}
+              ref={editComment}
               value={comment._id}
               fontSize={"small"}
               sx={{
@@ -43,9 +47,10 @@ function Comment(props) {
               }}
             />
             <DeleteForeverOutlinedIcon
-              onClick={handleDelete}
+              onClick={handleDelete(deleteComment)}
               htmlColor={"var(--color3)"}
               fontSize={"small"}
+              ref={deleteComment}
               value={comment._id}
               sx={{
                 "&:hover": {
