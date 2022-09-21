@@ -16,9 +16,9 @@ function MultiForm() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
-  const [isEdit, setIsEdit] = useState(location.state?.isEdit);
+  const [isEdit, ] = useState(location.state?.isEdit);
   const [imageFilesToConvert, setImageFilesToConvert] = useState([]);
-  const [editProjectSlug, setEditProjectSlug] = useState(
+  const [editProjectSlug, ] = useState(
     location.state?.project?.slug
   );
 
@@ -95,7 +95,7 @@ function MultiForm() {
       ...checkedBoxes,
     }));
   };
-  // Set snackbar allerts
+  // Set snackbar alerts
   const snackbarAlert = (open, severity, message) => {
     setOpen(open);
     setSeverity(severity);
