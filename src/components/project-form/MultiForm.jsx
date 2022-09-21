@@ -19,6 +19,7 @@ function MultiForm() {
   const [isEdit] = useState(location.state?.isEdit);
   const [imageFilesToConvert, setImageFilesToConvert] = useState([]);
   const [editProjectSlug] = useState(location.state?.project?.slug);
+  const [imagesToBeDeleted, setImagesToBeDeleted] = useState([]);
 
   const createNewForm = {
     step: location.search ? parseInt(location.search.slice(-1)) : 1,
@@ -44,6 +45,11 @@ function MultiForm() {
   };
 
   const [form, setForm] = useState(isEdit ? editForm : createNewForm);
+  
+  // Update the form when images to be deleted have been chosen
+  useEffect(() => {
+    setForm((prevState) => ({ ...prevState, deleted_images: imagesToBeDeleted }));
+  }, [imagesToBeDeleted])
 
   const [previewLogo, setPreviewLogo] = useState(isEdit ? form.logo_url : null);
   const [previewProjectImages, setPreviewProjectImages] = useState(
@@ -86,6 +92,7 @@ function MultiForm() {
     description,
     image_urls,
   };
+
   // Keep track of the checked boxes
   const checkboxTrack = (checkedBoxes) => {
     setCheckedState((prevState) => ({
@@ -93,12 +100,14 @@ function MultiForm() {
       ...checkedBoxes,
     }));
   };
+
   // Set snackbar alerts
   const snackbarAlert = (open, severity, message) => {
     setOpen(open);
     setSeverity(severity);
     setMessage(message);
   };
+
   // Set the step to 1 if coming in via /projects/create
   useEffect(() => {
     if (!location.search) {
@@ -219,6 +228,9 @@ function MultiForm() {
   const handleDeleteImageFromUpload = (event) => {
     event.preventDefault();
     const selected = event.target.id;
+    if (isEdit) {
+      setImagesToBeDeleted((prevState) => ([...prevState, selected]));
+    }
     // // Delete fom the preview images
     setPreviewProjectImages(
       previewProjectImages.filter((image) => {
