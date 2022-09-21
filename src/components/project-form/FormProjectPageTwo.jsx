@@ -6,7 +6,7 @@ import Button from "../buttons/Button";
 import Grid from "@mui/material/Unstable_Grid2";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
@@ -21,7 +21,8 @@ function FormProjectPageTwo(props) {
     open,
     severity,
     message,
-    setOpen
+    setOpen,
+    handleDeleteImageFromUpload
   } = props;
   const handleContinueClick = (event) => {
     event.preventDefault();
@@ -92,15 +93,25 @@ function FormProjectPageTwo(props) {
             />
             <ImageList
               cols={
-                previewProjectImages.length < 3
+                previewProjectImages.length < 2
                   ? previewProjectImages.length
-                  : 3
+                  : 2
               }
+              sx={{ marginBottom: 3 }}
             >
-              {previewProjectImages.map((item, idx) => (
-                <ImageListItem key={idx} sx={{ marginTop: 3 }}>
+              {previewProjectImages.map((item) => (
+                <ImageListItem key={item} sx={{ marginTop: 3 }}>
                   <img src={item} alt={item} loading="lazy" />
-                  {/* <HighlightOffOutlinedIcon sx={{marginTop: 1}} htmlColor={"var(--color3)"}/> */}
+                  <HighlightOffOutlinedIcon
+                    sx={{ marginTop: 1, 
+                      "&:hover": {
+                        cursor: "pointer",
+                      },
+                    }}
+                    htmlColor={"var(--color3)"}
+                    onClick={handleDeleteImageFromUpload}
+                    titleAccess={item}
+                  />
                 </ImageListItem>
               ))}
             </ImageList>

@@ -17,7 +17,7 @@ function MultiForm() {
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
   const [isEdit, setIsEdit] = useState(location.state?.isEdit);
-
+  const [imageFilesToConvert, setImageFilesToConvert] = useState([]);
   const [editProjectSlug, setEditProjectSlug] = useState(
     location.state?.project?.slug
   );
@@ -65,6 +65,7 @@ function MultiForm() {
   const [checkedState, setCheckedState] = useState(
     isEdit ? locationCheckedState : {}
   );
+
   const {
     step,
     username,
@@ -122,6 +123,7 @@ function MultiForm() {
       navigate(`/projects/create?step=${step + 1}`);
     }
   };
+
   // Go back to previous step
   const prevStep = () => {
     const { step } = form;
@@ -134,6 +136,7 @@ function MultiForm() {
       navigate(`/projects/create?step=${step - 1}`);
     }
   };
+
   // Handle field change
   const handleChange = (input) => (event) => {
     if (input === "categories") {
@@ -153,6 +156,7 @@ function MultiForm() {
       }));
     }
   };
+
   // When the checked boxes has been updated, update the form
   useEffect(() => {
     setForm((prevState) => ({
@@ -160,31 +164,54 @@ function MultiForm() {
       categories: checkedCategories,
     }));
   }, [checkedCategories]);
+
   // Handle file input
+  const [draftImageFiles, setDraftImageFiles] = useState(null);
+  const [publishImageFiles, setPublistImageFiles] = useState(null);
+  const convertFilesToFormData = (action) => {
+    return new Promise((resolve) => {
+      const files = imageFilesToConvert;
+      const formData = new FormData();
+      for (let i = 0, len = files.length; i < len; i++) {
+        formData.append(`image_urls`, files[i].file, files[i].name);
+      }
+      for (const value of formData) {
+        console.log(value);
+      }
+      if (action === "publish") {
+        setPublistImageFiles(formData);
+        resolve();
+      } else {
+        setDraftImageFiles(formData);
+        resolve();
+      }
+    });
+  };
+
   const handleFileInput = (input) => (event) => {
     event.preventDefault();
     // If the number of images added is 4 or more return early with and error
     if (previewProjectImages.length >= 4 || event.target.files.length > 4) {
-      snackbarAlert(true, "warning", "Only 4 photos may be uploaded to any project");
+      snackbarAlert(
+        true,
+        "warning",
+        "Only 4 photos may be uploaded to any project"
+      );
       return;
     }
     // If not, deal with the remainder of the images
     if (event.target.multiple) {
       const files = event.target.files;
+
       const arrFiles = [];
-      const formData = new FormData();
+      const filesToConvert = [];
+      // const formData = new FormData();
       for (let i = 0, len = files.length; i < len; i++) {
-        arrFiles.push(URL.createObjectURL(files[i]));
-        formData.append(
-          `image_urls`,
-          event.target.files[i],
-          event.target.files[i].name
-        );
+        const blob = URL.createObjectURL(files[i]);
+        arrFiles.push(blob);
+        filesToConvert.push({ file: files[i], name: blob });
       }
-      setForm((prevState) => ({
-        ...prevState,
-        [input]: formData,
-      }));
+      setImageFilesToConvert((prevState) => [...prevState, ...filesToConvert]);
       setPreviewProjectImages((prevState) => [...prevState, ...arrFiles]);
       return;
     }
@@ -200,8 +227,34 @@ function MultiForm() {
       [input]: formData,
     }));
   };
+
+  //Handle image delete
+  const handleDeleteImageFromUpload = (event) => {
+    event.preventDefault();
+    // Delete fom the preview images
+    const newImages = previewProjectImages.filter((image) => {
+      console.log(image);
+      console.log(event.target?.nextSibling?.textContent);
+      return image !== event.target?.nextSibling?.textContent;
+    });
+    setPreviewProjectImages(
+      previewProjectImages.filter(
+        (image) => image !== event.target?.nextSibling?.textContent
+      )
+    );
+    console.log(imageFilesToConvert);
+    console.log(previewProjectImages);
+  };
+
+  useEffect(() => {
+    publish();
+  }, [publishImageFiles]);
+  useEffect(() => {
+    saveDraft();
+  }, [draftImageFiles]);
+
   // Handle save as draft
-  const saveDraft = (event) => {
+  const saveDraft = async (event) => {
     event.preventDefault();
     const request = isEdit
       ? {
@@ -215,6 +268,7 @@ function MultiForm() {
         "Content-Type": "multipart/form-data boundary=???",
       },
     };
+
     // Send post request to projects
     axiosPrivate(request).then(
       (response) => {
@@ -222,7 +276,7 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: form.logo_url_files,
+              data: draftImageFiles,
               headers: config,
             }
           : {
@@ -271,8 +325,9 @@ function MultiForm() {
       }
     );
   };
+
   // Handle publish
-  const publish = (event) => {
+  const publish = async (event) => {
     event.preventDefault();
     const request = isEdit
       ? {
@@ -292,7 +347,7 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: form.logo_url_files,
+              data: publishImageFiles,
               headers: config,
             }
           : {
@@ -318,11 +373,7 @@ function MultiForm() {
         const photoRequestTwo = axiosPrivate(routeTwo);
         axiosMain.all([photoRequestOne, photoRequestTwo]).then(
           axiosMain.spread((...responses) => {
-            snackbarAlert(
-              true,
-              "success",
-              "Project successfully saved to draft"
-            );
+            snackbarAlert(true, "success", "Project successfully published");
             setTimeout(() => {
               navigate(`/projects/${response.data.slug}`);
             }, 2000);
@@ -371,13 +422,14 @@ function MultiForm() {
           message={message}
           setOpen={setOpen}
           values={values}
+          handleDeleteImageFromUpload={handleDeleteImageFromUpload}
         />
       );
     case 3:
       return (
         <Confirmation
-          saveDraft={saveDraft}
-          publish={publish}
+          saveDraft={convertFilesToFormData}
+          publish={convertFilesToFormData}
           prevStep={prevStep}
           values={values}
           previewLogo={previewLogo}
