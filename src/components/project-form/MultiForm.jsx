@@ -166,25 +166,14 @@ function MultiForm() {
   }, [checkedCategories]);
 
   // Handle file input
-  const [draftImageFiles, setDraftImageFiles] = useState(null);
-  const [publishImageFiles, setPublistImageFiles] = useState(null);
-  const convertFilesToFormData = (action) => {
+  const convertFilesToFormData = () => {
     return new Promise((resolve) => {
       const files = imageFilesToConvert;
       const formData = new FormData();
       for (let i = 0, len = files.length; i < len; i++) {
         formData.append(`image_urls`, files[i].file, files[i].name);
       }
-      for (const value of formData) {
-        console.log(value);
-      }
-      if (action === "publish") {
-        setPublistImageFiles(formData);
-        resolve();
-      } else {
-        setDraftImageFiles(formData);
-        resolve();
-      }
+      return resolve(formData);
     });
   };
 
@@ -231,31 +220,25 @@ function MultiForm() {
   //Handle image delete
   const handleDeleteImageFromUpload = (event) => {
     event.preventDefault();
-    // Delete fom the preview images
-    const newImages = previewProjectImages.filter((image) => {
-      console.log(image);
-      console.log(event.target?.nextSibling?.textContent);
-      return image !== event.target?.nextSibling?.textContent;
-    });
-    setPreviewProjectImages(
-      previewProjectImages.filter(
-        (image) => image !== event.target?.nextSibling?.textContent
-      )
-    );
-    console.log(imageFilesToConvert);
-    console.log(previewProjectImages);
+    // // Delete fom the preview images
+    // const newImages = previewProjectImages.filter((image) => {
+    //   console.log(image);
+    //   console.log(event.target?.nextSibling?.textContent);
+    //   return image !== event.target?.nextSibling?.textContent;
+    // });
+    // setPreviewProjectImages(
+    //   previewProjectImages.filter(
+    //     (image) => image !== event.target?.nextSibling?.textContent
+    //   )
+    // );
+    // console.log(imageFilesToConvert);
+    // console.log(previewProjectImages);
   };
-
-  useEffect(() => {
-    publish();
-  }, [publishImageFiles]);
-  useEffect(() => {
-    saveDraft();
-  }, [draftImageFiles]);
 
   // Handle save as draft
   const saveDraft = async (event) => {
     event.preventDefault();
+    const convertedFiles = await convertFilesToFormData();
     const request = isEdit
       ? {
           method: "put",
@@ -276,7 +259,7 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: draftImageFiles,
+              data: form.logo_url_files,
               headers: config,
             }
           : {
@@ -289,13 +272,13 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             }
           : {
               method: "post",
               url: `/projects/upload?slug=${response.data.slug}`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             };
         const photoRequestOne = axiosPrivate(routeOne);
@@ -329,6 +312,7 @@ function MultiForm() {
   // Handle publish
   const publish = async (event) => {
     event.preventDefault();
+    const convertedFiles = await convertFilesToFormData();
     const request = isEdit
       ? {
           method: "put",
@@ -347,7 +331,7 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: publishImageFiles,
+              data: form.logo_url_files,
               headers: config,
             }
           : {
@@ -360,13 +344,13 @@ function MultiForm() {
           ? {
               method: "put",
               url: `/projects/${editProjectSlug}/upload`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             }
           : {
               method: "post",
               url: `/projects/upload?slug=${response.data.slug}`,
-              data: form.image_urls_files,
+              data: convertedFiles,
               headers: config,
             };
         const photoRequestOne = axiosPrivate(routeOne);
@@ -428,8 +412,8 @@ function MultiForm() {
     case 3:
       return (
         <Confirmation
-          saveDraft={convertFilesToFormData}
-          publish={convertFilesToFormData}
+          saveDraft={saveDraft}
+          publish={publish}
           prevStep={prevStep}
           values={values}
           previewLogo={previewLogo}
