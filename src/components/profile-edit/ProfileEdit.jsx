@@ -177,8 +177,8 @@ function ProfileEdit() {
           component="h2"
           className="contributor-form-subtitle"
         >
-          {!name && "We just need a few details, and you’ll be on your way."}
-          {name && ""}
+          {!tagline && "We just need a few details, and you’ll be on your way."}
+          {tagline && ""}
         </Typography>
         {message.length > 0 && (
           <Box sx={{ marginTop: "1em" }}>
@@ -246,7 +246,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                value={name}
+                value={name || ""}
                 onChange={nameChange}
                 variant="filled"
                 size="small"
@@ -269,7 +269,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                value={tagline}
+                value={tagline || ""}
                 onChange={taglineChange}
                 type="text"
                 variant="filled"
@@ -289,7 +289,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                value={about}
+                value={about || ""}
                 onChange={aboutChange}
                 type="text"
                 variant="filled"
@@ -311,7 +311,7 @@ function ProfileEdit() {
                 required
                 hiddenLabel
                 fullWidth
-                value={interests}
+                value={interests || ""}
                 onChange={interestsChange}
                 type="text"
                 variant="filled"
@@ -332,7 +332,7 @@ function ProfileEdit() {
                   labelId="skills-multiple-chip-label"
                   id="skills-multiple-chip"
                   multiple
-                  value={selectedSkills}
+                  value={selectedSkills || ""}
                   onChange={skillsSelectChange}
                   input={
                     <OutlinedInput id="select-multiple-chip" label="Chip" />
