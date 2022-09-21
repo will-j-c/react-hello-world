@@ -23,7 +23,8 @@ function Confirmation(props) {
     open,
     severity,
     message,
-    setOpen
+    setOpen,
+    isEdit
   } = props;
   const handlePreviousClick = (event) => {
     event.preventDefault();
@@ -153,17 +154,19 @@ function Confirmation(props) {
           isFullWidth={true}
           onClick={handlePreviousClick}
         />
-        <Button
-          variant="outlined"
-          title="Save as Draft"
-          category="action"
-          isFullWidth={true}
-          onClick={saveDraft}
-          className={styles["no-wrap"]}
-        />
+        {!isEdit ?
+          (<Button
+            variant="outlined"
+            title="Save as Draft"
+            category="action"
+            isFullWidth={true}
+            onClick={saveDraft}
+            className={styles["no-wrap"]}
+          />) : ("")
+        }
         <Button
           variant="contained"
-          title="Publish"
+          title={isEdit? "Update" :"Publish"}
           category="action"
           isFullWidth={true}
           onClick={publish}
