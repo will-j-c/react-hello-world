@@ -6,9 +6,7 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
 function Comment(props) {
-  const comment = props.comment;
-  const auth = props.auth;
-  const handleDelete = props.handleDelete;
+  const { comment, auth, handleDelete, handleEdit } = props;
   return (
     <Box
       display={"flex"}
@@ -21,7 +19,7 @@ function Comment(props) {
         imgAlt={comment.username}
         sx={{ width: 32, height: 32, border: "solid 1px var(--color3)" }}
       />
-      <Box marginLeft={2}  width={147}>
+      <Box marginLeft={2} width={147}>
         <Typography
           variant="subtitle1"
           sx={{ color: "var(--color4)", fontWeight: "bold" }}
@@ -32,31 +30,33 @@ function Comment(props) {
           {comment.content}
         </Typography>
         {comment.username === auth.username ? (
-            <Box display={"flex"} justifyContent={"center"} marginTop={2}>
-                <ModeEditOutlineOutlinedIcon
-                  htmlColor={"var(--color3)"}
-                  fontSize={"large"}
-                  sx={{
-                    "&:hover": {
-                      cursor: "pointer",
-                    },
-                  }}
-                />
-              <DeleteForeverOutlinedIcon
-                onClick={handleDelete}
-                htmlColor={"var(--color3)"}
-                fontSize={"large"}
-                value={comment._id}
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-              />
-            </Box>
-          ) : (
-            ""
-          )}
+          <Box display={"flex"} justifyContent={"dlex-start"} marginTop={2}>
+            <ModeEditOutlineOutlinedIcon
+              onClick={handleEdit}
+              htmlColor={"var(--color3)"}
+              value={comment._id}
+              fontSize={"small"}
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+            />
+            <DeleteForeverOutlinedIcon
+              onClick={handleDelete}
+              htmlColor={"var(--color3)"}
+              fontSize={"small"}
+              value={comment._id}
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+            />
+          </Box>
+        ) : (
+          ""
+        )}
       </Box>
       <Box marginLeft={2} width={45}>
         <Typography
@@ -64,22 +64,14 @@ function Comment(props) {
           variant="body2"
           sx={{ color: "var(--color4)", fontSize: "0.5em" }}
         >
-          {date.format(
-            new Date(comment.updatedAt),
-            "hh.mm A",
-            "utc"
-          )}
+          {date.format(new Date(comment.updatedAt), "hh.mm A", "utc")}
         </Typography>
         <Typography
           flexShrink={1}
           variant="body2"
           sx={{ color: "var(--color4)", fontSize: "0.5em" }}
         >
-          {date.format(
-            new Date(comment.updatedAt),
-            "DD MMM YYYY",
-            "utc"
-          )}
+          {date.format(new Date(comment.updatedAt), "DD MMM YYYY", "utc")}
         </Typography>
       </Box>
     </Box>

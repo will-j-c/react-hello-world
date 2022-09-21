@@ -12,6 +12,7 @@ function CommentPanel(props) {
   const axiosPrivate = useAxiosPrivate();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [deleteComment, setDeleteComment] = useState(null);
+  const [editComment, setEditComment] = useState(null);
   const handleConfirm = () => {
     setModalIsOpen(false);
     axiosPrivate.delete(`comments/${deleteComment}`).then(
@@ -23,11 +24,15 @@ function CommentPanel(props) {
         setSnackbarAlert(true, "error", "Failed to delete comment");
       }
     );
-  }
+  };
   const handleDeleteClick = (event) => {
     event.preventDefault();
     setModalIsOpen(true);
     setDeleteComment(event.target.parentNode.attributes.value.nodeValue);
+  };
+  const handleEditClick = (event) => {
+    event.preventDefault();
+    setEditComment(event.target.parentNode.firstChild.attributes.value.nodeValue);
   };
   const handleClose = () => {
     setModalIsOpen(false);
@@ -35,7 +40,7 @@ function CommentPanel(props) {
   const commentsToShow = comments.map((comment, idx) => {
     return (
       <Grid padding={1} width={1} item key={idx}>
-        <Comment comment={comment} auth={auth} handleDelete={handleDeleteClick} />
+        <Comment comment={comment} auth={auth} handleDelete={handleDeleteClick} handleEdit={handleEditClick}/>
       </Grid>
     );
   });
