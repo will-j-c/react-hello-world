@@ -5,11 +5,14 @@ import Grid from "@mui/material/Unstable_Grid2";
 
 import ProjectCard from "../cards/project-card/ProjectCard";
 import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 function UserAcceptedProjects() {
   const params = useParams();
+  const axiosPrivate = useAxiosPrivate();
   const username = params.username;
   const [UserAcceptedProjects, setUserAcceptedProjects] = useState([]);
+  const [ followedProjects, setFollowedProjects ] = useState([]);
 
   useEffect(() => {
     axios
@@ -20,6 +23,17 @@ function UserAcceptedProjects() {
       .catch((err) => {
         console.log(err.response);
         // toast(err.response.data.message);
+      });
+  }, [params]);
+  useEffect(() => {
+    axiosPrivate
+      .get(`/users/${username}/projects/following`)
+      .then((response) => {
+        setFollowedProjects(response.data.map(
+          relation => relation.slug
+        ));
+      })
+      .catch((err) => {
       });
   }, [params]);
 
@@ -40,7 +54,7 @@ function UserAcceptedProjects() {
       };
       return (
         <Grid key={idx} item xs={12} sm={6} md={4}>
-          <ProjectCard project={projectCardDetails} />
+          <ProjectCard project={projectCardDetails} followed={followedProjects?.includes(project.slug)}/>
         </Grid>
       );
     });

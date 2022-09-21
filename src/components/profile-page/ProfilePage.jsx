@@ -20,7 +20,9 @@ import Button from "../buttons/Button";
 
 import "./ProfilePage.scss";
 import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import AuthContext from "../../context/AuthProvider";
+import LoginModal from "../modals/LoginModal";
 
 const baseProfileAvatar =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
@@ -31,8 +33,37 @@ function ProfilePage() {
   const { auth } = useContext(AuthContext);
   const authUserName = auth.username;
   const isAuth = authUserName === username;
+  const axiosPrivate = useAxiosPrivate();
 
+  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+  const [buttonTitle, setButtonTitle] = useState("Following");
+  const [followStatus, setFollowStatus] = useState();
+  const [authUserFollowings, setAuthUserFollowings] = useState([]);
+
+  const [tabValue, setTabValue] = useState("1");
+  const [panel, setPanel] = useState(null);
   const [profile, setProfile] = useState(null);
+  useEffect(() => {
+  }, [followStatus]);
+  useEffect(()=>{
+    async function getData(){
+      try {
+        if (authUserName){
+          const authUserFollowingResponse = await axios.get(
+            `/users/${authUserName}/following`
+          );
+          setAuthUserFollowings(
+            authUserFollowingResponse.data.map(
+              (relation) => relation.followee.username
+            )
+          );
+          
+          setFollowStatus(authUserFollowings.includes(username))
+        }
+      } catch (error) {}
+    }
+    getData();
+  })
 
   useEffect(() => {
     axios
@@ -41,8 +72,6 @@ function ProfilePage() {
         setProfile(response.data);
       })
       .catch((err) => {
-        console.log(err.response);
-        // toast(err.response.data.message);
       });
   }, [params.username]);
   // Logic for handling tabs
@@ -52,10 +81,32 @@ function ProfilePage() {
       return setPanel(<ProfileAboutPanel profile={profile} />);
     }
   }, [profile]);
-  // const { facebook, github, twitter, linkedin } = profile?.socmed;
-  // console.log(profile.socmed);
-  const [tabValue, setTabValue] = useState("1");
-  const [panel, setPanel] = useState(null);
+
+  const handleMouseOver = function () {
+    setButtonTitle("Unfollow");
+  };
+
+  const handleMouseLeave = function () {
+    setButtonTitle("Following");
+  };
+  const handleFollowAction = async function () {
+    try {
+      if (!auth.username) {
+        setModalIsOpen(true)
+        return;
+      }
+      if (followStatus) {
+        await axiosPrivate.delete(`/users/${username}/unfollow`);
+        setFollowStatus(false);
+      } else {
+        await axiosPrivate.post(`/users/${username}/follow`);
+        setFollowStatus(true);
+      }
+      return;
+    } catch (err) {}
+  };
+
+
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue);
     switch (newTabValue) {
@@ -102,46 +153,48 @@ function ProfilePage() {
               {profile.tagline || "Hello world, this is my empty tagline"}
             </Typography>
             <Box>
-              {/* BUG: can not go to this link  */}
               {profile?.socmed?.github && (
-                <Link href={profile?.socmed?.github}>
+                <a href={profile?.socmed?.github} target="_blank" rel="noreferrer">
                   <GitHubIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
               {profile?.socmed?.linkedin && (
-                <Link href={profile?.socmed?.linkedin}>
+                <a href={profile?.socmed?.linkedin} target="_blank" rel="noreferrer">
                   <LinkedInIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
 
               {profile?.socmed?.twitter && (
-                <Link href={profile?.socmed?.twitter}>
+                <a href={profile?.socmed?.twitter} target="_blank" rel="noreferrer">
                   <TwitterIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
 
               {profile?.socmed?.facebook && (
-                <Link href={profile?.socmed?.facebook}>
+                <a href={profile?.socmed?.facebook} target="_blank" rel="noreferrer">
                   <FacebookIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
             </Box>
           </Box>
           <Box
             marginLeft="auto"
-            // display={"flex"}
             flexDirection={"column"}
             justifyContent={"center"}
             sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
@@ -152,10 +205,8 @@ function ProfilePage() {
                   sx={{
                     marginY: 1,
                     color: "var(--disable-color)",
-                    "&:hover": {
-                      color: "var(--color3a)",
-                    },
                   }}
+                  className="icon"
                   fontSize={"large"}
                 />
               </Link>
@@ -163,8 +214,12 @@ function ProfilePage() {
             {username !== authUserName && (
               <Button
                 category={"action"}
-                title={"Follow"}
-                variant={"outlined"}
+                title={followStatus ? `${buttonTitle}` : 'Follow'}
+                variant={followStatus ? 'outlined' : 'contained'}
+                onMouseOver={handleMouseOver}
+                onMouseLeave={handleMouseLeave}
+                onClick={handleFollowAction}
+                component
               />
             )}
           </Box>
@@ -187,6 +242,7 @@ function ProfilePage() {
           {profile ? panel : ""}
         </Box>
       </Container>
+      <LoginModal isOpen={modalIsOpen} onClose={() => setModalIsOpen(false)} />
     </>
   ) : (
     ""
