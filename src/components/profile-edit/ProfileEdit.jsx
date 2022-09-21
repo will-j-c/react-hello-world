@@ -220,7 +220,14 @@ function ProfileEdit() {
           marginTop={4}
           container
         >
-          <Grid md={4} item>
+          <Grid
+            md={4}
+            item
+            alignItems={"center"}
+            justifyContent={"center"}
+            marginX={{ xs: "auto" }}
+            // marginX={{ xs: "auto", md: 1 }}
+          >
             <Box display="flex" flexDirection={"column"} alignItems={"center"}>
               <AvatarComponent
                 imgUrl={previewAvatar}

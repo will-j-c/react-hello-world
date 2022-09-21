@@ -136,7 +136,6 @@ function ProfilePage() {
             justifyContent={"center"}
             alignItems={"center"}
             sx={{ placeItems: "center" }}
-            alignSelf="center"
           >
             <AvatarComponent
               imgAlt={profile.username}
@@ -150,11 +149,7 @@ function ProfilePage() {
           </Grid>
 
           <Grid xs={9} md={7} item>
-            <Box
-              display={"flex"}
-              // flexDirection={"column"}
-              justifyContent={"space-between"}
-            >
+            <Box display={"flex"} justifyContent={"space-between"}>
               <Box>
                 <Typography
                   variant="h4"
