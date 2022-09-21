@@ -10,7 +10,7 @@ import AuthContext from '../../context/AuthProvider';
 import LoginModal from '../modals/LoginModal';
 import DeleteModal from '../modals/DeleteModal';
 
-export default function UserIndexGrid() {
+export default function UserIndexGrid(props) {
   const [contributors, setContributors] = useState([]);
   const [applications, setApplications] = useState([]);
   const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
@@ -19,11 +19,40 @@ export default function UserIndexGrid() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
+
+  const { filters, limit } = props;
+
+  let filterParams = '?';
+  let apiUrl = '/contributors';
+
+  if (filters) {
+    Object.keys(filters).forEach((key, idx) => {
+      const values = filters[key];
+      if (values.length > 0) {
+        filterParams += `${key}=${values.join(',').replaceAll(' ', '-')}`;
+        if (idx < Object.keys(filters).length - 1 ) {
+          filterParams += '&';
+        };
+      };
+    });
+  }
+
+  if (limit) {
+    if (filters) {
+      filterParams += `&limit=${limit}`
+    } else {
+      filterParams += `limit=${limit}`
+    }
+  }
+
+  if (filterParams.length > 1) {
+    apiUrl += filterParams;
+  }
   
   useEffect(() => {
     async function getData() {
       try {
-        const contributorsResp = await axios.get('/contributors');
+        const contributorsResp = await axios.get(apiUrl);
         setContributors(contributorsResp.data);
 
         if (username) {
@@ -46,7 +75,7 @@ export default function UserIndexGrid() {
     }
     getData()
     
-  }, [username])
+  }, [username, apiUrl])
 
   const triggerDeleteModal = ({contributor}) => {
     setTargetContributor(contributor);

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import UserIndexGrid from "../user-index-grid/UserIndexGrid";
+import ContributorIndexGrid from '../contributor-index-grid/ContributorIndexGrid';
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-export default function SearchUsersResults(props) {
+export default function SearchContributorsResults(props) {
   const { query  } = props;
   useEffect(() => {
   }, [query]);
@@ -20,10 +20,10 @@ export default function SearchUsersResults(props) {
             marginBottom='0.5em'
             fontWeight='600'
           >
-            Users
+            Contributors
           </Typography>
         </Box>
-      <UserIndexGrid filters={{q: query}} limit={3}/>
+      <ContributorIndexGrid filters={{q: query}} limit={3}/>
     </Box>  
   )
 }
