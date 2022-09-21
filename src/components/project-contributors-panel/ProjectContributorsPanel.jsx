@@ -9,21 +9,21 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import AvatarComponent from "../avatar/Avatar";
 import Button from "../buttons/Button";
 
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import AuthContext from "../../context/AuthProvider";
-import LoginModal from '../modals/LoginModal';
+import LoginModal from "../modals/LoginModal";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import ContributorRow from "./ContributorRow";
 
 function ProjectContributorsPanel(props) {
   const params = useParams();
   const { auth } = useContext(AuthContext);
-  const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
+  const [loginModalIsOpen, setLoginModalIsOpen] = useState(false);
   const { contributors, creator, updateContributors } = props;
   const axiosPrivate = useAxiosPrivate();
 
-  const handleApply = async function(contributorID) {
+  const handleApply = async function (contributorID) {
     try {
       if (!auth.username) {
         setLoginModalIsOpen(true);
@@ -32,14 +32,14 @@ function ProjectContributorsPanel(props) {
       await axiosPrivate.post(`/contributors/${contributorID}/apply`);
       updateContributors();
     } catch (err) {}
-  }
+  };
 
-  const handleWithdraw = async function(contributorID) {
+  const handleWithdraw = async function (contributorID) {
     try {
       await axiosPrivate.delete(`/contributors/${contributorID}/withdraw`);
       updateContributors();
     } catch (err) {}
-  }
+  };
 
   return (
     <Box>
@@ -108,25 +108,29 @@ function ProjectContributorsPanel(props) {
                   spacing={"small"}
                   sx={{ flexDirection: "row" }}
                 >
-                  <AvatarComponent
-                    imgAlt={creator.username}
-                    imgUrl={creator.profile_pic_url}
-                  />
+                  <Link to={`/users/${creator.username}`}>
+                    <AvatarComponent
+                      imgAlt={creator.username}
+                      imgUrl={creator.profile_pic_url}
+                    />
+                  </Link>
                 </AvatarGroup>
               </TableCell>
               <TableCell
                 component="th"
                 scope="row"
                 sx={{ color: "var(--color4)" }}
-              >
-              </TableCell>
+              ></TableCell>
             </TableRow>
             {contributors.map((contributor) => {
               const applicants = contributor.contributors;
-              const isApplied = applicants.filter(a => a.user.username === auth?.username);
-              const status = isApplied.length > 0 ? isApplied[0].state : 'not applied';
+              const isApplied = applicants.filter(
+                (a) => a.user.username === auth?.username
+              );
+              const status =
+                isApplied.length > 0 ? isApplied[0].state : "not applied";
               return (
-                <ContributorRow 
+                <ContributorRow
                   key={contributor.title}
                   contributor={contributor}
                   creator={creator}
@@ -135,13 +139,13 @@ function ProjectContributorsPanel(props) {
                   handleWithdraw={handleWithdraw}
                   triggerLogin={() => setLoginModalIsOpen(true)}
                 />
-              )
+              );
             })}
           </TableBody>
         </Table>
       </TableContainer>
-      <LoginModal 
-        isOpen={loginModalIsOpen} 
+      <LoginModal
+        isOpen={loginModalIsOpen}
         onClose={() => setLoginModalIsOpen(false)}
       />
     </Box>
