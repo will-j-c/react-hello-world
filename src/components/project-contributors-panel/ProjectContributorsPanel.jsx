@@ -90,6 +90,12 @@ function ProjectContributorsPanel(props) {
                   />
                 </AvatarGroup>
               </TableCell>
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{ color: "var(--color4)" }}
+              >
+              </TableCell>
             </TableRow>
             {contributors.map((contributor) => (
               <TableRow
@@ -129,6 +135,7 @@ function ProjectContributorsPanel(props) {
                     }
                   })}
                 </TableCell>
+                
                 <TableCell>
                   <Box display={"flex"} justifyContent={"space-between"}>
                     <Button

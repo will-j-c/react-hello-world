@@ -24,13 +24,10 @@ function FormProjectPageOne(props) {
     checkBoxTrack,
     checkedState,
   } = props;
-
-  console.log(previewLogo);
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
   };
-
   const onCheck = (event) => {
     checkBoxTrack({ [event.target.value]: event.target.checked });
   };
@@ -80,7 +77,7 @@ function FormProjectPageOne(props) {
             category="action"
             upload={true}
             defaultValue={values.logo_url}
-            onChange={handleFileInput("logo_url")}
+            onChange={handleFileInput("logo_url_files")}
           />
         </Box>
       </Grid>
@@ -127,6 +124,7 @@ function FormProjectPageOne(props) {
           />
           <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
             {categories.map((category) => {
+              console.log(checkedState[category])
               return (
                 <FormControlLabel
                   control={
