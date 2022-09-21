@@ -21,19 +21,16 @@ import Button from "../buttons/Button";
 import "./ProfilePage.scss";
 import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const baseProfileAvatar =
   "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
 
-function ProfilePage(props) {
+function ProfilePage() {
   const params = useParams();
   const username = params.username;
-  const navigate = useNavigate();
-  const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
-  const profileOwnerName = auth.username;
-  const isAuth = profileOwnerName === username;
+  const authUserName = auth.username;
+  const isAuth = authUserName === username;
 
   const [profile, setProfile] = useState(null);
 
@@ -47,7 +44,7 @@ function ProfilePage(props) {
         console.log(err.response);
         // toast(err.response.data.message);
       });
-  }, [params]);
+  }, [params.username]);
   // Logic for handling tabs
   useEffect(() => {
     if (profile) {
@@ -149,8 +146,8 @@ function ProfilePage(props) {
             justifyContent={"center"}
             sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
           >
-            {username === profileOwnerName && (
-              <Link to={`/users/${profileOwnerName}/edit`}>
+            {username === authUserName && (
+              <Link to={`/users/${authUserName}/edit`}>
                 <EditIcon
                   sx={{
                     marginY: 1,
@@ -163,7 +160,7 @@ function ProfilePage(props) {
                 />
               </Link>
             )}
-            {username !== profileOwnerName && (
+            {username !== authUserName && (
               <Button
                 category={"action"}
                 title={"Follow"}

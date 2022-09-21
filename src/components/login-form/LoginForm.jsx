@@ -20,7 +20,7 @@ export default function LogInForm() {
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
   const [cookies, setCookie] = useCookies(); 
-  const { setAuth } = useContext(AuthContext);
+  const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const formObj = {
@@ -50,7 +50,7 @@ export default function LogInForm() {
       setMessage('Login successful. Redirecting to homepage...');
       setSeverity('success');
 
-      setTimeout(navigate, 1000, '/');
+      navigate('/');
 
     } catch (err) {
       console.log(err);
@@ -60,6 +60,37 @@ export default function LogInForm() {
       return
     }
   }
+
+  if (auth?.username) { return (
+    <Box className={styles['form']}>
+      <Typography
+        variant='h4'
+        component="h1"
+        textAlign={'center'}
+        className={styles['title']}
+        gutterBottom
+      >
+        You have logged in as&nbsp;
+        <span className='highlight-text'>
+          {auth.username}
+        </span>
+      </Typography>
+      <Box textAlign={"center"}>
+        <Button
+          variant="contained"
+          title="Back to homepage" 
+          category="action"
+          route='/'
+        />
+        <Button
+          variant="outlined"
+          title="Open profile" 
+          category="action"
+          route={`/users/${auth.username}`}
+        />
+      </Box>
+    </Box>
+  )}
 
   return (
     <Box className={styles['form']}>

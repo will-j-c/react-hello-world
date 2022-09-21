@@ -65,7 +65,7 @@ function ProjectIndexGrid(props) {
   }, [props]);
 
   const triggerDeleteModal = ({slug, title}) => {
-    setTargetProject({projectSlug: slug, projectTitle: title});
+    setTargetProject({slug, title});
     setDeleteModalIsOpen(true);
   }
 
@@ -112,7 +112,7 @@ function ProjectIndexGrid(props) {
       />
       <DeleteModal 
         isOpen={deleteModalIsOpen}
-        targetProject={targetProject} 
+        target={{project: targetProject}} 
         onClose={() => setDeleteModalIsOpen(false)}
         deleteSuccessful={deleteSuccessful}
       />

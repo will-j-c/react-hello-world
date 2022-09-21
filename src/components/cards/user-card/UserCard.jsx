@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Box from "@mui/material/Box";
-import { Link as RouterLink } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import AvatarComponent from "../../avatar/Avatar";
 import Button from "../../buttons/Button";
@@ -18,14 +18,20 @@ export default function UserCard(props) {
   const [buttonTitle, setButtonTitle] = useState("Following");
   const [followStatus, setFollowStatus] = useState(props.followed);
   const { auth } = useContext(AuthContext);
+  const { isContributorPage, availability, updateAcceptance } = props;
+  const [ appStatus, setAppStatus ] = useState(props.applicationStatus);
+
+  const params = useParams();
 
   const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
+    setAppStatus(props.applicationStatus);
     setFollowStatus(props.followed);
-  }, [props.followed]);
+  }, [props.followed, props.applicationStatus]);
 
-  useEffect(() => {}, [followStatus]);
+  useEffect(() => {
+  }, [followStatus, appStatus]);
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
@@ -70,6 +76,21 @@ export default function UserCard(props) {
     } catch (err) {}
   };
 
+  const handleAcceptance = async function () {
+    try {
+      await axiosPrivate.put(`/contributors/${params.id}/accept/${username}`);
+      setAppStatus('accepted');
+      updateAcceptance();
+    } catch (err) {}
+  }
+
+  const handleRejection = async function () {
+    try {
+      await axiosPrivate.put(`/contributors/${params.id}/reject/${username}`);
+      setAppStatus('rejected');
+    } catch (err) {}
+  }
+
   return (
     <Card raised={true}>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -99,14 +120,43 @@ export default function UserCard(props) {
             variant={"outlined"}
             route={`/users/${username}`}
           />
-          <Button
-            category={"action"}
-            title={followStatus ? `${buttonTitle}` : "Follow"}
-            variant={followStatus ? "outlined" : "contained"}
-            onMouseOver={handleMouseOver}
-            onMouseLeave={handleMouseLeave}
-            onClick={handleFollowAction}
-          />
+          { !isContributorPage && (
+            <Button
+              category={'action'}
+              title={followStatus ? `${buttonTitle}` : 'Follow'}
+              variant={followStatus ? 'outlined' : 'contained'}
+              onMouseOver={handleMouseOver}
+              onMouseLeave={handleMouseLeave}
+              onClick={handleFollowAction}
+            />
+          )}
+
+          { (isContributorPage && appStatus !== 'rejected' && appStatus !== 'accepted') && (
+            <>
+              <Button
+                category={'action'}
+                title={'Reject'}
+                variant={'outlined'}
+                onClick={handleRejection}
+              />
+              { availability > 0 && (
+                <Button
+                  category={'action'}
+                  title={'Accept'}
+                  variant={'contained'}
+                  onClick={handleAcceptance}
+                />
+              )}
+            </>
+          )}
+
+          { (isContributorPage && (appStatus === 'rejected' || appStatus === 'accepted' )) && (
+            <Button
+              category={'status'}
+              title={appStatus === 'rejected' ? 'Rejected' : 'Accepted'}
+              variant={'outlined'}
+            />
+          )}
         </Box>
       </CardActions>
     </Card>
