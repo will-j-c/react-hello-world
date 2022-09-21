@@ -34,6 +34,13 @@ function ProjectContributorsPanel(props) {
     } catch (err) {}
   }
 
+  const handleWithdraw = async function(contributorID) {
+    try {
+      await axiosPrivate.delete(`/contributors/${contributorID}/withdraw`);
+      updateContributors();
+    } catch (err) {}
+  }
+
   return (
     <Box>
       {auth.username === creator.username && (
@@ -126,6 +133,7 @@ function ProjectContributorsPanel(props) {
                   creator={creator}
                   status={status}
                   handleApply={handleApply}
+                  handleWithdraw={handleWithdraw}
                   triggerLogin={() => setLoginModalIsOpen(true)}
                 />
               )

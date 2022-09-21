@@ -10,7 +10,7 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import AvatarComponent from "../avatar/Avatar";
 
 export default function ContributorRow(props) {
-  const { contributor, creator, status, handleApply } = props;
+  const { contributor, creator, status, handleApply, handleWithdraw } = props;
   const { title, available_slots, contributors } = contributor;
   const { auth } = useContext(AuthContext);
   const [ appliedButtonTitle, setAppliedButtonTitle ] = useState('Applied');
@@ -101,6 +101,7 @@ export default function ContributorRow(props) {
               title={appliedButtonTitle}
               onMouseOver={handleMouseOver}
               onMouseLeave={handleMouseLeave}
+              onClick={() => handleWithdraw(contributor._id)}
             />
           )}
         </Box>
