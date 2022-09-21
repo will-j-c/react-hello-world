@@ -20,7 +20,7 @@ function ProjectContributorsPanel(props) {
   const { auth } = useContext(AuthContext);
   const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
   const { contributors, creator } = props;
-  console.log(`contributors: ${JSON.stringify(contributors)}`);
+  const [ appliedButtonTitle, setAppliedButtonTitle ] = useState('Applied');
   const axiosPrivate = useAxiosPrivate();
 
   const handleAction = async function() {
@@ -40,6 +40,17 @@ function ProjectContributorsPanel(props) {
 
     } catch (err) {
     }
+  }
+
+  const handleApply = async function(contributorID) {
+    try {
+      if (!auth.username) {
+        setLoginModalIsOpen(true);
+        return;
+      }
+      await axiosPrivate.post(`/contributors/${contributorID}/apply`);
+
+    } catch (err) {}
   }
 
   return (
@@ -123,10 +134,10 @@ function ProjectContributorsPanel(props) {
               </TableCell>
             </TableRow>
             {contributors.map((contributor) => {
+              console.log(`contributor: ${JSON.stringify(contributor)}`);
               const applicants = contributor.contributors;
               const isApplied = applicants.filter(a => a.user.username === auth?.username);
               const status = isApplied.length > 0 ? isApplied[0].state : 'not applied';
-              console.log(`status: ${status}`);
               return (
                 <TableRow
                   key={contributor.title}
@@ -172,16 +183,16 @@ function ProjectContributorsPanel(props) {
                         variant={"outlined"}
                         category={"action"}
                         title={"View"}
-                        route={`/contributors/${contributor.id}`}
+                        route={`/contributors/${contributor._id}`}
                       />
-                      {(auth.username !== creator.username 
-                        && status === 'not applied'
+                      {(!auth.username || 
+                        (auth.username !== creator.username && status === 'not applied')
                       ) && (
                         <Button
                           variant={"contained"}
                           category={"action"}
                           title={"Apply"}
-                          onClick={handleAction}
+                          onClick={() => {handleApply(contributor._id)}}
                         />
                       )}
                       {(auth.username !== creator.username 
