@@ -5,7 +5,6 @@ import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AvatarComponent from "../../avatar/Avatar";
-import { Link as RouterLink } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import Button from "../../buttons/Button";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";

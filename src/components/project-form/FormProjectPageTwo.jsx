@@ -7,6 +7,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 function FormProjectPageTwo(props) {
   const {
@@ -16,6 +18,10 @@ function FormProjectPageTwo(props) {
     prevStep,
     handleFileInput,
     previewProjectImages,
+    open,
+    severity,
+    message,
+    setOpen
   } = props;
   const handleContinueClick = (event) => {
     event.preventDefault();
@@ -94,7 +100,7 @@ function FormProjectPageTwo(props) {
               {previewProjectImages.map((item, idx) => (
                 <ImageListItem key={idx} sx={{ marginTop: 3 }}>
                   <img src={item} alt={item} loading="lazy" />
-                  <HighlightOffOutlinedIcon sx={{marginTop: 1}} htmlColor={"var(--color3)"}/>
+                  {/* <HighlightOffOutlinedIcon sx={{marginTop: 1}} htmlColor={"var(--color3)"}/> */}
                 </ImageListItem>
               ))}
             </ImageList>
@@ -116,6 +122,19 @@ function FormProjectPageTwo(props) {
           />
         </Box>
       </Box>
+      <Snackbar
+        open={open}
+        autoHideDuration={4000}
+        onClose={(event, reason) => {
+          if (reason === "timeout") {
+            setOpen(false);
+          }
+        }}
+      >
+        <Alert variant="filled" severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
