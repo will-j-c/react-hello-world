@@ -5,10 +5,11 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import Grid from "@mui/material/Grid";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 import styles from '../login-grid/LoginGrid.module.scss';
 import axios from '../../api/axios';
+import AuthContext from "../../context/AuthProvider";
 
 import Button from '../buttons/Button';
 
@@ -21,6 +22,8 @@ function LoginForm() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
+  const { auth } = useContext(AuthContext);
+
   const handleRegistrationPost = (event) => {
     event.preventDefault();
     axios
@@ -44,6 +47,38 @@ function LoginForm() {
         return;
       });
   };
+
+  if (auth?.username) { return (
+    <Box className={styles['form']}>
+      <Typography
+        variant='h4'
+        component="h1"
+        textAlign={'center'}
+        className={styles['title']}
+        gutterBottom
+      >
+        You have logged in as&nbsp;
+        <span className='highlight-text'>
+          {auth.username}
+        </span>
+      </Typography>
+      <Box textAlign={"center"}>
+        <Button
+          variant="contained"
+          title="Back to homepage" 
+          category="action"
+          route='/'
+        />
+        <Button
+          variant="outlined"
+          title="Open profile" 
+          category="action"
+          route={`/users/${auth.username}`}
+        />
+      </Box>
+    </Box>
+  )}
+
   return (
     <Box className={styles['form']}>
       <Typography
