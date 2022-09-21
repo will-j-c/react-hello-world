@@ -1,22 +1,19 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import ProjectCard from "../cards/project-card/ProjectCard";
 import Button from "../buttons/Button";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import DeleteModal from "../modals/DeleteModal";
-// TODO: handle the case to show button project Draft , Public , ...
 
 function ProfileMyProjectsPanel(props) {
   const params = useParams();
   const username = params.username;
-  const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const authUsername = auth.username;
@@ -36,8 +33,8 @@ function ProfileMyProjectsPanel(props) {
       });
   }, [params]);
 
-  const triggerDeleteModal = ({slug, title}) => {
-    setTargetProject({slug, title});
+  const triggerDeleteModal = ({ slug, title }) => {
+    setTargetProject({ slug, title });
     setDeleteModalIsOpen(true);
   };
 
@@ -73,37 +70,33 @@ function ProfileMyProjectsPanel(props) {
         </Grid>
       );
     });
-    return (
-      <>
-        <Box
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-          marginY={5}
-        >
-          <AddCircleOutlineIcon
-            sx={{ marginY: 1, color: "var(--color4)" }}
-            fontSize={"large"}
-          />
-          <Button
-            category={"action"}
-            title={"Add new project"}
-            variant={"outlined"}
-            route={`/projects/create`}
-          />
-        </Box>
-        <Grid container spacing={2}>
-          {projectCardsToShow}
-        </Grid>
-        <DeleteModal
-          isOpen={deleteModalIsOpen}
-          target={{project: targetProject}}
-          onClose={() => setDeleteModalIsOpen(false)}
-          deleteSuccessful={deleteSuccessful}
-        />
-      </>
-    );
   }
+  return (
+    <>
+      <Box
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        marginY={5}
+      >
+        <Button
+          category={"action"}
+          title={"Add new project"}
+          variant={"outlined"}
+          route={`/projects/create`}
+        />
+      </Box>
+      <Grid container spacing={2}>
+        {projectCardsToShow}
+      </Grid>
+      <DeleteModal
+        isOpen={deleteModalIsOpen}
+        target={{ project: targetProject }}
+        onClose={() => setDeleteModalIsOpen(false)}
+        deleteSuccessful={deleteSuccessful}
+      />
+    </>
+  );
 }
 
 export default ProfileMyProjectsPanel;

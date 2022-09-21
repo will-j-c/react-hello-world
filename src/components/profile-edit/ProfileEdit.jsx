@@ -131,7 +131,7 @@ function ProfileEdit() {
     }
 
     getData();
-  }, []);
+  }, [params]);
   useEffect(() => {
     async function getData() {
       try {
