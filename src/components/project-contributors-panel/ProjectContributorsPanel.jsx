@@ -122,7 +122,6 @@ function ProjectContributorsPanel(props) {
               </TableCell>
             </TableRow>
             {contributors.map((contributor) => {
-              console.log(`contributor: ${JSON.stringify(contributor)}`);
               const applicants = contributor.contributors;
               const isApplied = applicants.filter(a => a.user.username === auth?.username);
               const status = isApplied.length > 0 ? isApplied[0].state : 'not applied';

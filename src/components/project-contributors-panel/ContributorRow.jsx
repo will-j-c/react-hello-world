@@ -15,6 +15,9 @@ export default function ContributorRow(props) {
   const { auth } = useContext(AuthContext);
   const [ appliedButtonTitle, setAppliedButtonTitle ] = useState('Applied');
 
+  const acceptances = contributors.filter(user => user.state === 'accepted');
+  const availability = Math.max(available_slots - acceptances.length, 0);
+
   const handleMouseOver = function() {
     if (appliedButtonTitle === 'Applied') {
       setAppliedButtonTitle('Withdraw');
@@ -42,8 +45,9 @@ export default function ContributorRow(props) {
           title={title}
         />
       </TableCell>
+      
       <TableCell align="center" sx={{ color: "var(--color4)" }}>
-        {available_slots}
+        {availability}
       </TableCell>
       <TableCell align="left">
         {contributors.map((user, idx) => {
@@ -64,7 +68,7 @@ export default function ContributorRow(props) {
           }
         })}
       </TableCell>
-      
+        
       <TableCell>
         <Box display={"flex"} justifyContent={"flex-end"}>
           <Button
@@ -73,9 +77,9 @@ export default function ContributorRow(props) {
             title={"View"}
             route={`/contributors/${contributor._id}`}
           />
-          {(!auth.username || 
+          {(availability > 0 && (!auth.username || 
             (auth.username !== creator.username && status === 'not applied')
-          ) && (
+          )) && (
             <Button
               variant={"contained"}
               category={"action"}
