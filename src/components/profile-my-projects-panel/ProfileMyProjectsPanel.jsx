@@ -1,17 +1,15 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import ProjectCard from "../cards/project-card/ProjectCard";
 import Button from "../buttons/Button";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import DeleteModal from "../modals/DeleteModal";
-// TODO: handle the case to show button project Draft , Public , ...
 
 function ProfileMyProjectsPanel(props) {
   const params = useParams();
@@ -81,10 +79,6 @@ function ProfileMyProjectsPanel(props) {
         alignItems={"center"}
         marginY={5}
       >
-        <AddCircleOutlineIcon
-          sx={{ marginY: 1, color: "var(--color4)" }}
-          fontSize={"large"}
-        />
         <Button
           category={"action"}
           title={"Add new project"}
