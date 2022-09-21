@@ -22,7 +22,10 @@ const Search = styled("div")(({ theme }) => ({
     width: "auto",
   },
   [theme.breakpoints.down("sm")]: {
-    backgroundColor: "var(--color1)",
+    width: "13ch",
+    "&:focus": {
+      width: "30ch",
+    },
   },
 }));
 
@@ -48,20 +51,20 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     [theme.breakpoints.up("lg")]: {
       width: "25ch",
       "&:focus": {
-        width: "30ch",
+        width: "50ch",
       },
     },
     [theme.breakpoints.down("lg")]: {
-      width: "10ch",
+      width: "8ch",
       "&:focus": {
-        width: "16ch",
+        width: "14ch",
       },
+    },
+    [theme.breakpoints.down("md")]: {
+      width: "5",
     },
     [theme.breakpoints.down("sm")]: {
       width: "0",
-      "&:focus": {
-        width: "6ch",
-      },
     },
   },
 }));
