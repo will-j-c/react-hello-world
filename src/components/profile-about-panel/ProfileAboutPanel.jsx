@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
+import Button from "../buttons/Button";
 import axios from "../../api/axios";
 import ProjectCard from "../cards/project-card/ProjectCard";
 
@@ -42,15 +43,12 @@ function ProfileAboutPanel(props) {
     const skillsToDisplay = skills.length ? (
       skills.map((skill, idx) => {
         return (
-          <Box
+          <Button
+            variant={"contained"}
+            category={"category"}
+            title={skill}
             key={idx}
-            sx={{ backgroundColor: "var(--color7a)" }}
-            padding={1}
-            marginRight={1}
-            borderRadius={1}
-          >
-            {skill}
-          </Box>
+          />
         );
       })
     ) : (
@@ -62,15 +60,12 @@ function ProfileAboutPanel(props) {
     const interestsToDisplay = interests.length ? (
       interests.map((interest, idx) => {
         return (
-          <Box
+          <Button
+            variant={"contained"}
+            category={"category"}
+            title={interest}
             key={idx}
-            sx={{ backgroundColor: "var(--color7a)" }}
-            padding={1}
-            marginRight={1}
-            borderRadius={1}
-          >
-            {interest}
-          </Box>
+          />
         );
       })
     ) : (
@@ -133,7 +128,9 @@ function ProfileAboutPanel(props) {
         >
           Skills:
         </Typography>
-        <Box display={"flex"} sx={{ flexWrap: 'wrap' , rowGap: 1}}>{skillsToDisplay}</Box>
+        <Box display={"flex"} sx={{ flexWrap: "wrap", rowGap: 1 }}>
+          {skillsToDisplay}
+        </Box>
         <Typography
           sx={{ color: "var(--color4)" }}
           fontWeight={"bold"}
@@ -142,7 +139,9 @@ function ProfileAboutPanel(props) {
         >
           Interests:
         </Typography>
-        <Box display={"flex"} sx={{ flexWrap: 'wrap' , rowGap: 1}}>{interestsToDisplay}</Box>
+        <Box display={"flex"} sx={{ flexWrap: "wrap", rowGap: 1 }}>
+          {interestsToDisplay}
+        </Box>
 
         <Typography
           sx={{ color: "var(--color4)" }}

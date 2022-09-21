@@ -27,7 +27,6 @@ const themeTab = createTheme({
           backgroundColor: "var(--color1)",
           color: "var(--color4)",
           minHeight: 38,
-          
           "&.Mui-selected": {
             backgroundColor: "var(--color3)",
             fontWeight: "bold",
@@ -46,9 +45,14 @@ function ProfileShowTabs(props) {
       value={props.tabValue}
       onChange={props.handleTabChange}
       variant="scrollable"
-      scrollButtons
+      scrollButtons="auto"
       allowScrollButtonsMobile
       aria-label="scrollable force tabs example"
+      sx={{
+        [`& .${tabsClasses.scrollButtons}`]: {
+          "&.Mui-disabled": { opacity: 0.3 },
+        },
+      }}
     >
       <Tab value="1" label="Profile" />
       <Tab value="2" label="Connection" />
@@ -60,14 +64,10 @@ function ProfileShowTabs(props) {
 function ShowTabsConnection(props) {
   return (
     <ThemeProvider theme={themeTab}>
-    <Tabs value={props.tabValue} onChange={props.handleTabChange}>
-      <Tab
-        value="1"
-        label="Following"
-        className="small-tab"
-      />
-      <Tab value="2" label="Followers" className="small-tab" />
-    </Tabs>
+      <Tabs value={props.tabValue} onChange={props.handleTabChange}>
+        <Tab value="1" label="Following" className="small-tab" />
+        <Tab value="2" label="Followers" className="small-tab" />
+      </Tabs>
     </ThemeProvider>
   );
 }
