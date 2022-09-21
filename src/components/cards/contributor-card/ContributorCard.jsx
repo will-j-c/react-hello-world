@@ -19,6 +19,7 @@ export default function ContributorCard(props) {
   const { logo_url, slug } = project_id;
   const projectTitle = project_id.title;
   const projectOwner = project_id.user_id.username;
+  const isFilled = props.isFilled;
   const projectUrl = `/projects/${slug}`;
   const { auth } = useContext(AuthContext);
   const [ buttonTitle, setButtonTitle ] = useState('Following');
@@ -158,14 +159,29 @@ export default function ContributorCard(props) {
             variant={"outlined"}
             route={`/contributors/${_id}`}
           />
-          { auth.username !== projectOwner && (
+          { (auth.username !== projectOwner && (status === 'rejected' || status === 'accepted' )) && (
             <Button
-              category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
+              category={'status'}
+              title={buttonTitle}
+              variant={'outlined'}
+            />
+          )}
+          { (auth.username !== projectOwner && !isFilled && status !== ('rejected' || 'accepted' )) && (
+            <Button
+              category={status === 'applied' ? 'status' : 'action'}
               title={buttonTitle}
               variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
               onMouseOver={handleMouseOver}
               onMouseLeave={handleMouseLeave}
               onClick={handleAction}
+            />
+          )}
+          { (auth.username !== projectOwner 
+            && isFilled && status !== 'rejected' && status !== 'accepted' ) && (
+            <Button
+              category={'status'}
+              title={'Filled'}
+              variant={'outlined'}
             />
           )}
           { auth.username === projectOwner && (
@@ -186,8 +202,6 @@ export default function ContributorCard(props) {
           )}
         </Box>
       </CardActions>
-      
-      
     </Card>
   )
 }
