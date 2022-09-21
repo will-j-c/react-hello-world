@@ -1,11 +1,10 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useContext, useEffect, useRef } from "react";
 
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -21,7 +20,7 @@ import Button from "../buttons/Button";
 import styles from "./MultiForm.module.scss";
 import AvatarComponent from "../avatar/Avatar";
 
-import axios, { axiosPrivate } from "../../api/axios";
+import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import LoginCheck from "../login-check/LoginCheck";
@@ -38,7 +37,6 @@ function ProfileEdit() {
   const authUsername = auth.username;
   const isAuth = authUsername === username;
 
-  const [currentUserData, setCurrentUserData] = useState(null);
   const [previewAvatar, setPreviewAvatar] = useState(null);
 
   const [message, setMessage] = useState("");
@@ -108,20 +106,17 @@ function ProfileEdit() {
   };
   const [file, setFile] = useState("");
   const handleFileInput = (evnt) => {
-    // console.log("evnt.target.files is:", evnt.target.files[0]);
     setFile(evnt.target.files[0]);
     setPreviewAvatar(URL.createObjectURL(evnt.target.files[0]));
   };
-  // const handleFileInput = (event) => {};
 
   useEffect(() => {
     async function getData() {
       try {
-        const skillsData = await axios.get("/data/skills");
         let userData = null;
-
         const response = await axios.get(`/users/${authUsername}`);
         userData = response.data;
+
         setPreviewAvatar(userData.profile_pic_url);
         setName(userData.name);
         setTagline(userData.tagline);
@@ -132,14 +127,21 @@ function ProfileEdit() {
         setFacebook(userData.socmed.facebook);
         setInterestsInput(userData.interests);
         setSelectedSkills(userData.skills);
-
-        setCurrentUserData(userData);
-        setSkills(skillsData.data);
       } catch (err) {}
     }
 
     getData();
   }, []);
+  useEffect(() => {
+    async function getData() {
+      try {
+        const skillsData = await axios.get("/data/skills");
+        setSkills(skillsData.data);
+      } catch (err) {}
+    }
+
+    getData();
+  }, [params]);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -229,20 +231,7 @@ function ProfileEdit() {
                   marginBottom: 2,
                 }}
               />
-              {/* <TextField
-                id="outlined-full-width"
-                label="Image Upload"
-                style={{ margin: 8 }}
-                name="avatar"
-                type="file"
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="outlined"
-                onChange={handleFileInput}
-              /> */}
+
               <Button
                 variant="outlined"
                 title="Upload"
@@ -283,8 +272,7 @@ function ProfileEdit() {
                 size="small"
                 type="text"
                 sx={{ marginBottom: 2 }}
-                // className={styles["input-text"]}
-                className="input-text"
+                className={styles["input-text"]}
                 placeholder="Filling your display name on your profile"
                 autoFocus
               />
@@ -498,11 +486,21 @@ function ProfileEdit() {
               />
 
               {/* SUBMIT BUTTON  */}
-              <Box textAlign={"center"} alignSelf={"flex-end"}>
-                {/* <Button variant="outlined" category="action" title="Cancel" /> */}
+              <Box
+                textAlign={"center"}
+                alignSelf={"flex-end"}
+                marginTop={3}
+                sx={{ display: "flex" }}
+              >
                 <Button
                   variant="outlined"
-                  title="Submit →"
+                  category="action"
+                  title="Cancel"
+                  route={`/users/${authUsername}`}
+                />
+                <Button
+                  variant="outlined"
+                  title="Submit"
                   category="action"
                   isFullWidth={true}
                   onClick={handleFormSubmit}
