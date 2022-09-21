@@ -17,7 +17,6 @@ function FormProjectPageTwo(props) {
     handleFileInput,
     previewProjectImages,
   } = props;
-  console.log(previewProjectImages);
   const handleContinueClick = (event) => {
     event.preventDefault();
     nextStep();
