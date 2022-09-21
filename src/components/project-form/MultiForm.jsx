@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Confirmation from "./Confirmation";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import axiosMain from "axios";
+import LoginCheck from "../login-check/LoginCheck";
 
 function MultiForm() {
   const location = useLocation();
@@ -228,6 +229,9 @@ function MultiForm() {
       }
     );
   };
+
+  if (!auth?.username) return <LoginCheck />
+
   switch (step) {
     case 1:
       return (
