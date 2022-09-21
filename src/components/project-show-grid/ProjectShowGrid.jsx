@@ -38,6 +38,14 @@ function ProjectShowGrid(props) {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
+  const updateComments = () => {
+        axios.get(`/comments/${slug}`).then(
+      (response) => {
+        setComments(response.data.commentsToSend);
+        setCommentCount(response.data.commentCount);
+      },
+      (error) => {})
+  }
 
   useEffect(() => {
     axios.get(`/projects/${slug}`).then(
@@ -48,14 +56,7 @@ function ProjectShowGrid(props) {
       },
       (error) => {}
     );
-
-    axios.get(`/comments/${slug}`).then(
-      (response) => {
-        setComments(response.data.commentsToSend);
-        setCommentCount(response.data.commentCount);
-      },
-      (error) => {}
-    );
+    updateComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,13 +90,7 @@ function ProjectShowGrid(props) {
     axiosPrivate.post(`/comments/${slug}`, { content }).then(
       (response) => {
         // Update comments with a fetch request
-        axios.get(`/comments/${slug}`).then(
-          (response) => {
-            setComments(response.data.commentsToSend);
-            setCommentCount(response.data.commentCount);
-          },
-          (error) => {}
-        );
+        updateComments();
       },
       (error) => {
         console.log("Error", error);
@@ -234,7 +229,7 @@ function ProjectShowGrid(props) {
           </Box>
         </Grid>
         <Grid md={4} sx={{ height: "100%", width: "100%" }} paddingTop={0} item>
-          <CommentPanel comments={comments} postComment={postComment} />
+          <CommentPanel comments={comments} postComment={postComment} auth={auth} updateComments={updateComments}/>
           <Pagination
             count={
               commentCount ? Math.floor(commentCount / comments.length) : 1
