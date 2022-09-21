@@ -7,11 +7,13 @@ import { useLocation } from 'react-router-dom';
  
 import axios from '../../api/axios';
 import AuthContext from "../../context/AuthProvider";
+import SearchProjectsResults from "./SearchProjectsResults";
 
 export default function SearchResultsPage(props) {
   const useQuery = () => new URLSearchParams(useLocation().search);
   const query = useQuery();
-  console.log(query.get('q'));
+  const keyword = query.get('q');
+  const [q, setQ] = useState([]);
 
   const [ projects, setProjects ] = useState([]);
   const [ contributors, setContributors ] = useState([]);
@@ -20,17 +22,8 @@ export default function SearchResultsPage(props) {
   const { auth } = useContext(AuthContext);
 
   useEffect(() => {
-    async function getData () {
-      try {
-        const projectsData = await axios.get(`/projects?q=${query.get('q')}`);
-        console.log(`projectsData: ${projectsData}`);
-      } catch (err) {
-        console.log(err)
-      }
-    }
-
-    getData();
-  }, [])
+    setQ([keyword]);
+  }, [keyword])
 
   return (
     <>
@@ -44,8 +37,10 @@ export default function SearchResultsPage(props) {
         Search results
       </Typography>
 
-      <Grid container columns={{ xs: 1, md: 12 }}>
-      
+      <Grid container direction='column'>
+        <Grid item>
+          <SearchProjectsResults query={q} props2={'hello'}/>
+        </Grid>
       </Grid>
     </>
     
