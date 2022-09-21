@@ -10,6 +10,7 @@ import axios from '../../api/axios';
 import AuthContext from "../../context/AuthProvider";
 import SearchProjectsResults from "./SearchProjectsResults";
 import SearchUsersResults from './SearchUsersResults';
+import SearchContributorsResults from "./SearchContributorsResults";
 
 export default function SearchResultsPage(props) {
   const useQuery = () => new URLSearchParams(useLocation().search);
@@ -75,6 +76,9 @@ export default function SearchResultsPage(props) {
         </Grid>
         <Grid item>
           <SearchUsersResults query={q} />
+        </Grid>
+        <Grid item>
+          <SearchContributorsResults query={q} />
         </Grid>
       </Grid>
     </>
