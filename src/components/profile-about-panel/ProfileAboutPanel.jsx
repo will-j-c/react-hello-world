@@ -122,7 +122,7 @@ function ProfileAboutPanel(props) {
         </Typography>
         <Box sx={{ backgroundColor: "var(--color1)" }} padding={2}>
           <Typography sx={{ color: "var(--color4)" }} variant={"body2"}>
-            {"about_me about_meabout_meabout_meabout_me" || "Nothing here yet!"}
+            {props.profile.about || "Nothing here yet!"}
           </Typography>
         </Box>
         <Typography
