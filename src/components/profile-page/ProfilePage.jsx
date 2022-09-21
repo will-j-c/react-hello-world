@@ -10,6 +10,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import Container from "@mui/material/Container";
 import EditIcon from "@mui/icons-material/Edit";
+import Grid from "@mui/material/Unstable_Grid2";
 
 import { ProfileShowTabs } from "../profile-show-tabs/ProfileShowTabs";
 import ProfileAboutPanel from "../profile-about-panel/ProfileAboutPanel";
@@ -35,7 +36,7 @@ function ProfilePage() {
   const isAuth = authUserName === username;
   const axiosPrivate = useAxiosPrivate();
 
-  const [ modalIsOpen, setModalIsOpen ] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [buttonTitle, setButtonTitle] = useState("Following");
   const [followStatus, setFollowStatus] = useState();
   const [authUserFollowings, setAuthUserFollowings] = useState([]);
@@ -43,12 +44,11 @@ function ProfilePage() {
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
   const [profile, setProfile] = useState(null);
+  useEffect(() => {}, [followStatus]);
   useEffect(() => {
-  }, [followStatus]);
-  useEffect(()=>{
-    async function getData(){
+    async function getData() {
       try {
-        if (authUserName){
+        if (authUserName) {
           const authUserFollowingResponse = await axios.get(
             `/users/${authUserName}/following`
           );
@@ -57,13 +57,13 @@ function ProfilePage() {
               (relation) => relation.followee.username
             )
           );
-          
-          setFollowStatus(authUserFollowings.includes(username))
+
+          setFollowStatus(authUserFollowings.includes(username));
         }
       } catch (error) {}
     }
     getData();
-  })
+  });
 
   useEffect(() => {
     axios
@@ -71,8 +71,7 @@ function ProfilePage() {
       .then((response) => {
         setProfile(response.data);
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   }, [params.username]);
   // Logic for handling tabs
   useEffect(() => {
@@ -92,7 +91,7 @@ function ProfilePage() {
   const handleFollowAction = async function () {
     try {
       if (!auth.username) {
-        setModalIsOpen(true)
+        setModalIsOpen(true);
         return;
       }
       if (followStatus) {
@@ -105,7 +104,6 @@ function ProfilePage() {
       return;
     } catch (err) {}
   };
-
 
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue);
@@ -130,100 +128,130 @@ function ProfilePage() {
   return profile ? (
     <>
       <Container>
-        <Box display={"flex"} marginTop={5}>
-          <AvatarComponent
-            imgAlt={profile.username}
-            imgUrl={profile.profile_pic_url || baseProfileAvatar}
-            sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
-          />
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
+        <Grid container justifyContent={{ xs: "center", sm: "flex-start" }}>
+          <Grid
+            item
+            mr={2}
+            alignSelf={"center"}
             justifyContent={"center"}
-            marginLeft={5}
+            alignItems={"center"}
+            sx={{ placeItems: "center" }}
+            alignSelf="center"
           >
-            <Typography
-              variant="h4"
-              component="h4"
-              sx={{ color: "var(--color3)", textTransform: "capitalize" }}
+            <AvatarComponent
+              imgAlt={profile.username}
+              imgUrl={profile.profile_pic_url || baseProfileAvatar}
+              sx={{
+                width: 128,
+                height: 128,
+                border: "solid 1px var(--color3)",
+              }}
+            />
+          </Grid>
+
+          <Grid xs={9} md={7} item>
+            <Box
+              display={"flex"}
+              // flexDirection={"column"}
+              justifyContent={"space-between"}
             >
-              {profile.name}
-            </Typography>
-            <Typography sx={{ color: "var(--color4)" }}>
-              {profile.tagline || "Hello world, this is my empty tagline"}
-            </Typography>
-            <Box>
-              {profile?.socmed?.github && (
-                <a href={profile?.socmed?.github} target="_blank" rel="noreferrer">
-                  <GitHubIcon
-                    sx={{ marginY: 1, color: "var(--color4)" }}
-                    fontSize={"large"}
-                    className="icon socmed"
-                  />
-                </a>
-              )}
-              {profile?.socmed?.linkedin && (
-                <a href={profile?.socmed?.linkedin} target="_blank" rel="noreferrer">
-                  <LinkedInIcon
-                    sx={{ marginY: 1, color: "var(--color4)" }}
-                    fontSize={"large"}
-                    className="icon socmed"
-                  />
-                </a>
-              )}
+              <Box>
+                <Typography
+                  variant="h4"
+                  component="h4"
+                  sx={{ color: "var(--color3)", textTransform: "capitalize" }}
+                >
+                  {profile.name}
+                </Typography>
+                <Typography sx={{ color: "var(--color4)" }}>
+                  {profile.tagline || "Hello world, this is my empty tagline"}
+                </Typography>
+                <Box>
+                  {profile?.socmed?.github && (
+                    <a
+                      href={profile?.socmed?.github}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <GitHubIcon
+                        sx={{ marginY: 1, color: "var(--color4)" }}
+                        fontSize={"large"}
+                        className="icon socmed"
+                      />
+                    </a>
+                  )}
+                  {profile?.socmed?.linkedin && (
+                    <a
+                      href={profile?.socmed?.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <LinkedInIcon
+                        sx={{ marginY: 1, color: "var(--color4)" }}
+                        fontSize={"large"}
+                        className="icon socmed"
+                      />
+                    </a>
+                  )}
 
-              {profile?.socmed?.twitter && (
-                <a href={profile?.socmed?.twitter} target="_blank" rel="noreferrer">
-                  <TwitterIcon
-                    sx={{ marginY: 1, color: "var(--color4)" }}
-                    fontSize={"large"}
-                    className="icon socmed"
-                  />
-                </a>
-              )}
+                  {profile?.socmed?.twitter && (
+                    <a
+                      href={profile?.socmed?.twitter}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <TwitterIcon
+                        sx={{ marginY: 1, color: "var(--color4)" }}
+                        fontSize={"large"}
+                        className="icon socmed"
+                      />
+                    </a>
+                  )}
 
-              {profile?.socmed?.facebook && (
-                <a href={profile?.socmed?.facebook} target="_blank" rel="noreferrer">
-                  <FacebookIcon
-                    sx={{ marginY: 1, color: "var(--color4)" }}
-                    fontSize={"large"}
-                    className="icon socmed"
+                  {profile?.socmed?.facebook && (
+                    <a
+                      href={profile?.socmed?.facebook}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <FacebookIcon
+                        sx={{ marginY: 1, color: "var(--color4)" }}
+                        fontSize={"large"}
+                        className="icon socmed"
+                      />
+                    </a>
+                  )}
+                </Box>
+              </Box>
+
+              <Box marginLeft="auto">
+                {username === authUserName && (
+                  <Link to={`/users/${authUserName}/edit`}>
+                    <EditIcon
+                      sx={{
+                        marginY: 1,
+                        color: "var(--disable-color)",
+                      }}
+                      className="icon"
+                      fontSize={"large"}
+                    />
+                  </Link>
+                )}
+                {username !== authUserName && (
+                  <Button
+                    category={"action"}
+                    title={followStatus ? `${buttonTitle}` : "Follow"}
+                    variant={followStatus ? "outlined" : "contained"}
+                    onMouseOver={handleMouseOver}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={handleFollowAction}
+                    component
                   />
-                </a>
-              )}
+                )}
+              </Box>
             </Box>
-          </Box>
-          <Box
-            marginLeft="auto"
-            flexDirection={"column"}
-            justifyContent={"center"}
-            sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
-          >
-            {username === authUserName && (
-              <Link to={`/users/${authUserName}/edit`}>
-                <EditIcon
-                  sx={{
-                    marginY: 1,
-                    color: "var(--disable-color)",
-                  }}
-                  className="icon"
-                  fontSize={"large"}
-                />
-              </Link>
-            )}
-            {username !== authUserName && (
-              <Button
-                category={"action"}
-                title={followStatus ? `${buttonTitle}` : 'Follow'}
-                variant={followStatus ? 'outlined' : 'contained'}
-                onMouseOver={handleMouseOver}
-                onMouseLeave={handleMouseLeave}
-                onClick={handleFollowAction}
-                component
-              />
-            )}
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
         <Box
           sx={{
             border: "solid 1px var(--color3)",
