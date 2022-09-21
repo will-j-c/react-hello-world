@@ -153,46 +153,48 @@ function ProfilePage() {
               {profile.tagline || "Hello world, this is my empty tagline"}
             </Typography>
             <Box>
-              {/* BUG: can not go to this link  */}
               {profile?.socmed?.github && (
-                <Link href={profile?.socmed?.github}>
+                <a href={profile?.socmed?.github} target="_blank" rel="noreferrer">
                   <GitHubIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
               {profile?.socmed?.linkedin && (
-                <Link href={profile?.socmed?.linkedin}>
+                <a href={profile?.socmed?.linkedin} target="_blank" rel="noreferrer">
                   <LinkedInIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
 
               {profile?.socmed?.twitter && (
-                <Link href={profile?.socmed?.twitter}>
+                <a href={profile?.socmed?.twitter} target="_blank" rel="noreferrer">
                   <TwitterIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
 
               {profile?.socmed?.facebook && (
-                <Link href={profile?.socmed?.facebook}>
+                <a href={profile?.socmed?.facebook} target="_blank" rel="noreferrer">
                   <FacebookIcon
                     sx={{ marginY: 1, color: "var(--color4)" }}
                     fontSize={"large"}
+                    className="icon socmed"
                   />
-                </Link>
+                </a>
               )}
             </Box>
           </Box>
           <Box
             marginLeft="auto"
-            // display={"flex"}
             flexDirection={"column"}
             justifyContent={"center"}
             sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
@@ -203,10 +205,8 @@ function ProfilePage() {
                   sx={{
                     marginY: 1,
                     color: "var(--disable-color)",
-                    "&:hover": {
-                      color: "var(--color3a)",
-                    },
                   }}
+                  className="icon"
                   fontSize={"large"}
                 />
               </Link>
@@ -219,6 +219,7 @@ function ProfilePage() {
                 onMouseOver={handleMouseOver}
                 onMouseLeave={handleMouseLeave}
                 onClick={handleFollowAction}
+                component
               />
             )}
           </Box>
