@@ -195,7 +195,6 @@ function ProfilePage() {
           </Box>
           <Box
             marginLeft="auto"
-            // display={"flex"}
             flexDirection={"column"}
             justifyContent={"center"}
             sx={{ justifyContent: "flex-start", alignContent: "flex-end" }}
