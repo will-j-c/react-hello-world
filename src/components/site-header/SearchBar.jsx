@@ -77,7 +77,6 @@ export default function SearchBar() {
   const navigate = useNavigate();
   
   const handleSearchSubmit = (evnt) => {
-    console.log(evnt.target.value);
     evnt.preventDefault();
     navigate(`/search?q=${evnt.target.value}`);
     return;

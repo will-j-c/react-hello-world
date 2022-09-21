@@ -9,7 +9,7 @@ import UserCard from "../cards/user-card/UserCard";
 import AuthContext from "../../context/AuthProvider";
 import LoginModal from "../modals/LoginModal";
 
-export default function UserIndexGrid() {
+export default function UserIndexGrid(props) {
   const [users, setUsers] = useState([]);
   const [followingUsers, setFollowingUsers] = useState([]);
   const [followers, setFollowers] = useState([]);
@@ -17,11 +17,39 @@ export default function UserIndexGrid() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
+  const { filters, limit } = props;
+
+  let filterParams = '?';
+  let apiUrl = '/users';
+
+  if (filters) {
+    Object.keys(filters).forEach((key, idx) => {
+      const values = filters[key];
+      if (values.length > 0) {
+        filterParams += `${key}=${values.join(',').replaceAll(' ', '-')}`;
+        if (idx < Object.keys(filters).length - 1 ) {
+          filterParams += '&';
+        };
+      };
+    });
+  }
+
+  if (limit) {
+    if (filters) {
+      filterParams += `&limit=${limit}`
+    } else {
+      filterParams += `limit=${limit}`
+    }
+  }
+
+  if (filterParams.length > 1) {
+    apiUrl += filterParams;
+  }
 
   useEffect(() => {
     async function getData() {
       try {
-        const usersResponse = await axios.get("/users");
+        const usersResponse = await axios.get(apiUrl);
         setUsers(usersResponse.data);
 
         if (username) {
@@ -45,20 +73,18 @@ export default function UserIndexGrid() {
     }
 
     getData();
-  }, [username])
+  }, [username, props, apiUrl])
 
   const userCards = users.map((user, idx) => {
-    if (user.username !== username) {
-      return (
-        <Grid key={idx} xs={6} md={4} item>
-          <UserCard
-            user={user}
-            followed={followingUsers.includes(user.username)}
-            triggerLogin={() => setModalIsOpen(true)}
-          />
-        </Grid>
-      );
-    }
+    return (
+      <Grid key={idx} xs={6} md={4} item>
+        <UserCard
+          user={user}
+          followed={followingUsers.includes(user.username)}
+          triggerLogin={() => setModalIsOpen(true)}
+        />
+      </Grid>
+    );
   });
 
   return (

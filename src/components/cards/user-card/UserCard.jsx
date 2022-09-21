@@ -125,7 +125,6 @@ export default function UserCard(props) {
               </>
             )}
           </Box>
-          {/* <Box className="card-captions">{interestsDisplay}</Box> */}
         </CardContent>
       </Box>
 
@@ -137,7 +136,7 @@ export default function UserCard(props) {
             variant={"outlined"}
             route={`/users/${username}`}
           />
-          { !isContributorPage && (
+          { (!isContributorPage && username !== auth.username) && (
             <Button
               category={'action'}
               title={followStatus ? `${buttonTitle}` : 'Follow'}
@@ -148,7 +147,11 @@ export default function UserCard(props) {
             />
           )}
 
-          { (isContributorPage && appStatus !== 'rejected' && appStatus !== 'accepted') && (
+          { (isContributorPage 
+            && appStatus !== 'rejected' 
+            && appStatus !== 'accepted' 
+            && username !== auth.username
+          ) && (
             <>
               <Button
                 category={'action'}
@@ -167,7 +170,10 @@ export default function UserCard(props) {
             </>
           )}
 
-          { (isContributorPage && (appStatus === 'rejected' || appStatus === 'accepted' )) && (
+          { (isContributorPage 
+          && (appStatus === 'rejected' || appStatus === 'accepted' )
+          && username !== auth.username
+          ) && (
             <Button
               category={'status'}
               title={appStatus === 'rejected' ? 'Rejected' : 'Accepted'}
