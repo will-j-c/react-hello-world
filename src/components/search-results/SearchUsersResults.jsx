@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 export default function SearchUsersResults(props) {
-  const { query  } = props;
+  const { query, limit } = props;
   useEffect(() => {
   }, [query]);
   return (
@@ -23,7 +23,7 @@ export default function SearchUsersResults(props) {
             Users
           </Typography>
         </Box>
-      <UserIndexGrid filters={{q: query}} limit={3}/>
+      <UserIndexGrid filters={{q: query}} limit={limit}/>
     </Box>  
   )
 }
