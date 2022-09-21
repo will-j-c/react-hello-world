@@ -14,9 +14,6 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import BatchPredictionOutlinedIcon from '@mui/icons-material/BatchPredictionOutlined';
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
 
 import "./SiteHeader.css";
 import DrawerComponent from "./DrawerComponent";
@@ -76,7 +73,7 @@ function SiteHeader() {
       pageLink: "/delete",
     },
     addNewProject: {
-      pageName: "Add new project",
+      pageName: "Add project",
       pageLink: "/projects/create",
     },
   };
@@ -87,13 +84,6 @@ function SiteHeader() {
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
-  const [tooltipAddProject, setTooltipAddProject] = React.useState(null);
-  const handleOpenAddProject = (event) => {
-    setTooltipAddProject(event.currentTarget);
-  };
-  const handleOpenCloseProject = () => {
-    setTooltipAddProject(null);
-  };
 
   return (
     <AppBar
@@ -123,7 +113,7 @@ function SiteHeader() {
                 sx={{
                   marginLeft: "auto",
                   display: "inline-flex",
-                  alignItems: "center"
+                  alignItems: "center",
                 }}
               >
                 <SearchBar />
@@ -199,19 +189,34 @@ function SiteHeader() {
             </Grid>
 
             {isAuth && (
-              <Box sx={{ flexGrow: 1, marginLeft: 1, display: "flex" }}>
-                <Tooltip title="Add new project">
-                  <IconButton onClick={handleOpenAddProject} sx={{ p: 0 }}>
-                  <Link to={`/projects/create`}>
-                    <BatchPredictionOutlinedIcon
-                      sx={{ marginY: 1, color: "var(--color4)" }}
-                      fontSize={"large"}
-                      className="icon socmed"
-                    />
-                  </Link>
-                  </IconButton>
-                </Tooltip>
-                
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  marginLeft: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 3,
+                }}
+              >
+                <ListItemButton to="/projects/create" component={Link}>
+                  <ListItemIcon>
+                    <ListItemText
+                      primaryTypographyProps={{
+                        fontWeight: "bold",
+                      }}
+                      sx={{
+                        color: "var(--color7)",
+                        cursor: "pointer",
+                        fontSize: 10,
+                        "&:hover": {
+                          color: "var(--color3)",
+                        },
+                      }}
+                    >
+                      Add project
+                    </ListItemText>
+                  </ListItemIcon>
+                </ListItemButton>
                 <MenuBar
                   pageLinks={pageLinks}
                   profileAvatarUrl={profileAvatarUrl}
