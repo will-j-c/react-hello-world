@@ -108,7 +108,7 @@ function ProfileEdit() {
   };
   const [file, setFile] = useState("");
   const handleFileInput = (evnt) => {
-    console.log("evnt.target.files is:", evnt.target.files[0]);
+    // console.log("evnt.target.files is:", evnt.target.files[0]);
     setFile(evnt.target.files[0]);
     setPreviewAvatar(URL.createObjectURL(evnt.target.files[0]));
   };
