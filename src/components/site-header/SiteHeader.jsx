@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material";
@@ -13,6 +14,9 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import BatchPredictionOutlinedIcon from '@mui/icons-material/BatchPredictionOutlined';
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 
 import "./SiteHeader.css";
 import DrawerComponent from "./DrawerComponent";
@@ -71,6 +75,10 @@ function SiteHeader() {
       pageName: "Delete Account",
       pageLink: "/delete",
     },
+    addNewProject: {
+      pageName: "Add new project",
+      pageLink: "/projects/create",
+    },
   };
   const { projects, community, contributors, login, signup } = pageLinks;
   const pages = isAuth
@@ -79,6 +87,13 @@ function SiteHeader() {
 
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("md"));
+  const [tooltipAddProject, setTooltipAddProject] = React.useState(null);
+  const handleOpenAddProject = (event) => {
+    setTooltipAddProject(event.currentTarget);
+  };
+  const handleOpenCloseProject = () => {
+    setTooltipAddProject(null);
+  };
 
   return (
     <AppBar
@@ -108,6 +123,7 @@ function SiteHeader() {
                 sx={{
                   marginLeft: "auto",
                   display: "inline-flex",
+                  alignItems: "center"
                 }}
               >
                 <SearchBar />
@@ -183,10 +199,23 @@ function SiteHeader() {
             </Grid>
 
             {isAuth && (
-              <Box sx={{ flexGrow: 1, marginLeft: 1 }}>
+              <Box sx={{ flexGrow: 1, marginLeft: 1, display: "flex" }}>
+                <Tooltip title="Add new project">
+                  <IconButton onClick={handleOpenAddProject} sx={{ p: 0 }}>
+                  <Link to={`/projects/create`}>
+                    <BatchPredictionOutlinedIcon
+                      sx={{ marginY: 1, color: "var(--color4)" }}
+                      fontSize={"large"}
+                      className="icon socmed"
+                    />
+                  </Link>
+                  </IconButton>
+                </Tooltip>
+                
                 <MenuBar
                   pageLinks={pageLinks}
                   profileAvatarUrl={profileAvatarUrl}
+                  marginTop={1}
                 />
               </Box>
             )}
