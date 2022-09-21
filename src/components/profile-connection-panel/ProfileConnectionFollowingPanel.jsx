@@ -46,7 +46,7 @@ function ProfileConnectionFollowingPanel() {
   if (userFollowings.length) {
     userFollowingsCards = userFollowings.map((user, idx) => {
       return (
-        <Grid key={idx} xs={6} md={4} item>
+        <Grid key={idx} xs={12} sm={6} md={4} item>
           <UserCard
             user={user}
             followed={authUserFollowings.includes(user.username)}

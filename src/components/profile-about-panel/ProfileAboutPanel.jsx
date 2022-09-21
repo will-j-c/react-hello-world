@@ -133,7 +133,7 @@ function ProfileAboutPanel(props) {
         >
           Skills:
         </Typography>
-        <Box display={"flex"}>{skillsToDisplay}</Box>
+        <Box display={"flex"} sx={{ flexWrap: 'wrap' , rowGap: 1}}>{skillsToDisplay}</Box>
         <Typography
           sx={{ color: "var(--color4)" }}
           fontWeight={"bold"}
@@ -142,7 +142,7 @@ function ProfileAboutPanel(props) {
         >
           Interests:
         </Typography>
-        <Box display={"flex"}>{interestsToDisplay}</Box>
+        <Box display={"flex"} sx={{ flexWrap: 'wrap' , rowGap: 1}}>{interestsToDisplay}</Box>
 
         <Typography
           sx={{ color: "var(--color4)" }}

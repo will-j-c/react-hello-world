@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useState, useContext } from "react";
 import { useTheme } from "@mui/material";
@@ -71,6 +72,10 @@ function SiteHeader() {
       pageName: "Delete Account",
       pageLink: "/delete",
     },
+    addNewProject: {
+      pageName: "Add project",
+      pageLink: "/projects/create",
+    },
   };
   const { projects, community, contributors, login, signup } = pageLinks;
   const pages = isAuth
@@ -108,6 +113,7 @@ function SiteHeader() {
                 sx={{
                   marginLeft: "auto",
                   display: "inline-flex",
+                  alignItems: "center",
                 }}
               >
                 <SearchBar />
@@ -183,10 +189,38 @@ function SiteHeader() {
             </Grid>
 
             {isAuth && (
-              <Box sx={{ flexGrow: 1, marginLeft: 1 }}>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  marginLeft: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 3,
+                }}
+              >
+                <ListItemButton to="/projects/create" component={Link}>
+                  <ListItemIcon>
+                    <ListItemText
+                      primaryTypographyProps={{
+                        fontWeight: "bold",
+                      }}
+                      sx={{
+                        color: "var(--color7)",
+                        cursor: "pointer",
+                        fontSize: 10,
+                        "&:hover": {
+                          color: "var(--color3)",
+                        },
+                      }}
+                    >
+                      Add project
+                    </ListItemText>
+                  </ListItemIcon>
+                </ListItemButton>
                 <MenuBar
                   pageLinks={pageLinks}
                   profileAvatarUrl={profileAvatarUrl}
+                  marginTop={1}
                 />
               </Box>
             )}

@@ -16,7 +16,8 @@ function ProjectIndexGrid(props) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
-  const filters = props.filters;
+  const { filters, limit } = props;
+
   let filterParams = '?';
   let apiUrl = '/projects';
 
@@ -32,6 +33,14 @@ function ProjectIndexGrid(props) {
     });
   }
 
+  if (limit) {
+    if (filters) {
+      filterParams += `&limit=${limit}`
+    } else {
+      filterParams += `limit=${limit}`
+    }
+  }
+
   if (filterParams.length > 1) {
     apiUrl += filterParams;
   }
@@ -41,7 +50,6 @@ function ProjectIndexGrid(props) {
   const baseProjectLogo = 'https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png';
   
   useEffect(() => {
-
     async function getData() {
       try {
         const projectsResp = await axios
@@ -62,7 +70,7 @@ function ProjectIndexGrid(props) {
 
     getData();
     
-  }, [props]);
+  }, [props, apiUrl]);
 
   const triggerDeleteModal = ({slug, title}) => {
     setTargetProject({slug, title});
