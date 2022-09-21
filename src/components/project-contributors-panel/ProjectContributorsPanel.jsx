@@ -19,7 +19,7 @@ function ProjectContributorsPanel(props) {
   const params = useParams();
   const { auth } = useContext(AuthContext);
   const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
-  const { contributors, creator } = props;
+  const { contributors, creator, updateContributors } = props;
   const [ appliedButtonTitle, setAppliedButtonTitle ] = useState('Applied');
   const axiosPrivate = useAxiosPrivate();
 
@@ -49,7 +49,7 @@ function ProjectContributorsPanel(props) {
         return;
       }
       await axiosPrivate.post(`/contributors/${contributorID}/apply`);
-
+      updateContributors();
     } catch (err) {}
   }
 
