@@ -101,6 +101,10 @@ export default function ContributorCard(props) {
     }
   }
 
+  const triggerDeleteModal = function() {
+    props.triggerDeleteModal({contributor: props.contributor});
+  }
+
   const skillsDisplay = skills.map((skill, idx) => {
     return (
       <Typography className='card-subtitle' key={idx} variant='caption'>
@@ -165,7 +169,7 @@ export default function ContributorCard(props) {
               category='action'
               title='Delete'
               variant='outlined'
-              onClick={handleAction}
+              onClick={triggerDeleteModal}
             />
               <Button
                 category='action'

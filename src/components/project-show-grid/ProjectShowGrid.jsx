@@ -21,7 +21,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 const baseProjectLogo =
-  "https://cdn.pixabay.com/photo/2017/01/31/20/53/robot-2027195_960_720.png";
+  "'https://i.pinimg.com/564x/a9/d6/7e/a9d67e7c7c1f738141b3d728c31b2dd8.jpg'";
 
 function ProjectShowGrid(props) {
   const location = useLocation();
@@ -38,7 +38,20 @@ function ProjectShowGrid(props) {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
-
+  const updateComments = () => {
+    axios.get(`/comments/${slug}`).then(
+      (response) => {
+        setComments(response.data.commentsToSend);
+        setCommentCount(response.data.commentCount);
+      },
+      (error) => {}
+    );
+  };
+  const setSnackbarAlert = (open, severity, message) => {
+    setOpen(open);
+    setSeverity(severity);
+    setMessage(message);
+  };
   useEffect(() => {
     axios.get(`/projects/${slug}`).then(
       (response) => {
@@ -48,14 +61,7 @@ function ProjectShowGrid(props) {
       },
       (error) => {}
     );
-
-    axios.get(`/comments/${slug}`).then(
-      (response) => {
-        setComments(response.data.commentsToSend);
-        setCommentCount(response.data.commentCount);
-      },
-      (error) => {}
-    );
+    updateComments();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -89,13 +95,7 @@ function ProjectShowGrid(props) {
     axiosPrivate.post(`/comments/${slug}`, { content }).then(
       (response) => {
         // Update comments with a fetch request
-        axios.get(`/comments/${slug}`).then(
-          (response) => {
-            setComments(response.data.commentsToSend);
-            setCommentCount(response.data.commentCount);
-          },
-          (error) => {}
-        );
+        updateComments();
       },
       (error) => {
         console.log("Error", error);
@@ -155,7 +155,10 @@ function ProjectShowGrid(props) {
           />
           {creator.username === auth.username ? (
             <Box display={"flex"} justifyContent={"center"} marginTop={2}>
-              <Link to={`/projects/${project.slug}/edit`} state={{ project, isEdit: true }}>
+              <Link
+                to={`/projects/${project.slug}/edit`}
+                state={{ project, isEdit: true }}
+              >
                 <ModeEditOutlineOutlinedIcon
                   htmlColor={"var(--color3)"}
                   fontSize={"large"}
@@ -234,7 +237,13 @@ function ProjectShowGrid(props) {
           </Box>
         </Grid>
         <Grid md={4} sx={{ height: "100%", width: "100%" }} paddingTop={0} item>
-          <CommentPanel comments={comments} postComment={postComment} />
+          <CommentPanel
+            comments={comments}
+            postComment={postComment}
+            auth={auth}
+            updateComments={updateComments}
+            setSnackbarAlert={setSnackbarAlert}
+          />
           <Pagination
             count={
               commentCount ? Math.floor(commentCount / comments.length) : 1

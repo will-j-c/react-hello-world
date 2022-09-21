@@ -5,7 +5,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 
 function HomeGrid(props) {
   const matches = useMediaQuery('(max-width:400px)');
-  console.log(matches)
   return (
     <Grid container spacing={10} direction='column'>
       <Grid item >
