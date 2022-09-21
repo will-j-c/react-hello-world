@@ -10,7 +10,7 @@ import AuthContext from '../../context/AuthProvider';
 import LoginModal from '../modals/LoginModal';
 import DeleteModal from '../modals/DeleteModal';
 
-export default function UserIndexGrid() {
+export default function UserIndexGrid(props) {
   const [ contributors, setContributors ] = useState([]);
   const [ applications, setApplications ] = useState([]);
   const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
