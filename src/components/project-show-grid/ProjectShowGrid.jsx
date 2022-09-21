@@ -71,6 +71,25 @@ function ProjectShowGrid(props) {
       return setPanel(<ProjectAboutPanel project={project} />);
     }
   }, [project]);
+
+  const updateContributors = async () => {
+    axios.get(`/projects/${slug}`).then(
+      (response) => {
+        setTabValue('2');
+        setPanel(
+          <ProjectContributorsPanel
+            creator={response.data.createdBy}
+            contributors={response.data.jobs}
+            updateContributors={updateContributors}
+          />
+        );
+        setContributors(response.data.jobs);
+        setCreator(response.data.createdBy);
+      },
+      (error) => {}
+    );
+  }
+
   const [tabValue, setTabValue] = useState("1");
   const [panel, setPanel] = useState(null);
   const handleTabChange = (event, newTabValue) => {
@@ -81,6 +100,7 @@ function ProjectShowGrid(props) {
           <ProjectContributorsPanel
             creator={creator}
             contributors={contributors}
+            updateContributors={updateContributors}
           />
         );
   };
