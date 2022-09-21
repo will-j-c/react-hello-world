@@ -88,6 +88,12 @@ function MultiForm() {
       ...checkedBoxes,
     }));
   };
+  // Set snackbar allerts
+  const snackbarAlert = (open, severity, message) => {
+    setOpen(open);
+    setSeverity(severity);
+    setMessage(message);
+  }
   // Set the step to 1 if coming in via /projects/create
   useEffect(() => {
     if (!location.search) {
@@ -200,25 +206,18 @@ function MultiForm() {
         const photoRequestTwo = axiosPrivate(routeTwo);
         axiosMain.all([photoRequestOne, photoRequestTwo]).then(
           axiosMain.spread((...responses) => {
-            console.log(responses);
-            setOpen(true);
-            setSeverity("success");
-            setMessage("Project successfully saved to draft");
+            snackbarAlert(true, "success", "Project successfully saved to draft");
             setTimeout(() => {
               navigate(`/projects/${response.data.slug}`);
             }, 2000);
           }),
           axiosMain.spread((...errors) => {
-            setOpen(true);
-            setSeverity("error");
-            setMessage("Ooops, something went wrong...");
+            snackbarAlert(true, "error", "Ooops, something went wrong...");
           })
         );
       },
       (error) => {
-        setOpen(true);
-        setSeverity("error");
-        setMessage(error.response.data.error);
+        snackbarAlert(true, "error", error?.response?.data?.error || "Ooops, something went wrong...");
       }
     );
   };
@@ -239,24 +238,18 @@ function MultiForm() {
         const photoRequestTwo = axiosPrivate(routeTwo);
         axiosMain.all([photoRequestOne, photoRequestTwo]).then(
           axiosMain.spread((...responses) => {
-            setOpen(true);
-            setSeverity("success");
-            setMessage("Project successfully created");
+            snackbarAlert(true, "success", "Project successfully saved to draft");
             setTimeout(() => {
               navigate(`/projects/${response.data.slug}`);
             }, 2000);
           }),
           axiosMain.spread((...errors) => {
-            setOpen(true);
-            setSeverity("error");
-            setMessage("Ooops, something went wrong...");
+            snackbarAlert(true, "error", "Ooops, something went wrong...");
           })
         );
       },
       (error) => {
-        setOpen(true);
-        setSeverity("error");
-        setMessage(error?.response.data.error);
+        snackbarAlert(true, "error", error?.response?.data?.error || "Ooops, something went wrong...");
       }
     );
   };

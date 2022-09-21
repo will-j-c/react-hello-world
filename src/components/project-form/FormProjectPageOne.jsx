@@ -124,7 +124,6 @@ function FormProjectPageOne(props) {
           />
           <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
             {categories.map((category) => {
-              console.log(checkedState[category])
               return (
                 <FormControlLabel
                   control={
