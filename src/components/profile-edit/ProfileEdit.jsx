@@ -481,13 +481,21 @@ function ProfileEdit() {
               />
 
               {/* SUBMIT BUTTON  */}
-              <Box textAlign={"center"} alignSelf={"flex-end"}>
-                <Button variant="outlined" category="action" title="Cancel">
-                  <Link to="/">About Page</Link>
-                </Button>
+              <Box
+                textAlign={"center"}
+                alignSelf={"flex-end"}
+                marginTop={3}
+                sx={{ display: "flex" }}
+              >
                 <Button
                   variant="outlined"
-                  title="Submit →"
+                  category="action"
+                  title="Cancel"
+                  route={`/users/${authUsername}`}
+                />
+                <Button
+                  variant="outlined"
+                  title="Submit"
                   category="action"
                   isFullWidth={true}
                   onClick={handleFormSubmit}
