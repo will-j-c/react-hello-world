@@ -1,11 +1,10 @@
-// .profileAvatar {
-//   width: 160px;
-//   height: 160px;
-//   border-radius: 100%;
-// }
-// .TitlePage {
-//   color: var(--color3);
-// }
-// .title-name {
-//   text-transform: capitalize;
-// }
+.icon:hover{
+  color: var(--color3);
+  transform-style: preserve-3d;
+  transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in;
+  transform: scale(1.1);
+}
+.socmed {
+  margin-right: 1rem;
+}
