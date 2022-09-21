@@ -94,7 +94,7 @@ function FormProjectPageTwo(props) {
               {previewProjectImages.map((item, idx) => (
                 <ImageListItem key={idx} sx={{ marginTop: 3 }}>
                   <img src={item} alt={item} loading="lazy" />
-                  {/* <HighlightOffOutlinedIcon sx={{marginTop: 1}} htmlColor={"var(--color3)"}/> */}
+                  <HighlightOffOutlinedIcon sx={{marginTop: 1}} htmlColor={"var(--color3)"}/>
                 </ImageListItem>
               ))}
             </ImageList>

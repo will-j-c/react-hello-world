@@ -139,12 +139,6 @@ function ProjectCard(props) {
               variant={"outlined"}
               onClick={triggerDeleteModal}
             />
-            <Button
-              category={"action"}
-              title={"Edit"}
-              variant={"contained"}
-              route={`/projects/${slug}/edit`}
-            />
           </>) 
         }
       </CardActions>
