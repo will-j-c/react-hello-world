@@ -16,7 +16,8 @@ function ProjectIndexGrid(props) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
   const username = auth?.username;
-  const filters = props.filters;
+  const { filters, limit } = props;
+
   let filterParams = '?';
   let apiUrl = '/projects';
 
@@ -30,6 +31,14 @@ function ProjectIndexGrid(props) {
         };
       };
     });
+  }
+
+  if (limit) {
+    if (filters) {
+      filterParams += `&limit=${limit}`
+    } else {
+      filterParams += `limit=${limit}`
+    }
   }
 
   if (filterParams.length > 1) {

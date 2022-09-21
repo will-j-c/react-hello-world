@@ -1,6 +1,7 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import Button from '../buttons/Button';
 
 import { useState, useEffect, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
 import AuthContext from "../../context/AuthProvider";
 import SearchProjectsResults from "./SearchProjectsResults";
+import SearchUsersResults from './SearchUsersResults';
 
 export default function SearchResultsPage(props) {
   const useQuery = () => new URLSearchParams(useLocation().search);
@@ -31,15 +33,48 @@ export default function SearchResultsPage(props) {
         variant="h4"
         component='h1'
         textAlign={"center"}
-        marginY={4}
         sx={{ color: "var(--color3)", fontWeight: "bold" }}
       >
         Search results
       </Typography>
+      <Typography
+        variant="h6"
+        component='h2'
+        textAlign={"center"}
+        sx={{ color: "var(--color3)"}}
+      >
+        for "<span className='highlight-text'>{keyword}</span>"
+      </Typography>
 
-      <Grid container direction='column'>
+      <Box padding='2em 0' display='flex' gap='0.3em'>
+        <Button 
+          category='category'
+          title='All'
+          variant='contained'
+        />
+        <Button 
+          category='category'
+          title='Projects'
+          variant='outlined'
+        />
+        <Button 
+          category='category'
+          title='Users'
+          variant='outlined'
+        />
+        <Button 
+          category='category'
+          title='Contributors'
+          variant='outlined'
+        />
+      </Box>
+
+      <Grid container direction='column' rowSpacing={1.1}>
         <Grid item>
-          <SearchProjectsResults query={q} props2={'hello'}/>
+          <SearchProjectsResults query={q} />
+        </Grid>
+        <Grid item>
+          <SearchUsersResults query={q} />
         </Grid>
       </Grid>
     </>

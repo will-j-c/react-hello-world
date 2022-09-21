@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import ProjectIndexGrid from "../project-index-grid/ProjectIndexGrid";
+import UserIndexGrid from "../user-index-grid/UserIndexGrid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
@@ -10,6 +10,7 @@ export default function SearchProjectsResults(props) {
   return (
     <Box sx={{
       backgroundColor: 'var(--color2)', 
+
       padding: '1em',
     }}>
         <Box>
@@ -20,10 +21,10 @@ export default function SearchProjectsResults(props) {
             marginBottom='0.5em'
             fontWeight='600'
           >
-            Projects
+            Users
           </Typography>
         </Box>
-      <ProjectIndexGrid filters={{q: query}} limit={3}/>
+      <UserIndexGrid filters={{q: query}} limit={3}/>
     </Box>  
   )
 }
