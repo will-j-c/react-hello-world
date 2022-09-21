@@ -11,8 +11,8 @@ import LoginModal from '../modals/LoginModal';
 import DeleteModal from '../modals/DeleteModal';
 
 export default function UserIndexGrid() {
-  const [contributors, setContributors] = useState([]);
-  const [applications, setApplications] = useState([]);
+  const [ contributors, setContributors ] = useState([]);
+  const [ applications, setApplications ] = useState([]);
   const [ loginModalIsOpen, setLoginModalIsOpen ] = useState(false);
   const [ deleteModalIsOpen, setDeleteModalIsOpen ] = useState(false);
   const [ targetContributor, setTargetContributor ] = useState({});
@@ -39,9 +39,7 @@ export default function UserIndexGrid() {
             )
           );
         }
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
        
     }
     getData()
@@ -59,6 +57,9 @@ export default function UserIndexGrid() {
 
   const contributorCards = contributors.map((c, idx) => {
     const application = applications.filter(a => a.contributor_id.toString() === c._id.toString());
+    const noOfAcceptance = c.applicants.filter(a => a.state === 'accepted').length;
+    
+    const isFilled = noOfAcceptance >= c.available_slots;
     return (
       <Grid key={idx} xs={6} md={4} item>
         
@@ -67,6 +68,7 @@ export default function UserIndexGrid() {
           status={ application.length > 0 ? application[0].state : 'not applied' }
           triggerLogin={() => setLoginModalIsOpen(true)}
           triggerDeleteModal={triggerDeleteModal}
+          isFilled={isFilled}
         />
       </Grid>
     )
