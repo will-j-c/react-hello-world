@@ -118,6 +118,7 @@ function Confirmation(props) {
               {values.categories.map((category) => {
                 return (
                   <Button
+                    key={category}
                     variant="contained"
                     title={category}
                     category="category"
