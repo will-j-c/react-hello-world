@@ -8,26 +8,19 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 function CommentPanel(props) {
   const comments = props.comments ? props.comments : [];
-  const auth = props.auth;
-  const updateComments = props.updateComments;
+  const {auth, updateComments, setSnackbarAlert, postComment} = props;
   const axiosPrivate = useAxiosPrivate();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [deleteComment, setDeleteComment] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [severity, setSeverity] = useState(null);
-  const [message, setMessage] = useState(null);
   const handleConfirm = () => {
     setModalIsOpen(false);
     axiosPrivate.delete(`comments/${deleteComment}`).then(
       (response) => {
         updateComments();
-        setOpen(true);
-        setSeverity("success");
-        setMessage("Successfully deleted project");
+        setSnackbarAlert(true, "success", "Comment deleted");
       },
       (error) => {
-        setSeverity("error");
-        setMessage("Failed to delete project");
+        setSnackbarAlert(true, "error", "Failed to delete comment");
       }
     );
   }
@@ -68,7 +61,7 @@ function CommentPanel(props) {
       >
         {commentsToShow}
       </Grid>
-      <CommentAddField postComment={props.postComment} />
+      <CommentAddField postComment={postComment} />
       <ConfirmModal
         isOpen={modalIsOpen}
         onConfirm={handleConfirm}

@@ -39,14 +39,19 @@ function ProjectShowGrid(props) {
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
   const updateComments = () => {
-        axios.get(`/comments/${slug}`).then(
+    axios.get(`/comments/${slug}`).then(
       (response) => {
         setComments(response.data.commentsToSend);
         setCommentCount(response.data.commentCount);
       },
-      (error) => {})
-  }
-
+      (error) => {}
+    );
+  };
+  const setSnackbarAlert = (open, severity, message) => {
+    setOpen(open);
+    setSeverity(severity);
+    setMessage(message);
+  };
   useEffect(() => {
     axios.get(`/projects/${slug}`).then(
       (response) => {
@@ -150,7 +155,10 @@ function ProjectShowGrid(props) {
           />
           {creator.username === auth.username ? (
             <Box display={"flex"} justifyContent={"center"} marginTop={2}>
-              <Link to={`/projects/${project.slug}/edit`} state={{ project, isEdit: true }}>
+              <Link
+                to={`/projects/${project.slug}/edit`}
+                state={{ project, isEdit: true }}
+              >
                 <ModeEditOutlineOutlinedIcon
                   htmlColor={"var(--color3)"}
                   fontSize={"large"}
@@ -229,7 +237,13 @@ function ProjectShowGrid(props) {
           </Box>
         </Grid>
         <Grid md={4} sx={{ height: "100%", width: "100%" }} paddingTop={0} item>
-          <CommentPanel comments={comments} postComment={postComment} auth={auth} updateComments={updateComments}/>
+          <CommentPanel
+            comments={comments}
+            postComment={postComment}
+            auth={auth}
+            updateComments={updateComments}
+            setSnackbarAlert={setSnackbarAlert}
+          />
           <Pagination
             count={
               commentCount ? Math.floor(commentCount / comments.length) : 1
