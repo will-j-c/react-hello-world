@@ -16,11 +16,9 @@ function MultiForm() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
-  const [isEdit, ] = useState(location.state?.isEdit);
+  const [isEdit] = useState(location.state?.isEdit);
   const [imageFilesToConvert, setImageFilesToConvert] = useState([]);
-  const [editProjectSlug, ] = useState(
-    location.state?.project?.slug
-  );
+  const [editProjectSlug] = useState(location.state?.project?.slug);
 
   const createNewForm = {
     step: location.search ? parseInt(location.search.slice(-1)) : 1,
@@ -220,19 +218,16 @@ function MultiForm() {
   //Handle image delete
   const handleDeleteImageFromUpload = (event) => {
     event.preventDefault();
+    const selected = event.target.id;
     // // Delete fom the preview images
-    // const newImages = previewProjectImages.filter((image) => {
-    //   console.log(image);
-    //   console.log(event.target?.nextSibling?.textContent);
-    //   return image !== event.target?.nextSibling?.textContent;
-    // });
-    // setPreviewProjectImages(
-    //   previewProjectImages.filter(
-    //     (image) => image !== event.target?.nextSibling?.textContent
-    //   )
-    // );
-    // console.log(imageFilesToConvert);
-    // console.log(previewProjectImages);
+    setPreviewProjectImages(
+      previewProjectImages.filter((image) => {
+        return image !== selected;
+      })
+    );
+    setImageFilesToConvert(imageFilesToConvert.filter((image) => {
+      return image.name !== selected;
+    }));
   };
 
   // Handle save as draft
