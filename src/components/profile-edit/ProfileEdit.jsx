@@ -1,11 +1,10 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useState, useContext, useEffect, useRef } from "react";
 
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -38,7 +37,6 @@ function ProfileEdit() {
   const authUsername = auth.username;
   const isAuth = authUsername === username;
 
-  const [currentUserData, setCurrentUserData] = useState(null);
   const [previewAvatar, setPreviewAvatar] = useState(null);
 
   const [message, setMessage] = useState("");
@@ -133,7 +131,6 @@ function ProfileEdit() {
         setInterestsInput(userData.interests);
         setSelectedSkills(userData.skills);
 
-        setCurrentUserData(userData);
         setSkills(skillsData.data);
       } catch (err) {}
     }
@@ -229,20 +226,7 @@ function ProfileEdit() {
                   marginBottom: 2,
                 }}
               />
-              {/* <TextField
-                id="outlined-full-width"
-                label="Image Upload"
-                style={{ margin: 8 }}
-                name="avatar"
-                type="file"
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="outlined"
-                onChange={handleFileInput}
-              /> */}
+
               <Button
                 variant="outlined"
                 title="Upload"
@@ -283,8 +267,7 @@ function ProfileEdit() {
                 size="small"
                 type="text"
                 sx={{ marginBottom: 2 }}
-                // className={styles["input-text"]}
-                className="input-text"
+                className={styles["input-text"]}
                 placeholder="Filling your display name on your profile"
                 autoFocus
               />
@@ -499,7 +482,9 @@ function ProfileEdit() {
 
               {/* SUBMIT BUTTON  */}
               <Box textAlign={"center"} alignSelf={"flex-end"}>
-                {/* <Button variant="outlined" category="action" title="Cancel" /> */}
+                <Button variant="outlined" category="action" title="Cancel">
+                  <Link to="/">About Page</Link>
+                </Button>
                 <Button
                   variant="outlined"
                   title="Submit →"
