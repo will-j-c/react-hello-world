@@ -42,18 +42,23 @@ function MultiForm() {
     description: location.state?.project?.description,
     image_urls: location.state?.project?.image_urls,
   };
+
   const [form, setForm] = useState(isEdit ? editForm : createNewForm);
+
   const [previewLogo, setPreviewLogo] = useState(isEdit ? form.logo_url : null);
   const [previewProjectImages, setPreviewProjectImages] = useState(
     isEdit ? form.image_urls : []
   );
+
   const locationCheckedState = {};
   if (isEdit) {
     form.categories.forEach(category => {
       locationCheckedState[category] = true;
     });
   }
+
   const [checkedCategories, setCheckedCategories] = useState(isEdit ? form.categories : []);
+  console.log(checkedCategories)
   const [checkedState, setCheckedState] = useState(
     isEdit
       ? locationCheckedState
@@ -133,20 +138,12 @@ function MultiForm() {
     if (input === "categories") {
       if (event.target.checked) {
         setCheckedCategories((prevState) => [...prevState, event.target.value]);
-        setForm((prevState) => ({
-          ...prevState,
-          [input]: checkedCategories,
-        }));
       } else {
         setCheckedCategories(
           checkedCategories.filter((value) => {
             return value !== event.target.value;
           })
         );
-        setForm((prevState) => ({
-          ...prevState,
-          [input]: checkedCategories,
-        }));
       }
     } else {
       setForm((prevState) => ({
@@ -155,6 +152,13 @@ function MultiForm() {
       }));
     }
   };
+  // When the checked boxes has been updated, update the form
+  useEffect(() => {
+    setForm((prevState) => ({
+      ...prevState,
+      categories: checkedCategories,
+    }));
+  }, [checkedCategories])
   // Handle file input
   const handleFileInput = (input) => (event) => {
     if (event.target.multiple) {

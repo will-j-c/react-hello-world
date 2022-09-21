@@ -24,7 +24,7 @@ function Confirmation(props) {
     severity,
     message,
     setOpen,
-    isEdit
+    isEdit,
   } = props;
   const handlePreviousClick = (event) => {
     event.preventDefault();
@@ -116,17 +116,19 @@ function Confirmation(props) {
                   />
                 </ListItem>
               </List>
-              {values.categories.map((category) => {
-                return (
-                  <Button
-                    key={category}
-                    variant="contained"
-                    title={category}
-                    category="category"
-                    onClick={handlePreviousClick}
-                  />
-                );
-              })}
+              <Box display={"flex"}>
+                {values.categories.map((category) => {
+                  return (
+                    <Button
+                      key={category}
+                      variant="contained"
+                      title={category}
+                      category="category"
+                      onClick={handlePreviousClick}
+                    />
+                  );
+                })}
+              </Box>
             </Box>
           </Grid>
           <Grid item>
@@ -154,19 +156,21 @@ function Confirmation(props) {
           isFullWidth={true}
           onClick={handlePreviousClick}
         />
-        {!isEdit ?
-          (<Button
+        {!isEdit ? (
+          <Button
             variant="outlined"
             title="Save as Draft"
             category="action"
             isFullWidth={true}
             onClick={saveDraft}
             className={styles["no-wrap"]}
-          />) : ("")
-        }
+          />
+        ) : (
+          ""
+        )}
         <Button
           variant="contained"
-          title={isEdit? "Update" :"Publish"}
+          title={isEdit ? "Update" : "Publish"}
           category="action"
           isFullWidth={true}
           onClick={publish}
