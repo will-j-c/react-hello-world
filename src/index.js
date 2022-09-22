@@ -22,6 +22,7 @@ import MultiForm from "./components/project-form/MultiForm";
 import ProjectIndexPage from "./components/project-index-page/ProjectIndexPage.jsx";
 import Activation from "./components/activation/Activation";
 import ContributorForm from "./components/contributor-form/ContributorForm";
+import SearchResultsPage from "./components/search-results/SearchResultsPage";
 
 const theme = createTheme({
   components: {
@@ -85,6 +86,7 @@ root.render(
                   <Route path=":id" element={<ContributorShow />} />
                   <Route path=":id/edit" element={<ContributorForm />} />
                 </Route>
+                <Route path="search" element={<SearchResultsPage />} />
                 <Route path="" element={<HomeGrid />} />
                 <Route
                   path="*"

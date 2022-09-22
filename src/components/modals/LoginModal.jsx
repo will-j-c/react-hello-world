@@ -95,7 +95,6 @@ export default function LoginModal(props) {
               required
               hiddenLabel
               fullWidth
-              defaultValue="Ex. McSpicy"
               variant="filled"
               size="small"
               form="login-form"

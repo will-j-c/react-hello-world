@@ -4,6 +4,8 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import Box from "@mui/material/Box";
+import VerifiedIcon from '@mui/icons-material/Verified';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useParams } from "react-router-dom";
 
 import AvatarComponent from "../../avatar/Avatar";
@@ -36,8 +38,8 @@ export default function UserCard(props) {
   const skillsDisplay = skills.map((skill, idx) => {
     return (
       <Typography className="card-subtitle" key={idx} variant="caption">
+        {idx > 0 ? "| " : ""}
         {skill}
-        {idx < skills.length - 1 ? " |" : ""}
       </Typography>
     );
   });
@@ -45,8 +47,8 @@ export default function UserCard(props) {
   const interestsDisplay = interests.map((interest, idx) => {
     return (
       <Typography className="card-subtitle" key={idx} variant="caption">
+        {idx > 0 ? "| " : ""}
         {interest}
-        {idx < interests.length - 1 ? " |" : ""}
       </Typography>
     );
   });
@@ -107,8 +109,22 @@ export default function UserCard(props) {
           <Typography variant="body2" className="card-tagline">
             {tagline}
           </Typography>
-          <Box className="card-captions">{skillsDisplay}</Box>
-          <Box className="card-captions">{interestsDisplay}</Box>
+          <Box className='card-categories' sx={{maxHeight: '1.5em'}}>
+            { skillsDisplay.length > 0 && (
+              <>
+                <VerifiedIcon sx={{color: 'var(--color3)', fontSize: 'medium'}}/>
+                {skillsDisplay}
+              </>
+            )}
+          </Box>
+          <Box className='card-categories' sx={{maxHeight: '1.5em'}}>
+            { interestsDisplay.length > 0 && (
+              <>
+                <FavoriteIcon sx={{color: 'var(--color3)', fontSize: 'medium'}}/>
+                {interestsDisplay}
+              </>
+            )}
+          </Box>
         </CardContent>
       </Box>
 
@@ -120,7 +136,7 @@ export default function UserCard(props) {
             variant={"outlined"}
             route={`/users/${username}`}
           />
-          { !isContributorPage && (
+          { (!isContributorPage && username !== auth.username) && (
             <Button
               category={'action'}
               title={followStatus ? `${buttonTitle}` : 'Follow'}
@@ -131,7 +147,11 @@ export default function UserCard(props) {
             />
           )}
 
-          { (isContributorPage && appStatus !== 'rejected' && appStatus !== 'accepted') && (
+          { (isContributorPage 
+            && appStatus !== 'rejected' 
+            && appStatus !== 'accepted' 
+            && username !== auth.username
+          ) && (
             <>
               <Button
                 category={'action'}
@@ -150,7 +170,10 @@ export default function UserCard(props) {
             </>
           )}
 
-          { (isContributorPage && (appStatus === 'rejected' || appStatus === 'accepted' )) && (
+          { (isContributorPage 
+          && (appStatus === 'rejected' || appStatus === 'accepted' )
+          && username !== auth.username
+          ) && (
             <Button
               category={'status'}
               title={appStatus === 'rejected' ? 'Rejected' : 'Accepted'}

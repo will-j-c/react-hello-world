@@ -16,10 +16,11 @@ function MultiForm() {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState(null);
   const [message, setMessage] = useState(null);
-  const [isEdit, setIsEdit] = useState(location.state?.isEdit);
-  const [editProjectSlug, setEditProjectSlug] = useState(
-    location.state?.project?.slug
-  );
+  const [isEdit] = useState(location.state?.isEdit);
+  const [imageFilesToConvert, setImageFilesToConvert] = useState([]);
+  const [editProjectSlug] = useState(location.state?.project?.slug);
+  const [imagesToBeDeleted, setImagesToBeDeleted] = useState([]);
+
   const createNewForm = {
     step: location.search ? parseInt(location.search.slice(-1)) : 1,
     username: auth.username,
@@ -42,23 +43,33 @@ function MultiForm() {
     description: location.state?.project?.description,
     image_urls: location.state?.project?.image_urls,
   };
+
   const [form, setForm] = useState(isEdit ? editForm : createNewForm);
+  
+  // Update the form when images to be deleted have been chosen
+  useEffect(() => {
+    setForm((prevState) => ({ ...prevState, deleted_images: imagesToBeDeleted }));
+  }, [imagesToBeDeleted])
+
   const [previewLogo, setPreviewLogo] = useState(isEdit ? form.logo_url : null);
   const [previewProjectImages, setPreviewProjectImages] = useState(
     isEdit ? form.image_urls : []
   );
+
   const locationCheckedState = {};
   if (isEdit) {
-    form.categories.forEach(category => {
+    form.categories.forEach((category) => {
       locationCheckedState[category] = true;
     });
   }
-  const [checkedCategories, setCheckedCategories] = useState(isEdit ? form.categories : []);
-  const [checkedState, setCheckedState] = useState(
-    isEdit
-      ? locationCheckedState
-      : {}
+
+  const [checkedCategories, setCheckedCategories] = useState(
+    isEdit ? form.categories : []
   );
+  const [checkedState, setCheckedState] = useState(
+    isEdit ? locationCheckedState : {}
+  );
+
   const {
     step,
     username,
@@ -81,6 +92,7 @@ function MultiForm() {
     description,
     image_urls,
   };
+
   // Keep track of the checked boxes
   const checkboxTrack = (checkedBoxes) => {
     setCheckedState((prevState) => ({
@@ -88,12 +100,14 @@ function MultiForm() {
       ...checkedBoxes,
     }));
   };
-  // Set snackbar allerts
+
+  // Set snackbar alerts
   const snackbarAlert = (open, severity, message) => {
     setOpen(open);
     setSeverity(severity);
     setMessage(message);
-  }
+  };
+
   // Set the step to 1 if coming in via /projects/create
   useEffect(() => {
     if (!location.search) {
@@ -116,6 +130,7 @@ function MultiForm() {
       navigate(`/projects/create?step=${step + 1}`);
     }
   };
+
   // Go back to previous step
   const prevStep = () => {
     const { step } = form;
@@ -128,25 +143,18 @@ function MultiForm() {
       navigate(`/projects/create?step=${step - 1}`);
     }
   };
+
   // Handle field change
   const handleChange = (input) => (event) => {
     if (input === "categories") {
       if (event.target.checked) {
         setCheckedCategories((prevState) => [...prevState, event.target.value]);
-        setForm((prevState) => ({
-          ...prevState,
-          [input]: checkedCategories,
-        }));
       } else {
         setCheckedCategories(
           checkedCategories.filter((value) => {
             return value !== event.target.value;
           })
         );
-        setForm((prevState) => ({
-          ...prevState,
-          [input]: checkedCategories,
-        }));
       }
     } else {
       setForm((prevState) => ({
@@ -155,24 +163,51 @@ function MultiForm() {
       }));
     }
   };
+
+  // When the checked boxes has been updated, update the form
+  useEffect(() => {
+    setForm((prevState) => ({
+      ...prevState,
+      categories: checkedCategories,
+    }));
+  }, [checkedCategories]);
+
   // Handle file input
-  const handleFileInput = (input) => (event) => {
-    if (event.target.multiple) {
-      const files = event.target.files;
-      const arrFiles = [];
+  const convertFilesToFormData = () => {
+    return new Promise((resolve) => {
+      const files = imageFilesToConvert;
       const formData = new FormData();
       for (let i = 0, len = files.length; i < len; i++) {
-        arrFiles.push(URL.createObjectURL(files[i]));
-        formData.append(
-          `image_urls`,
-          event.target.files[i],
-          event.target.files[i].name
-        );
+        formData.append(`image_urls`, files[i].file, files[i].name);
       }
-      setForm((prevState) => ({
-        ...prevState,
-        [input]: formData,
-      }));
+      return resolve(formData);
+    });
+  };
+
+  const handleFileInput = (input) => (event) => {
+    event.preventDefault();
+    // If the number of images added is 4 or more return early with and error
+    if (previewProjectImages.length >= 4 || event.target.files.length > 4) {
+      snackbarAlert(
+        true,
+        "warning",
+        "Only 4 photos may be uploaded to any project"
+      );
+      return;
+    }
+    // If not, deal with the remainder of the images
+    if (event.target.multiple) {
+      const files = event.target.files;
+
+      const arrFiles = [];
+      const filesToConvert = [];
+      // const formData = new FormData();
+      for (let i = 0, len = files.length; i < len; i++) {
+        const blob = URL.createObjectURL(files[i]);
+        arrFiles.push(blob);
+        filesToConvert.push({ file: files[i], name: blob });
+      }
+      setImageFilesToConvert((prevState) => [...prevState, ...filesToConvert]);
       setPreviewProjectImages((prevState) => [...prevState, ...arrFiles]);
       return;
     }
@@ -188,25 +223,80 @@ function MultiForm() {
       [input]: formData,
     }));
   };
-  // Handle save as draft
-  const saveDraft = (event) => {
+
+  //Handle image delete
+  const handleDeleteImageFromUpload = (event) => {
     event.preventDefault();
-    const request = isEdit ? {method: "put", url: `/projects/${editProjectSlug}`, data: { ...form, state: "draft" }} : {method: "post", url: "/projects", data: { ...form, state: "draft" }};
+    const selected = event.target.id;
+    if (isEdit) {
+      setImagesToBeDeleted((prevState) => ([...prevState, selected]));
+    }
+    // // Delete fom the preview images
+    setPreviewProjectImages(
+      previewProjectImages.filter((image) => {
+        return image !== selected;
+      })
+    );
+    setImageFilesToConvert(imageFilesToConvert.filter((image) => {
+      return image.name !== selected;
+    }));
+  };
+
+  // Handle save as draft
+  const saveDraft = async (event) => {
+    event.preventDefault();
+    const convertedFiles = await convertFilesToFormData();
+    const request = isEdit
+      ? {
+          method: "put",
+          url: `/projects/${editProjectSlug}`,
+          data: { ...form, state: "draft" },
+        }
+      : { method: "post", url: "/projects", data: { ...form, state: "draft" } };
     const config = {
       headers: {
         "Content-Type": "multipart/form-data boundary=???",
       },
     };
+
     // Send post request to projects
     axiosPrivate(request).then(
       (response) => {
-        const routeOne = isEdit ? {method: "put", url: `/projects/${editProjectSlug}/upload`, data: form.logo_url_files, headers: config} : {method: "post", url: `/projects/upload?slug=${response.data.slug}`, data: form.logo_url_files, headers: config};
-        const routeTwo = isEdit ? {method: "put", url: `/projects/${editProjectSlug}/upload`, data: form.image_urls_files, headers: config} : {method: "post", url: `/projects/upload?slug=${response.data.slug}`, data: form.image_urls_files, headers: config};
+        const routeOne = isEdit
+          ? {
+              method: "put",
+              url: `/projects/${editProjectSlug}/upload`,
+              data: form.logo_url_files,
+              headers: config,
+            }
+          : {
+              method: "post",
+              url: `/projects/upload?slug=${response.data.slug}`,
+              data: form.logo_url_files,
+              headers: config,
+            };
+        const routeTwo = isEdit
+          ? {
+              method: "put",
+              url: `/projects/${editProjectSlug}/upload`,
+              data: convertedFiles,
+              headers: config,
+            }
+          : {
+              method: "post",
+              url: `/projects/upload?slug=${response.data.slug}`,
+              data: convertedFiles,
+              headers: config,
+            };
         const photoRequestOne = axiosPrivate(routeOne);
         const photoRequestTwo = axiosPrivate(routeTwo);
         axiosMain.all([photoRequestOne, photoRequestTwo]).then(
           axiosMain.spread((...responses) => {
-            snackbarAlert(true, "success", "Project successfully saved to draft");
+            snackbarAlert(
+              true,
+              "success",
+              "Project successfully saved to draft"
+            );
             setTimeout(() => {
               navigate(`/projects/${response.data.slug}`);
             }, 2000);
@@ -217,44 +307,84 @@ function MultiForm() {
         );
       },
       (error) => {
-        snackbarAlert(true, "error", error?.response?.data?.error || "Ooops, something went wrong...");
-      }
-    );
-  };
-  // Handle publish
-  const publish = (event) => {
-    event.preventDefault();
-    const request = isEdit ? {method: "put", url: `/projects/${editProjectSlug}`, data: { ...form, state: "published" }} : {method: "post", url: "/projects", data: { ...form, state: "draft" }};
-    const config = {
-      headers: {
-        "Content-Type": "multipart/form-data boundary=???",
-      },
-    };
-    axiosPrivate(request).then(
-      (response) => {
-        const routeOne = isEdit ? {method: "put", url: `/projects/${editProjectSlug}/upload`, data: form.logo_url_files, headers: config} : {method: "post", url: `/projects/upload?slug=${response.data.slug}`, data: form.logo_url_files, headers: config};
-        const routeTwo = isEdit ? {method: "put", url: `/projects/${editProjectSlug}/upload`, data: form.image_urls_files, headers: config} : {method: "post", url: `/projects/upload?slug=${response.data.slug}`, data: form.image_urls_files, headers: config};
-        const photoRequestOne = axiosPrivate(routeOne);
-        const photoRequestTwo = axiosPrivate(routeTwo);
-        axiosMain.all([photoRequestOne, photoRequestTwo]).then(
-          axiosMain.spread((...responses) => {
-            snackbarAlert(true, "success", "Project successfully saved to draft");
-            setTimeout(() => {
-              navigate(`/projects/${response.data.slug}`);
-            }, 2000);
-          }),
-          axiosMain.spread((...errors) => {
-            snackbarAlert(true, "error", "Ooops, something went wrong...");
-          })
+        snackbarAlert(
+          true,
+          "error",
+          error?.response?.data?.error || "Ooops, something went wrong..."
         );
-      },
-      (error) => {
-        snackbarAlert(true, "error", error?.response?.data?.error || "Ooops, something went wrong...");
       }
     );
   };
 
-  if (!auth?.username) return <LoginCheck />
+  // Handle publish
+  const publish = async (event) => {
+    event.preventDefault();
+    const convertedFiles = await convertFilesToFormData();
+    const request = isEdit
+      ? {
+          method: "put",
+          url: `/projects/${editProjectSlug}`,
+          data: { ...form, state: "published" },
+        }
+      : { method: "post", url: "/projects", data: { ...form, state: "draft" } };
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data boundary=???",
+      },
+    };
+    axiosPrivate(request).then(
+      (response) => {
+        const routeOne = isEdit
+          ? {
+              method: "put",
+              url: `/projects/${editProjectSlug}/upload`,
+              data: form.logo_url_files,
+              headers: config,
+            }
+          : {
+              method: "post",
+              url: `/projects/upload?slug=${response.data.slug}`,
+              data: form.logo_url_files,
+              headers: config,
+            };
+        const routeTwo = isEdit
+          ? {
+              method: "put",
+              url: `/projects/${editProjectSlug}/upload`,
+              data: convertedFiles,
+              headers: config,
+            }
+          : {
+              method: "post",
+              url: `/projects/upload?slug=${response.data.slug}`,
+              data: convertedFiles,
+              headers: config,
+            };
+        const photoRequestOne = axiosPrivate(routeOne);
+        const photoRequestTwo = axiosPrivate(routeTwo);
+        axiosMain.all([photoRequestOne, photoRequestTwo]).then(
+          axiosMain.spread((...responses) => {
+            snackbarAlert(true, "success", "Project successfully published");
+            setTimeout(() => {
+              navigate(`/projects/${response.data.slug}`);
+            }, 2000);
+          }),
+          axiosMain.spread((...errors) => {
+            snackbarAlert(true, "error", "Ooops, something went wrong...");
+          })
+        );
+      },
+      (error) => {
+        snackbarAlert(
+          true,
+          "error",
+          error?.response?.data?.error || "Ooops, something went wrong..."
+        );
+      }
+    );
+  };
+
+  if (!auth?.username) return <LoginCheck />;
 
   switch (step) {
     case 1:
@@ -278,7 +408,12 @@ function MultiForm() {
           handleChange={handleChange}
           handleFileInput={handleFileInput}
           previewProjectImages={previewProjectImages}
+          open={open}
+          severity={severity}
+          message={message}
+          setOpen={setOpen}
           values={values}
+          handleDeleteImageFromUpload={handleDeleteImageFromUpload}
         />
       );
     case 3:

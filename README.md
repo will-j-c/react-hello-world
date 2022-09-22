@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+# Hello World - front end
+## About
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hello World is an app where like minded people can come together to share project ideas, meet new and interesting friends and find contributors for their projects. It's Linkedin for developers!
 
-## Available Scripts
 
-In the project directory, you can run:
+## Links
 
-### `npm start`
+Server - https://express-hello-world-zmw.herokuapp.com/
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Front end - https://hello-world-zmw.netlify.app/
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+In the frontend, the tech stack was:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* React - Main framework
+* React Router - used for FE routing
+* Material UI - A library for react with many pre made components
+* SASS - For CSS
+* JSON web token - For encrypted data sending
+* GSAP - For the animation
+* Axios - for making the API calls
 
-### `npm run build`
+## Planning and Execution
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The team initially suggested ideas to each other until we had a list to choose from. Once we had settled on Hello World, we had a planning session at GA campus where we mapped out features and drew basic wire frames on the whiteboard. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+With the white board session done, the routes and data schema were designed to incorporate the views and features that had been designed. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+We then spent a solid week on designing each view in figma and getting the flow and styling correct.
 
-### `npm run eject`
+The back end was then prioritised, being substantially completed in one weekend to leave plenty of time to build the front end.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Front end works took approximately 1.5 weeks to complete and was significantly more difficult than initially expected. MUI has quite a steep learning curve and react state management would prove to be very tricky at times. 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Issues faced
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* Image uploads - The whole process of getting images uploaded and creating a decent user experience was painful. Thoughts for next time is have one person do the image front end and backend as this would save time.
+* State management - There were numerous issues where state not updating immediately caused issues (such as image upload, checkboxes etc). Further practice is required to better understand when and where state will misbehave.
+* Scope - Looking back on it now, the project was ambitious for 2.5 weeks. There are a lot of moving parts and it required much more time than expected to get everything set up.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## User stories
 
-## Learn More
+* Users can create an account and login
+* Users can create a profile and edit their profile with various information.
+* Guests can view projects and search projects before signing up
+* Logged in users can create projects, create contributor roles for those projects and edit/them them accordingly.
+* Logged in users can discuss a project using the comments section of each project.
+* Users can follow each other, follow projects and apply for contributor roles within projects. 
+* Users can logout. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Initial concept images
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Concept images can be found at https://www.figma.com/file/h5oEoEXdhu67xMLLpK1FQ7/HelloWorld?node-id=63%3A243

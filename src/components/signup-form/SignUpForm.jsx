@@ -117,7 +117,7 @@ function LoginForm() {
             required
             hiddenLabel
             fullWidth
-            defaultValue="Ex. Melody"
+            placeholder="Ex. Melody"
             variant="filled"
             size="small"
             form="registration-form"
@@ -132,7 +132,7 @@ function LoginForm() {
             required
             hiddenLabel
             fullWidth
-            defaultValue="Ex. McSpicy"
+            placeholder="Ex. McSpicy"
             variant="filled"
             size="small"
             form="registration-form"
@@ -148,7 +148,7 @@ function LoginForm() {
             hiddenLabel
             fullWidth
             id="email"
-            defaultValue="Ex. Melody@email.com"
+            placeholder="Ex. mcspicy@email.com"
             variant="filled"
             size="small"
             sx={{ marginBottom: 2 }}

@@ -21,10 +21,18 @@ function DrawerComponent(props) {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useContext(AuthContext);
 
-  const { projects, community, contributors, login, signup, profile, logout } =
-    props.pageLinks;
+  const {
+    projects,
+    community,
+    contributors,
+    login,
+    signup,
+    profile,
+    logout,
+    addNewProject,
+  } = props.pageLinks;
   const pages = props.isAuth
-    ? [projects, community, contributors, logout]
+    ? [addNewProject, projects, community, contributors, logout]
     : [login, signup, projects, community, contributors];
 
   const [open, setOpen] = useState(false);
@@ -84,6 +92,7 @@ function DrawerComponent(props) {
 
           {pages.map((page, index) => (
             <ListItemButton
+              onClick={() => setOpen(false)}
               key={index}
               to={`${page.pageLink}`}
               component={Link}

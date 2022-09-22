@@ -41,7 +41,7 @@ function UserFollowingProjects() {
       };
       return (
         <Grid key={idx} item xs={12} sm={6} md={4}>
-          <ProjectCard project={projectCardDetails} />
+          <ProjectCard project={projectCardDetails} followed={true}/>
         </Grid>
       );
     });
