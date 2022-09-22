@@ -326,7 +326,7 @@ function MultiForm() {
           url: `/projects/${editProjectSlug}`,
           data: { ...form, state: "published" },
         }
-      : { method: "post", url: "/projects", data: { ...form, state: "draft" } };
+      : { method: "post", url: "/projects", data: { ...form, state: "published" } };
     const config = {
       headers: {
         "Content-Type": "multipart/form-data boundary=???",
