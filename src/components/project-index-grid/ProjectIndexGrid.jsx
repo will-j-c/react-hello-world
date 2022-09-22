@@ -93,7 +93,7 @@ function ProjectIndexGrid(props) {
       state: project.state,
     };
     return (
-      <Grid key={idx} xs={true} md={4} item>
+      <Grid key={idx} xs={1} md={4} item>
         <ProjectCard 
           project={projectCardDetails}
           followed={followedProjects.includes(project.slug)}
@@ -111,6 +111,7 @@ function ProjectIndexGrid(props) {
         spacing={2}
         columns={{ xs: 1, md: 12 }}
         justifyContent="center"
+        alignItems="stretch"
       >
         {projectCardsToShow}
       </Grid>

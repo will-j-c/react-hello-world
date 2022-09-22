@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useState, useContext, useEffect } from "react";
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import axios from '../../api/axios';
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
@@ -21,6 +22,7 @@ import ContributorShowTabs from "./contributor-show-tabs/ContributorShowTabs";
 import './ContributorShow.scss';
 
 export default function ContributorShow() {
+  const matches = useMediaQuery('(max-width:600px)');
   const [ contributor, setContributor ] = useState({});
   const [ relations, setRelations ] = useState(null);
   const [ project, setProject ] = useState(null);
@@ -160,13 +162,17 @@ export default function ContributorShow() {
           <AvatarComponent
             imgAlt={project?.title || 'placeholder'}
             imgUrl={project?.logo_url || baseProjectAvatar}
-            sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
+            sx={{ 
+              width: matches ? 80 : 128, 
+              height: matches ? 80 : 128, 
+              border: "solid 1px var(--color3)" 
+            }}
           />
           <Box
             display={"flex"}
             flexDirection={"column"}
             justifyContent={"center"}
-            marginLeft={5}
+            marginLeft={matches ? 2 : 5}
           >
             <Typography variant="h4" component="h1" className='title'>
               {contributor?.title}
