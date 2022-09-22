@@ -166,7 +166,7 @@ export default function ContributorCard(props) {
               variant={'outlined'}
             />
           )}
-          { (auth.username !== projectOwner && !isFilled && status !== ('rejected' || 'accepted' )) && (
+          { (auth.username !== projectOwner && !isFilled && status !== 'rejected' && status !== 'accepted' ) && (
             <Button
               category={status === 'applied' ? 'status' : 'action'}
               title={buttonTitle}
