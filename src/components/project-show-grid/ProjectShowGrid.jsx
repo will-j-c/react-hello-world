@@ -178,13 +178,51 @@ function ProjectShowGrid(props) {
               height: matches ? 80 : 128, 
               border: "solid 1px var(--color3)" }}
           />
-          {creator.username === auth.username ? (
-            <Box display={"flex"} justifyContent={"center"} marginTop={2}>
-              <Link
-                to={`/projects/${project.slug}/edit`}
-                state={{ project, isEdit: true }}
-              >
-                <ModeEditOutlineOutlinedIcon
+          
+        </Box>
+        <Box
+          display={"flex"}
+          flexDirection={"row"}
+          justifyContent={"space-between"}
+          alignItems={'center'}
+          marginLeft={matches ? 2 : 5}
+          flexWrap={"wrap"}
+          flexGrow={1}
+        >
+          <Box>
+            {project.state === "draft" || "archived" ? (
+              <Typography sx={{ color: "var(--color7)" }} variant={"h6"}>
+                {project.state.toUpperCase()}
+              </Typography>
+            ) : (
+              ""
+            )}
+            <Typography sx={{ color: "var(--color3)" }} variant={"h4"}>
+              {project.title}
+            </Typography>
+            <Typography sx={{ color: "var(--color4)" }}>
+              {project.tagline}
+            </Typography>
+          </Box>
+          <Box>
+            {creator.username === auth.username ? (
+              <Box display={"flex"} justifyContent={"center"} marginTop={2}>
+                <Link
+                  to={`/projects/${project.slug}/edit`}
+                  state={{ project, isEdit: true }}
+                >
+                  <ModeEditOutlineOutlinedIcon
+                    htmlColor={"var(--color3)"}
+                    fontSize={"large"}
+                    sx={{
+                      "&:hover": {
+                        cursor: "pointer",
+                      },
+                    }}
+                  />
+                </Link>
+                <DeleteForeverOutlinedIcon
+                  onClick={handleDeleteClick}
                   htmlColor={"var(--color3)"}
                   fontSize={"large"}
                   sx={{
@@ -193,42 +231,11 @@ function ProjectShowGrid(props) {
                     },
                   }}
                 />
-              </Link>
-              <DeleteForeverOutlinedIcon
-                onClick={handleDeleteClick}
-                htmlColor={"var(--color3)"}
-                fontSize={"large"}
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-              />
-            </Box>
-          ) : (
-            ""
-          )}
-        </Box>
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          marginLeft={5}
-          flexWrap={"wrap"}
-        >
-          {project.state === "draft" || "archived" ? (
-            <Typography sx={{ color: "var(--color7)" }} variant={"h6"}>
-              {project.state.toUpperCase()}
-            </Typography>
-          ) : (
-            ""
-          )}
-          <Typography sx={{ color: "var(--color3)" }} variant={"h4"}>
-            {project.title}
-          </Typography>
-          <Typography sx={{ color: "var(--color4)" }}>
-            {project.tagline}
-          </Typography>
+              </Box>
+            ) : (
+              ""
+            )}
+          </Box>
         </Box>
       </Box>
       <Grid

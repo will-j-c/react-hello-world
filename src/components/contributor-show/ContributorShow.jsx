@@ -172,7 +172,7 @@ export default function ContributorShow() {
             display={"flex"}
             flexDirection={"column"}
             justifyContent={"center"}
-            marginLeft={5}
+            marginLeft={matches ? 2 : 5}
           >
             <Typography variant="h4" component="h1" className='title'>
               {contributor?.title}

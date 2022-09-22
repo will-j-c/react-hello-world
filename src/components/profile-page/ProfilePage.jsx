@@ -130,98 +130,128 @@ function ProfilePage() {
   return profile ? (
     <>
       <Container>
-        <Grid container justifyContent={{ xs: "center", sm: "flex-start" }}>
-          <Grid
-            item
-            mr={2}
-            alignSelf={"center"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            sx={{ placeItems: "center" }}
-          >
+        <Box display={"flex"} marginTop={4}>
+          <Box>
             <AvatarComponent
               imgAlt={profile.username}
               imgUrl={profile.profile_pic_url || baseProfileAvatar}
-              sx={{
+              sx={{ 
                 width: matches ? 80 : 128, 
                 height: matches ? 80 : 128, 
-                border: "solid 1px var(--color3)",
-              }}
+                border: "solid 1px var(--color3)" }}
             />
-          </Grid>
-
-          <Grid xs={9} md={7} item>
-            <Box display={"flex"} justifyContent={"space-between"}>
+          </Box>
+          
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"space-between"}
+            alignItems={'center'}
+            marginLeft={matches ? 2 : 5}
+            flexWrap={"wrap"}
+            flexGrow={1}
+          >
+            <Box>
+              <Typography
+                variant="h4"
+                component="h4"
+                sx={{ color: "var(--color3)", textTransform: "capitalize" }}
+              >
+                {profile.name}
+              </Typography>
+              <Typography sx={{ color: "var(--color4)" }}>
+                {profile.tagline || "Hello world, this is my empty tagline"}
+              </Typography>
               <Box>
-                <Typography
-                  variant="h4"
-                  component="h4"
-                  sx={{ color: "var(--color3)", textTransform: "capitalize" }}
-                >
-                  {profile.name}
-                </Typography>
-                <Typography sx={{ color: "var(--color4)" }}>
-                  {profile.tagline || "Hello world, this is my empty tagline"}
-                </Typography>
-                <Box>
-                  {profile?.socmed?.github && (
-                    <a
-                      href={profile?.socmed?.github}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <GitHubIcon
-                        sx={{ marginY: 1, color: "var(--color4)" }}
-                        fontSize={"large"}
-                        className="icon socmed"
-                      />
-                    </a>
-                  )}
-                  {profile?.socmed?.linkedin && (
-                    <a
-                      href={profile?.socmed?.linkedin}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <LinkedInIcon
-                        sx={{ marginY: 1, color: "var(--color4)" }}
-                        fontSize={"large"}
-                        className="icon socmed"
-                      />
-                    </a>
-                  )}
+                {profile?.socmed?.github && (
+                  <a
+                    href={profile?.socmed?.github}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <GitHubIcon
+                      sx={{ marginY: 1, color: "var(--color4)" }}
+                      fontSize={"large"}
+                      className="icon socmed"
+                    />
+                  </a>
+                )}
+                {profile?.socmed?.linkedin && (
+                  <a
+                    href={profile?.socmed?.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <LinkedInIcon
+                      sx={{ marginY: 1, color: "var(--color4)" }}
+                      fontSize={"large"}
+                      className="icon socmed"
+                    />
+                  </a>
+                )}
 
-                  {profile?.socmed?.twitter && (
-                    <a
-                      href={profile?.socmed?.twitter}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <TwitterIcon
-                        sx={{ marginY: 1, color: "var(--color4)" }}
-                        fontSize={"large"}
-                        className="icon socmed"
-                      />
-                    </a>
-                  )}
+                {profile?.socmed?.twitter && (
+                  <a
+                    href={profile?.socmed?.twitter}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <TwitterIcon
+                      sx={{ marginY: 1, color: "var(--color4)" }}
+                      fontSize={"large"}
+                      className="icon socmed"
+                    />
+                  </a>
+                )}
 
-                  {profile?.socmed?.facebook && (
-                    <a
-                      href={profile?.socmed?.facebook}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <FacebookIcon
-                        sx={{ marginY: 1, color: "var(--color4)" }}
-                        fontSize={"large"}
-                        className="icon socmed"
-                      />
-                    </a>
-                  )}
-                </Box>
+                {profile?.socmed?.facebook && (
+                  <a
+                    href={profile?.socmed?.facebook}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FacebookIcon
+                      sx={{ marginY: 1, color: "var(--color4)" }}
+                      fontSize={"large"}
+                      className="icon socmed"
+                    />
+                  </a>
+                )}
               </Box>
+            </Box>
+            <Box>
+              {username === authUserName && (
+                <Link to={`/users/${authUserName}/edit`}>
+                  <EditIcon
+                    sx={{
+                      marginY: 1,
+                      color: "var(--disable-color)",
+                    }}
+                    className="icon"
+                    fontSize={"large"}
+                  />
+                </Link>
+              )}
+              {username !== authUserName && (
+                <Button
+                  category={"action"}
+                  title={followStatus ? `${buttonTitle}` : "Follow"}
+                  variant={followStatus ? "outlined" : "contained"}
+                  onMouseOver={handleMouseOver}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={handleFollowAction}
+                  component
+                />
+              )}
+            </Box>
+          </Box>
+        </Box>
+        <Grid container justifyContent={{ xs: "center", sm: "flex-start" }} alignItems={"center"}>
 
-              <Box marginLeft="auto">
+          <Grid xs={9} md={7} item sx={{ flexGrow: 1 }}>
+            <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
+
+              {/* <Box marginLeft="auto">
                 {username === authUserName && (
                   <Link to={`/users/${authUserName}/edit`}>
                     <EditIcon
@@ -245,7 +275,7 @@ function ProfilePage() {
                     component
                   />
                 )}
-              </Box>
+              </Box> */}
             </Box>
           </Grid>
         </Grid>
