@@ -15,6 +15,8 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useTheme } from "@mui/material/styles";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 import Button from "../buttons/Button";
 import styles from "./MultiForm.module.scss";
@@ -39,7 +41,6 @@ function ProfileEdit() {
 
   const [previewAvatar, setPreviewAvatar] = useState(null);
 
-  const [message, setMessage] = useState("");
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [name, setName] = useState("");
@@ -50,6 +51,10 @@ function ProfileEdit() {
   const [github, setGithub] = useState("");
   const [twitter, setTwitter] = useState("");
   const [facebook, setFacebook] = useState("");
+
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -169,12 +174,16 @@ function ProfileEdit() {
         },
         config
       );
+      setOpen(true);
       setMessage(
         `Your profile successfully updated. You will be redirected shortly...`
       );
-      setTimeout(navigate, 1500, `/users/${authUsername}`);
+      setSeverity("success");
+      setTimeout(navigate, 500, `/users/${authUsername}`);
     } catch (error) {
-      setMessage(error.response.data.error);
+      setOpen(true);
+      setMessage(error?.response?.data?.error);
+      setSeverity("error");
     }
   };
   if (!isAuth) {
@@ -199,16 +208,6 @@ function ProfileEdit() {
           {!tagline && "We just need a few details, and you’ll be on your way."}
           {tagline && ""}
         </Typography>
-        {message.length > 0 && (
-          <Box sx={{ marginTop: "1em" }}>
-            <Typography
-              variant={"caption"}
-              className={"contributor-form-message"}
-            >
-              {message}
-            </Typography>
-          </Box>
-        )}
       </Box>
       <form onSubmit={handleFormSubmit}>
         <Grid
@@ -226,7 +225,6 @@ function ProfileEdit() {
             alignItems={"center"}
             justifyContent={"center"}
             marginX={{ xs: "auto" }}
-            // marginX={{ xs: "auto", md: 1 }}
           >
             <Box display="flex" flexDirection={"column"} alignItems={"center"}>
               <AvatarComponent
@@ -517,6 +515,19 @@ function ProfileEdit() {
           </Grid>
         </Grid>
       </form>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={(event, reason) => {
+          if (reason === "timeout") {
+            setOpen(false);
+          }
+        }}
+      >
+        <Alert variant="filled" severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
