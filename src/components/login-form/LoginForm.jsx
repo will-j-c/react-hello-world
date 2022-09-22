@@ -132,7 +132,6 @@ export default function LogInForm() {
             required
             hiddenLabel
             fullWidth
-            defaultValue='Ex. McSpicy'
             variant='filled'
             size='small'
             form='login-form'

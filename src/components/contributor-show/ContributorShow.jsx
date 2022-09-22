@@ -247,62 +247,36 @@ export default function ContributorShow() {
             )}
           </Box>
         </Box>
-        <Grid 
-          container 
-          columns={{ xs: 1, md: 12 }} 
-          justifyContent='space-between'
-          spacing={4}
-          marginTop={4}
-        >
-          <Grid item md={8}>
-            {auth?.username === project?.user_id.username && (
-              <Box
-                sx={{
-                  border: "solid 1px var(--color3)",
-                  backgroundColor: "var(--color2)",
-                  height: "100%",
-                }}
-                paddingX={4}
-                paddingBottom={4}
-                id="panel-box"
-                height={1}
-              >
-                <ContributorShowTabs 
-                  tabValue={tabValue} 
-                  handleTabChange={handleTabChange} 
-                />
-                { panel }
-              </Box>
-            )}
-            
-            {auth?.username !== project?.user_id.username && (
-              <Box className='contributor-content'>
-                <ContributorAboutPanel contributor={contributor} noOfAcceptance={noOfAcceptance}/>
-              </Box>
-              
-            )}
-            
-          </Grid>
-          <Grid item md={4} >
-            <Box className='contributor-content' height='100%'>
-              <Typography variant='subtitle1' className='contributor-section-header'>
-                Similar contributors
-              </Typography>
-              <Grid
-                container
-                spacing={2}
-                columns={{ xs: 1, md: 12 }}
-                justifyContent="center"
-                alignItems="stretch"
-              >
-                <Typography className='contributor-section-text'>
-                  To add later
-                </Typography>
-              </Grid>
 
+        <Box marginTop='2em'>
+          {auth?.username === project?.user_id.username && (
+            <Box
+              sx={{
+                border: "solid 1px var(--color3)",
+                backgroundColor: "var(--color2)",
+                height: "100%",
+              }}
+              paddingX={4}
+              paddingBottom={4}
+              id="panel-box"
+              height={1}
+            >
+              <ContributorShowTabs 
+                tabValue={tabValue} 
+                handleTabChange={handleTabChange} 
+              />
+              { panel }
             </Box>
-          </Grid>
-        </Grid>
+          )}
+          
+          {auth?.username !== project?.user_id.username && (
+            <Box className='contributor-content'>
+              <ContributorAboutPanel contributor={contributor} noOfAcceptance={noOfAcceptance}/>
+            </Box>
+            
+          )}
+          
+        </Box>
         
       </Container>
       <LoginModal 

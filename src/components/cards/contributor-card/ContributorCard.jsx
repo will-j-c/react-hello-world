@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Button from "../../buttons/Button";
 import AuthContext from '../../../context/AuthProvider';
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 import '../Card.scss';
 
@@ -18,6 +19,7 @@ export default function ContributorCard(props) {
   const { logo_url, slug } = project_id;
   const projectTitle = project_id.title;
   const projectOwner = project_id.user_id.username;
+  const isFilled = props.isFilled;
   const projectUrl = `/projects/${slug}`;
   const { auth } = useContext(AuthContext);
   const [ buttonTitle, setButtonTitle ] = useState('Following');
@@ -107,9 +109,9 @@ export default function ContributorCard(props) {
 
   const skillsDisplay = skills.map((skill, idx) => {
     return (
-      <Typography className='card-subtitle' key={idx} variant='caption'>
+      <Typography className="card-subtitle" key={idx} variant="caption">
+        {idx > 0 ? "| " : ""}
         {skill}
-        {idx < skills.length - 1 ? ' |' : ''}
       </Typography>
     )
   })
@@ -130,16 +132,20 @@ export default function ContributorCard(props) {
           </Typography>
           
           <Box className='card-captions'>
-            <Typography className='card-subtitle' variant='body2'>
-              For&nbsp; 
+            <Typography className='card-subtitle' variant='body2'> 
               <Link className='link' to={projectUrl}>
                 <span id='card-highlightext'>{projectTitle}</span>
               </Link>
             </Typography>
           </Box>
 
-          <Box className='card-captions'>
-            {skillsDisplay}
+          <Box className='card-categories' sx={{maxHeight: '3em'}}>
+            { skillsDisplay.length > 0 && (
+              <>
+                <VerifiedIcon sx={{color: 'var(--color3)', fontSize: 'medium'}}/>
+                {skillsDisplay}
+              </>
+            )}
           </Box>
 
         </CardContent>
@@ -153,14 +159,29 @@ export default function ContributorCard(props) {
             variant={"outlined"}
             route={`/contributors/${_id}`}
           />
-          { auth.username !== projectOwner && (
+          { (auth.username !== projectOwner && (status === 'rejected' || status === 'accepted' )) && (
             <Button
-              category={status === ('rejected' || 'accepted' ) ? 'status' : 'action'}
+              category={'status'}
+              title={buttonTitle}
+              variant={'outlined'}
+            />
+          )}
+          { (auth.username !== projectOwner && !isFilled && status !== 'rejected' && status !== 'accepted' ) && (
+            <Button
+              category={status === 'applied' ? 'status' : 'action'}
               title={buttonTitle}
               variant={buttonTitle === 'Apply' ? 'contained' : 'outlined'}
               onMouseOver={handleMouseOver}
               onMouseLeave={handleMouseLeave}
               onClick={handleAction}
+            />
+          )}
+          { (auth.username !== projectOwner 
+            && isFilled && status !== 'rejected' && status !== 'accepted' ) && (
+            <Button
+              category={'status'}
+              title={'Filled'}
+              variant={'outlined'}
             />
           )}
           { auth.username === projectOwner && (
@@ -181,8 +202,6 @@ export default function ContributorCard(props) {
           )}
         </Box>
       </CardActions>
-      
-      
     </Card>
   )
 }

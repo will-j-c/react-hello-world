@@ -1,9 +1,7 @@
 import Box from "@mui/material/Box";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import axios from "../../api/axios";
 import AuthContext from "../../context/AuthProvider";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 import { ShowTabsOtherProjects } from "../profile-show-tabs/ProfileShowTabs";
 

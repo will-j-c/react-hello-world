@@ -2,7 +2,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import AuthContext from "../../context/AuthProvider";
 import Box from "@mui/material/Box";
-
+import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 
 import Button from "../buttons/Button";
@@ -59,10 +59,12 @@ export default function ContributorRow(props) {
                 key={idx}
                 sx={{ flexDirection: "row" }}
               >
+                <Link to={`/users/${user.user.username}`}>
                 <AvatarComponent
                   imgAlt={user.user.username}
                   imgUrl={user.user.profile_pic_url}
                 />
+                </Link>
               </AvatarGroup>
             );
           }

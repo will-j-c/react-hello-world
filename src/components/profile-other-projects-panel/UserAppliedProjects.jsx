@@ -12,6 +12,8 @@ function UserAppliedProjects() {
   const axiosPrivate = useAxiosPrivate();
 
   const [UserAppliedProjects, setUserAppliedProjects] = useState([]);
+  const [ followedProjects, setFollowedProjects ] = useState([]);
+
 
   useEffect(() => {
     axiosPrivate
@@ -24,6 +26,17 @@ function UserAppliedProjects() {
         // toast(err.response.data.message);
       });
   }, []);
+  useEffect(() => {
+    axiosPrivate
+      .get(`/users/${username}/projects/following`)
+      .then((response) => {
+        setFollowedProjects(response.data.map(
+          relation => relation.slug
+        ));
+      })
+      .catch((err) => {
+      });
+  }, [params]);
   let UserAppliedProjectsCards = [];
   const baseProjectImage =
     "https://cdn.pixabay.com/photo/2014/10/05/19/02/binary-code-475664_960_720.jpg";
@@ -41,7 +54,7 @@ function UserAppliedProjects() {
       };
       return (
         <Grid key={idx} item xs={12} sm={6} md={4}>
-          <ProjectCard project={projectCardDetails} />
+          <ProjectCard project={projectCardDetails} followed={followedProjects?.includes(project.slug)}/>
         </Grid>
       );
     });

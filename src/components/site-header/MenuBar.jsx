@@ -59,7 +59,7 @@ function MenuBar(props) {
   return (
     <div>
       <Tooltip title="Open settings">
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 , marginTop:0.7}}>
           <Avatar alt="profileOwner" src={props.profileAvatarUrl} />
         </IconButton>
       </Tooltip>
