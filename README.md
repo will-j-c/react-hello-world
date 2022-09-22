@@ -1,5 +1,4 @@
-# Hello World - server side
-
+# Hello World - front end
 ## About
 
 Hello World is an app where like minded people can come together to share project ideas, meet new and interesting friends and find contributors for their projects. It's Linkedin for developers!
