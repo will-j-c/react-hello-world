@@ -24,7 +24,7 @@ function HomeGrid(props) {
             category="action"
             title="View All"
             variant="contained"
-            to="/projects"
+            route={"/projects"}
           />
         </Box>
         <Box>

@@ -246,39 +246,7 @@ function ProfilePage() {
             </Box>
           </Box>
         </Box>
-        <Grid container justifyContent={{ xs: "center", sm: "flex-start" }} alignItems={"center"}>
 
-          <Grid xs={9} md={7} item sx={{ flexGrow: 1 }}>
-            <Box display={"flex"} justifyContent={"space-between"} alignItems={"center"}>
-
-              {/* <Box marginLeft="auto">
-                {username === authUserName && (
-                  <Link to={`/users/${authUserName}/edit`}>
-                    <EditIcon
-                      sx={{
-                        marginY: 1,
-                        color: "var(--disable-color)",
-                      }}
-                      className="icon"
-                      fontSize={"large"}
-                    />
-                  </Link>
-                )}
-                {username !== authUserName && (
-                  <Button
-                    category={"action"}
-                    title={followStatus ? `${buttonTitle}` : "Follow"}
-                    variant={followStatus ? "outlined" : "contained"}
-                    onMouseOver={handleMouseOver}
-                    onMouseLeave={handleMouseLeave}
-                    onClick={handleFollowAction}
-                    component
-                  />
-                )}
-              </Box> */}
-            </Box>
-          </Grid>
-        </Grid>
         <Box
           sx={{
             border: "solid 1px var(--color3)",
