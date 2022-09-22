@@ -19,11 +19,13 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import ConfirmModal from "../modals/ConfirmModal";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const baseProjectLogo =
   "'https://i.pinimg.com/564x/a9/d6/7e/a9d67e7c7c1f738141b3d728c31b2dd8.jpg'";
 
 function ProjectShowGrid(props) {
+  const matches = useMediaQuery('(max-width:600px)');
   const location = useLocation();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
@@ -171,15 +173,56 @@ function ProjectShowGrid(props) {
           <AvatarComponent
             imgAlt={project.title}
             imgUrl={project.logo_url || baseProjectLogo}
-            sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
+            sx={{ 
+              width: matches ? 80 : 128, 
+              height: matches ? 80 : 128, 
+              border: "solid 1px var(--color3)" }}
           />
-          {creator.username === auth.username ? (
-            <Box display={"flex"} justifyContent={"center"} marginTop={2}>
-              <Link
-                to={`/projects/${project.slug}/edit`}
-                state={{ project, isEdit: true }}
-              >
-                <ModeEditOutlineOutlinedIcon
+          
+        </Box>
+        <Box
+          display={"flex"}
+          flexDirection={"row"}
+          justifyContent={"space-between"}
+          alignItems={'center'}
+          marginLeft={matches ? 2 : 5}
+          flexWrap={"wrap"}
+          flexGrow={1}
+        >
+          <Box>
+            {project.state === "draft" || "archived" ? (
+              <Typography sx={{ color: "var(--color7)" }} variant={"h6"}>
+                {project.state.toUpperCase()}
+              </Typography>
+            ) : (
+              ""
+            )}
+            <Typography sx={{ color: "var(--color3)" }} variant={"h4"}>
+              {project.title}
+            </Typography>
+            <Typography sx={{ color: "var(--color4)" }}>
+              {project.tagline}
+            </Typography>
+          </Box>
+          <Box>
+            {creator.username === auth.username ? (
+              <Box display={"flex"} justifyContent={"center"} marginTop={2}>
+                <Link
+                  to={`/projects/${project.slug}/edit`}
+                  state={{ project, isEdit: true }}
+                >
+                  <ModeEditOutlineOutlinedIcon
+                    htmlColor={"var(--color3)"}
+                    fontSize={"large"}
+                    sx={{
+                      "&:hover": {
+                        cursor: "pointer",
+                      },
+                    }}
+                  />
+                </Link>
+                <DeleteForeverOutlinedIcon
+                  onClick={handleDeleteClick}
                   htmlColor={"var(--color3)"}
                   fontSize={"large"}
                   sx={{
@@ -188,42 +231,11 @@ function ProjectShowGrid(props) {
                     },
                   }}
                 />
-              </Link>
-              <DeleteForeverOutlinedIcon
-                onClick={handleDeleteClick}
-                htmlColor={"var(--color3)"}
-                fontSize={"large"}
-                sx={{
-                  "&:hover": {
-                    cursor: "pointer",
-                  },
-                }}
-              />
-            </Box>
-          ) : (
-            ""
-          )}
-        </Box>
-        <Box
-          display={"flex"}
-          flexDirection={"column"}
-          justifyContent={"center"}
-          marginLeft={5}
-          flexWrap={"wrap"}
-        >
-          {project.state === "draft" || "archived" ? (
-            <Typography sx={{ color: "var(--color7)" }} variant={"h6"}>
-              {project.state.toUpperCase()}
-            </Typography>
-          ) : (
-            ""
-          )}
-          <Typography sx={{ color: "var(--color3)" }} variant={"h4"}>
-            {project.title}
-          </Typography>
-          <Typography sx={{ color: "var(--color4)" }}>
-            {project.tagline}
-          </Typography>
+              </Box>
+            ) : (
+              ""
+            )}
+          </Box>
         </Box>
       </Box>
       <Grid
