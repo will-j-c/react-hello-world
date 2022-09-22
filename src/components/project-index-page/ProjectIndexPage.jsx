@@ -1,5 +1,6 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { useEffect, useState } from "react";
 
@@ -12,6 +13,7 @@ import './ProjectIndexPage.scss';
 function ProjectIndexPage() {
   const [ categories, setCategories] = useState([]);
   const [ categoriesFilter, setCategoriesFilter ] = useState([]);
+  const matches = useMediaQuery('(max-width:600px)');
 
   useEffect(() => {
     async function getCategories() {
@@ -43,21 +45,22 @@ function ProjectIndexPage() {
         justifyContent="space-between"
         marginTop={4}
       >
-        <Grid md={2} item>
-          <Typography variant='h6' component='h2' color='white'>
-            Filters
-          </Typography>
-          <Typography
-            className='clear-filters-button'
-            variant='caption' 
-            
-            onClick={clearFilters}
-          >
-            Clear filters
-          </Typography>
-
-          <Filters options={categories} currentSelections={categoriesFilter} updateSelections={updateCategoriesFilter} />
-        </Grid>
+        { !matches && (
+          <Grid md={2} item>
+            <Typography variant='h6' component='h2' color='white'>
+              Filters
+            </Typography>
+            <Typography
+              className='clear-filters-button'
+              variant='caption' 
+              
+              onClick={clearFilters}
+            >
+              Clear filters
+            </Typography>
+            <Filters options={categories} currentSelections={categoriesFilter} updateSelections={updateCategoriesFilter} />
+          </Grid>
+        )}
 
         <Grid md={10} sx={{ height: "100%" }} paddingTop={0}>
           <Typography

@@ -19,11 +19,13 @@ import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined
 import ConfirmModal from "../modals/ConfirmModal";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const baseProjectLogo =
   "'https://i.pinimg.com/564x/a9/d6/7e/a9d67e7c7c1f738141b3d728c31b2dd8.jpg'";
 
 function ProjectShowGrid(props) {
+  const matches = useMediaQuery('(max-width:600px)');
   const location = useLocation();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
@@ -171,7 +173,10 @@ function ProjectShowGrid(props) {
           <AvatarComponent
             imgAlt={project.title}
             imgUrl={project.logo_url || baseProjectLogo}
-            sx={{ width: 128, height: 128, border: "solid 1px var(--color3)" }}
+            sx={{ 
+              width: matches ? 80 : 128, 
+              height: matches ? 80 : 128, 
+              border: "solid 1px var(--color3)" }}
           />
           {creator.username === auth.username ? (
             <Box display={"flex"} justifyContent={"center"} marginTop={2}>
