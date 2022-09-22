@@ -2,6 +2,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 import '../ContributorShow.scss';
+import Button from '../../buttons/Button';
 
 export default function ContributorAboutPanel(props) {
   const { contributor, noOfAcceptance } = props;
@@ -11,15 +12,12 @@ export default function ContributorAboutPanel(props) {
   const skillsDisplay = contributor?.skills?.length ? (
     contributor?.skills.map((skill, idx) => {
       return (
-        <Box
+        <Button
+          variant={"contained"}
+          category={"skill"}
+          title={skill}
           key={idx}
-          sx={{ backgroundColor: "var(--color7a)" }}
-          padding={1}
-          marginRight={1}
-          borderRadius={1}
-        >
-          <Typography variant='body2'>{skill}</Typography>
-        </Box>
+        />
       );
     })
   ) : (
@@ -41,7 +39,9 @@ export default function ContributorAboutPanel(props) {
       <Typography variant='subtitle1' className='contributor-section-header'>
         Required skills:
       </Typography>
-      <Box display={"flex"}>{skillsDisplay}</Box>
+      <Box display={"flex"} sx={{ flexWrap: "wrap", rowGap: 1, gap: 1 }}>
+        {skillsDisplay}
+      </Box>
       <Box className='contributor-section-content'>
         <Typography variant='subtitle1' className='contributor-section-header'>
           Location:

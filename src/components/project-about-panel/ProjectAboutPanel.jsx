@@ -63,7 +63,9 @@ function ProjectAboutPanel(props) {
         >
           Categories:
         </Typography>
-        <Box display={"flex"}>{categoriesToDisplay}</Box>
+        <Box display={"flex"} sx={{ flexWrap: "wrap", rowGap: 1 }}>
+          {categoriesToDisplay}
+        </Box>
         <Typography
           sx={{ color: "var(--color4)" }}
           fontWeight={"bold"}
