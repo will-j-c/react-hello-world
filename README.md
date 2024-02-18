@@ -10,6 +10,8 @@ Server - https://express-hello-world-zmw.herokuapp.com/
 
 Front end - https://hello-world-zmw.netlify.app/
 
+Server GitHub - https://github.com/will-j-c/express-hello-world
+
 ## Tech Stack
 
 In the frontend, the tech stack was:
